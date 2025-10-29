@@ -1,5 +1,5 @@
 <view class="head" bindtap="sign">
-	<image  bindtap="sign" src="{{isLogin ? url + info.avatar : '../../image/boy.jpeg'}}" mode="scaleToFill"></image>
+	<image  bindtap="sign" src="{{isLogin ? '../../image/avatar.png' : '../../image/boy.jpeg'}}" mode="scaleToFill"></image>
 	<view class="headRight">
 		<text  bindtap="sign" class="name">{{isLogin ? info.nickname : '登录/注册'}}</text>
 		<!-- <text  bindtap="sign" class="userName" wx:if="isLogin">账号：{{info.userName}}</text> -->

@@ -12,7 +12,7 @@ Page({
 		phone: '',
 		email: '',
 		info: {},
-		avatar: '',
+		avatar: '../../../image/avatar.png',
 		isMod: false
 	},
 	/**
@@ -163,7 +163,7 @@ Page({
 		}
 	},
 	look() {
-		if (this.data.isMod) return
+		// if (this.data.isMod) return
 		wx.previewImage({
 			current: this.data.avatar,
 			urls: [this.data.avatar],
