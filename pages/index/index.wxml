@@ -29,7 +29,7 @@
 	</view>
 	<view class="morBlock" bindtap="indexMake">
 		<image src="../../image/mz.png"></image>
-		<text>正在预约</text>
+		<text>当前预约</text>
 	</view>
 	<view class="morBlock" bindtap="refund">
 		<image src="../../image/tk.png"></image>
