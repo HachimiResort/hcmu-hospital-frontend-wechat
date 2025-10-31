@@ -35,7 +35,8 @@ Page({
 					this.setData({
 						info: res.data.data,
 						isLogin: true
-					})
+          })
+          console.log(this.data.info);
 				} else {
 					this.setData({
 						isLogin: false
