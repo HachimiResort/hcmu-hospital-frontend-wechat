@@ -125,13 +125,8 @@ Page({
 		console.log(this.data.docList);
 	},
 	go(e) {
-		let id = e.currentTarget.dataset.id;
-		let name = e.currentTarget.dataset.name;
-		let patId = this.data.patId;
-		let hosName = this.data.hosName
-		let patName = this.data.patName
 		wx.navigateTo({
-			url: `../hosChange/hosChange?patId=${patId}&depTwoId=${id}&depName=${name}&hosName=${hosName}&patName=${patName}`,
+			url: `../doctorInfo/doctorInfo?docId=${this.data.docList[e.currentTarget.dataset.index].userId}`,
 		})
 	},
 
