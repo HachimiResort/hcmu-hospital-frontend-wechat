@@ -123,7 +123,7 @@ Page({
 	},
 	make(){
 		wx.navigateTo({
-		  url: '../appointment/appointment',
+		  url: '../appointment/dep/dep',
 		})
 	},
 	/**

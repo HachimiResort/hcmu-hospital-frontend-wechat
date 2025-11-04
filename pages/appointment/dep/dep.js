@@ -6,41 +6,36 @@ Page({
 	 */
 	data: {
 		url: getApp().globalData.$url,
-		hosList:[],
-		hosChoice:[],
-		depList:[],
-		depTwo:[],
-		patId:'',
-		depChoice:[],
-		chiose:[],
-		hosName:'',
-		patName:''
+		depList: [],
+		depChoice: [],
+		docList: [],
+		chiose: [],
+		userInfo: {}
 	},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-		
+
 		this.setData({
-			patId:options.id,
-			patName:options.patName
+			userInfo: wx.getStorageSync('userInfo')
 		})
 		let token = wx.getStorageSync('token')
 		wx.showLoading({
-		  title: '加载中...',
+			title: '加载中...',
 		})
-		new Promise((resolve, reject)=>{
+		new Promise((resolve, reject) => {
 			wx.request({
-				url: this.data.url + '/simple/getHospital?switch=on',
+				url: this.data.url + '/departments',
 				header: {
 					'Authorization': token
 				},
 				success: (res) => {
-					if(res.data.data.length == 0) return wx.hideLoading()
+					if (res.data.data.total == 0) return wx.hideLoading()
 					if (res.data.code == 200) {
-						resolve(res.data)
-					}else if(res.data.code == 403){
+						resolve(res.data.data.list)
+					} else if (res.data.code == 403) {
 						getApp().notPermission()
 					} else {
 						wx.showToast({
@@ -57,53 +52,26 @@ Page({
 					})
 				}
 			})
-		}).then(res=>{
-			
-			let arr = new Array(res.data.length).fill(false);
+		}).then(res => {
+			let arr = new Array(res.length).fill(false);
 			arr[0] = true;
 			this.setData({
-				hosList:res.data,
-				hosChoice:arr,
-				hosName:res.data[0].name
+				depList: res,
+				depChoice: arr,
 			})
-			return new Promise((resolve, reject)=>{
+			return new Promise((resolve, reject) => {
 				wx.request({
-					url: this.data.url +`/simple/getDepOne?hosId=${res.data[0].id}&switch=on`,
+					url: this.data.url + `/departments/${res[0].departmentId}/doctors`,
 					header: {
 						'Authorization': token
 					},
 					success: (res) => {
-						if (res.data.code == 200) {
-							resolve(res.data)
-							
-						}else {
-							wx.showToast({
-								title: res.data.msg,
-								icon: 'error'
-							})
-						}
-					}
-				})
-			})
-		}).then(res=>{
-			let arr = new Array(res.data.length).fill(false);
-			arr[0] = true;
-			this.setData({
-				depList:res.data,
-				depChoice:arr
-			})
-				wx.request({
-					url: this.data.url +`/simple/getDepTwo?depId=${res.data[0].id}&switch=on`,
-					header: {
-						'Authorization': token
-					},
-					success: (res) => {
-						wx.hideLoading()
 						if (res.data.code == 200) {
 							this.setData({
-								depTwo:res.data.data
+								docList: res.data.data.list,
 							})
-						}else {
+							wx.hideLoading()
+						} else {
 							wx.showToast({
 								title: res.data.msg,
 								icon: 'error'
@@ -111,92 +79,42 @@ Page({
 						}
 					}
 				})
-		}).catch(err=>{
+			})
+		}).catch(err => {
 			wx.hideLoading()
 			wx.showToast({
-			  title: '出现错误',
-			  icon:'error'
+				title: '出现错误',
+				icon: 'error'
 			})
 			console.log(err)
 		})
 	},
-	hosChange(e){
-		if(e.currentTarget.dataset.index == this.data.hosChoice.indexOf(true)) return
-		let arrh = new Array(this.data.hosChoice.length).fill(false);
-		arrh[e.currentTarget.dataset.index] = true;
-		let token = wx.getStorageSync('token')
-		wx.showLoading({
-		  title: '加载中...',
-		})
-		new Promise((resolve, reject)=>{
-			wx.request({
-				url: this.data.url +`/simple/getDepOne?hosId=${this.data.hosList[e.currentTarget.dataset.index].id}&switch=on`,
-				header: {'Authorization': token},
-				success: (res) => {
-					if (res.data.code == 200) {
-						resolve(res.data)
-					}else {
-						wx.showToast({
-							title: res.data.msg,
-							icon: 'error'
-						})
-					}
-				}
-			})
-		}).then(res=>{
-			let arr = new Array(res.data.length).fill(false);
-			arr[0] = true;
-			this.setData({
-				depList:res.data,
-				depChoice:arr,
-				hosName:this.data.hosList[e.currentTarget.dataset.index].name
-			})
-			wx.request({
-				url: this.data.url + `/simple/getDepTwo?depId=${res.data[0].id}&switch=on`,
-				header: {'Authorization': token},
-				success: (res) => {
-					wx.hideLoading()
-					if (res.data.code == 200) {
-						this.setData({
-							hosChoice:arrh,
-							depTwo:res.data.data
-						})
-					}else {
-						wx.showToast({
-							title: res.data.msg,
-							icon: 'error'
-						})
-					}
-				}
-			})
-		}).catch(err=>{
-			wx.hideLoading()
-			wx.showToast({
-			  title: '出现错误',
-			  icon:'error'
-			})
-			console.log(err)
-		})
-	},
-	depChange(e){
-		if(e.currentTarget.dataset.index == this.data.depChoice.indexOf(true)) return
+	depChange(e) {
+		if (e.currentTarget.dataset.index == this.data.depChoice.indexOf(true)) return
 		let arr = new Array(this.data.depChoice.length).fill(false);
 		arr[e.currentTarget.dataset.index] = true;
+		this.setData({
+			depChoice: arr
+		})
 		let token = wx.getStorageSync('token')
 		wx.showLoading({
-		  title: '加载中...',
+			title: '加载中...',
 		})
+		console.log(this.data.depList[e.currentTarget.dataset.index].departmentId)
 		wx.request({
-			url: this.data.url + `/simple/getDepTwo?depId=${this.data.depList[e.currentTarget.dataset.index].id}&switch=on`,
-			header: {'Authorization': token},
+			url: this.data.url + `/departments/${this.data.depList[e.currentTarget.dataset.index].departmentId}/doctors`,
+			header: {
+				'Authorization': token
+			},
 			success: (res) => {
-				wx.hideLoading()
 				if (res.data.code == 200) {
+					let arr1 = new Array(res.length).fill(false);
+					arr1[0] = true;
 					this.setData({
-						depChoice:arr,
-						depTwo:res.data.data
+						docList: res.data.data.list,
 					})
-				}else {
+					wx.hideLoading()
+				} else {
 					wx.showToast({
 						title: res.data.msg,
 						icon: 'error'
@@ -204,15 +122,16 @@ Page({
 				}
 			}
 		})
+		console.log(this.data.docList);
 	},
-	go(e){
+	go(e) {
 		let id = e.currentTarget.dataset.id;
 		let name = e.currentTarget.dataset.name;
 		let patId = this.data.patId;
 		let hosName = this.data.hosName
 		let patName = this.data.patName
 		wx.navigateTo({
-		  url: `../hosChange/hosChange?patId=${patId}&depTwoId=${id}&depName=${name}&hosName=${hosName}&patName=${patName}`,
+			url: `../hosChange/hosChange?patId=${patId}&depTwoId=${id}&depName=${name}&hosName=${hosName}&patName=${patName}`,
 		})
 	},
 
