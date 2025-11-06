@@ -79,9 +79,7 @@ Page({
 			header: {
 				'Authorization': token
 			},
-			data: {
-				'requestDTO': requestDTO
-			},
+			data: requestDTO,
 			success: (res) => {
 				wx.hideLoading()
 				if (res.data.code == 200) {
