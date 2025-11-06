@@ -134,9 +134,8 @@ Page({
 						url: '../appointment/dep/dep',
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon: 'error'
+					wx.navigateTo({
+						url: '/pages/sign/sign',
 					})
 				}
 			},
