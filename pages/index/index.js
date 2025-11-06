@@ -107,8 +107,33 @@ Page({
 		})
 	},
 	indexMake() {
-		wx.navigateTo({
-			url: '../make/make?type=index'
+		let token = wx.getStorageSync('token')
+		wx.showLoading({
+			title: '加载中...',
+		})
+		wx.request({
+			url: this.data.url + `/patient-profiles/${wx.getStorageSync('userId')}/appointments`,
+			header: {
+				'Authorization': token
+			},
+			success: (res) => {
+				if (res.data.code == 200) {
+					wx.navigateTo({
+						url: '/pages/make/make',
+					})
+				} else {
+					wx.navigateTo({
+						url: '/pages/sign/sign',
+					})
+				}
+			},
+			fail: (err) => {
+				wx.hideLoading()
+				wx.showToast({
+					title: '请检查网络连接',
+					icon: 'error'
+				})
+			}
 		})
 	},
 	refund() {

@@ -172,7 +172,40 @@ Page({
 			content: appointmentDetails,
 			success: (res) => {
 				if (res.confirm) {
-					console.log('预约成功.');
+					wx.showLoading({
+						title: '加载中...',
+					})
+					let token = wx.getStorageSync('token')
+					wx.request({
+						url: this.data.url + `/schedules/` + appointmentInfo.scheduleId + `/appoint`,
+						header: {
+							'Authorization': token
+						},
+						method: 'POST',
+						success: (res) => {
+							wx.hideLoading()
+							if (res.data.code == 200) {
+								wx.hideLoading()
+								wx.reLaunch({
+									url: '/pages/index/index',
+								})
+							} else {
+								wx.hideLoading()
+								wx.showToast({
+									title: res.data.msg,
+									icon: 'error'
+								})
+							}
+						},
+						fail: (err) => {
+							console.log(err)
+							wx.hideLoading()
+							wx.showToast({
+								title: '出现错误',
+								icon: 'error'
+							})
+						}
+					})
 				}
 			}
 		});

@@ -1,51 +1,53 @@
 <wxs module="filter" src="/utils/tool.wxs"></wxs>
-<view wx:if="{{name == ''}}" class="not">
-	<image src="../../image/not.png"></image>
-	<text>请先添加就诊人</text>
-</view>
-<view class="main" wx:else>
-	<view class="pat">
-		<view>
-			<view class="patCont">
-				<text class="name">{{name}}</text>
-				<text class="relation">{{relation}}</text>
-			</view>
-			<text class="card">{{certificate}}</text>
-		</view>
-		<view class="change">
-			<picker mode="selector" range="{{patList}}" range-key="{{'name'}}" bindchange="changeValue">
-				<image src="../../image/u689.svg"></image>
-				<text>切换就诊人</text>
-			</picker>
-		</view>
-	</view>
+<view class="main">
 	<view class="tap">
 		<view class="tapLeft"></view>
-		<text>{{type == 'index' ? '正在预约中' : '预约记录'}}</text>
+		<text>预约记录</text>
 	</view>
 	<view wx:if="{{orderList.length == 0}}" class="not">
 		<image src="../../image/not.png"></image>
 		<text>数据为空</text>
 	</view>
 	<view wx:else>
-		<view class="block" wx:for="{{orderList}}" wx:key="index" bindtap="uigo" data-id="{{item.id}}">
-			<view class="top">
-				<text class="depName">{{item.depName}}</text>
-				<text class="doctorName">{{item.doctorName}}</text>
-				<text class="state" style="color:{{item.state==0?'#006EFF':item.state==1?'#00d306':'#AAAAAA'}};">{{item.state==0?'预约成功':item.state==1?'已完成':'已取消'}}</text>
+		<view class="block" wx:for="{{orderList}}" wx:key="index" data-id="{{item.id}}">
+			<view class="block-header">
+				<text class="order-no">预约编号：{{item.appointmentNo}}</text>
+				<text class="order-status" wx:if="{{item.status === 1}}" style="color: #ff9800;">待支付</text>
+				<text class="order-status" wx:elif="{{item.status === 2}}" style="color: #2196f3;">已预约</text>
+				<text class="order-status" wx:elif="{{item.status === 3}}" style="color: #4caf50;">已签到</text>
+				<text class="order-status" wx:elif="{{item.status === 4}}" style="color: #9e9e9e;">已就诊</text>
+				<text class="order-status" wx:elif="{{item.status === 5}}" style="color: #607d8b;">已取消</text>
+				<text class="order-status" wx:elif="{{item.status === 6}}" style="color: #f44336;">爽约</text>
+				<text class="order-status" wx:else style="color: #f44336;">看见这个信息请联系管理员</text>
 			</view>
-			<view class="botm">
-				<view>
-					<text class="tit">预约医院</text>
-					<text class="con">{{item.hosName}}</text>
+			<view class="block-content">
+				<view class="info-row">
+					<text class="info-label">排班编号：</text>
+					<text class="info-value">{{item.scheduleId}}</text>
 				</view>
-				<view>
-					<text class="tit">预约日期</text>
-					<text class="con">{{item.time}}</text>
+				<view class="info-row">
+					<text class="info-label">原始费用：</text>
+					<text class="info-value">¥{{item.originalFee}}</text>
 				</view>
-				<view>
-					<text class="tit">预约类型</text>
-					<text class="con">{{item.type}}</text>
+				<view class="info-row">
+					<text class="info-label">实际费用：</text>
+					<text class="info-value">¥{{item.actualFee}}</text>
+				</view>
+				<view class="info-row" wx:if="{{item.status !== 1&&item.status !== 5}}">
+					<text class="info-label">支付时间：</text>
+					<text class="info-value">{{filter.formatDate(item.paymentTime)}}</text>
+				</view>
+				<view class="info-row" wx:if="{{item.status === 5}}">
+					<text class="info-label">取消时间：</text>
+					<text class="info-value">{{filter.formatDate(item.cancellationTime)}}</text>
+				</view>
+				<view class="info-row" wx:if="{{item.status === 5 && item.cancellationReason}}">
+					<text class="info-label">取消原因：</text>
+					<text class="info-value">{{item.cancellationReason}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">创建时间：</text>
+					<text class="info-value">{{filter.formatDate(item.createTime)}}</text>
 				</view>
 			</view>
 		</view>
