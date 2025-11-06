@@ -4,8 +4,20 @@ var moenyago = function (money){
 var sum = function(a,b){
 	return Number(a) + Number(b)
 }
+var formatDate = function(dateStr){
+	// 将2025-11-3格式转换为11-3格式
+	if (dateStr && dateStr.indexOf('-') !== -1) {
+		var parts = dateStr.split('-');
+		if (parts.length >= 3) {
+			// 月可能有前导0，日可能没有，保持原样
+			return parts[1] + '/' + parts[2];
+		}
+	}
+	return dateStr;
+}
 
 module.exports = {
 	moenyago:moenyago,
 	sum:sum,
+	formatDate:formatDate
 }

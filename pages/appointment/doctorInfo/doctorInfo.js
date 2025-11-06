@@ -6,54 +6,56 @@ Page({
 	 */
 	data: {
 		url: getApp().globalData.$url,
-		depTwoId: '',
-		week: [],
+		docId: 0,
+		doctor: {},
+		scheduleList: [],
+		scheduleChoice: 0,
 		doctorList: [],
 		time: '',
-		doctor: {},
-		hosName:'',
-		depName:'',
-		doctorId:'',
-		weekType:1,
-		arrange:{}
+		hosName: '',
+		depName: '',
+		doctorId: '',
+		weekType: 1,
+		arrange: {}
 	},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-		wx.setNavigationBarTitle({
-			title: options.name
-		})
-		let arr = Array(7).fill(false);
-		arr[0] = true;
 		this.setData({
-			depTwoId: options.depTwoId,
-			week: this.getweek(false),
-			time: this.getweek(false)[0].date,
-			hosName:options.hosName,
-			depName:options.depName,
-			doctorId:options.doctorId
+			docId: parseInt(options.docId)
 		})
+		// 获取当天日期和7天后日期
+		const today = new Date();
+		const sevenDaysLater = new Date();
+		sevenDaysLater.setDate(today.getDate() + 7);
+
+		// 格式化日期为YYYY-MM-DD格式
+		const formatDate = (date) => {
+			return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+		};
+
 		wx.showLoading({
 			title: '加载中...',
 		})
 		let token = wx.getStorageSync('token')
 		wx.request({
-			url: this.data.url + `/arrange/admin/weekArrange?doctorId=${this.data.doctorId}&week=1`,
+			url: this.data.url + `/doctor-profiles/` + options.docId,
 			header: {
 				'Authorization': token
 			},
+			type: 'GET',
 			success: (res) => {
 				wx.hideLoading()
 				if (res.data.code == 200) {
 					this.setData({
-						arrange: this.getDoctorArray(res.data.data[0])
+						doctor: res.data.data
 					})
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon:'error'
+						icon: 'error'
 					})
 				}
 			},
@@ -66,131 +68,118 @@ Page({
 				})
 			}
 		})
+		let requestDTO = {
+			doctorUserId: this.data.docId,
+			scheduleStartDate: formatDate(today),
+			scheduleEndDate: formatDate(sevenDaysLater)
+		}
+		console.log(requestDTO);
 		wx.request({
-			url: this.data.url + `/arrange/redDoctor?doctorId=${this.data.doctorId}&time=${this.data.time}&depTwoId=${this.data.depTwoId}`,
+			url: this.data.url + `/schedules`,
 			header: {
 				'Authorization': token
+			},
+			data: {
+				'requestDTO': requestDTO
 			},
 			success: (res) => {
 				wx.hideLoading()
 				if (res.data.code == 200) {
+
+					// 将res.data.data.list按scheduleDate分组
+					const arr = [];
+					// 使用Map来按日期分组
+					const dateMap = new Map();
+
+					// 遍历所有日程，按日期分组
+					res.data.data.list.forEach(item => {
+						if (!dateMap.has(item.scheduleDate)) {
+							dateMap.set(item.scheduleDate, []);
+						}
+						dateMap.get(item.scheduleDate).push(item);
+					});
+
+					// 转换Map为要求的数组格式，并对每个日期的schedules按slotPeriod排序
+					dateMap.forEach((scheduleItems, date) => {
+						// 按slotPeriod从小到大排序
+						scheduleItems.sort((a, b) => a.slotPeriod - b.slotPeriod);
+						arr.push({
+							scheduleDate: date,
+							schedules: scheduleItems
+						});
+					});
+
+					// 按日期排序
+					arr.sort((a, b) => a.scheduleDate.localeCompare(b.scheduleDate));
+
+					console.log(arr);
 					this.setData({
-						doctorList: res.data.data
+						scheduleList: arr
 					})
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon:'error'
-					})
-				}
-			}
-		})
-		wx.request({
-			url: this.data.url + `/simple/getDoctorInfo?id=${this.data.doctorId}`,
-			header: {
-				'Authorization': token
-			},
-			success: (res) => {
-				wx.hideLoading()
-				if (res.data.code == 200) {
-					this.setData({
-						doctor: res.data.data[0]
-					})
-				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'error'
+						icon: 'error'
 					})
 				}
 			}
 		})
 	},
-	 getDoctorArray(obj){
-		function isnull(params) {
-			let flag = true;
-			if(params.Anum == null && params.Mnum == null) return false
-			return flag;
-		}
-		function getweekday(date){
-			var weekArray = new Array("日", "一", "二", "三", "四", "五", "六");
-			var week = weekArray[new Date(date).getDay()];
-			return '周' + week;
-		}
-		let arr = []
-		for(let i=1;i<8;i++){
-			let obje = {
-				time:null,
-				Anum:null,
-				AtimeSegment:null,
-				Mnum:null,
-				MtimeSegment:null,
-				week:null
-			}
-			if(obj['Astate' +i] === 0 || obj['Astate' +i] === '0'){
-				obje.Anum = obj['Anum' +i];
-				obje.AtimeSegment = obj['AtimeSegment' +i];
-				obje.time = obj['time' +i];
-				obje.week = getweekday(obj['time' +i])
-			}
-			if(obj['Mstate' +i] === 0 || obj['Mstate' +i] === '0'){
-				obje.Mnum = obj['Mnum' +i];
-				obje.MtimeSegment = obj['MtimeSegment' +i];
-				obje.time = obj['time' +i];
-				obje.week = getweekday(obj['time' +i])
-			}
-			if(isnull(obje)) arr.push(obje)
-		}
-		return arr
+	changeSchedule(e) {
+		console.log(e.currentTarget.dataset.index);
+		this.setData({
+			scheduleChoice: e.currentTarget.dataset.index
+		})
 	},
-	/**
-	 * 生命周期函数--监听页面初次渲染完成
-	 */
-	getweek(iseasy) {
-		function formatDate(time) {
-			var date = new Date(time);
-			var year = date.getFullYear(),
-				month = date.getMonth()+1,
-				day = date.getDate()
-			var newTime = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day)
-			return newTime;
-		}
-		let today = new Date()
-		let date2 = new Date(today);
-		let dateArray = []
-		// date2.setDate(today.getDate() + 7)
-		for (let i = 0; i < 7; i++) {
-			let everyDay = formatDate(date2.setDate(today.getDate() + i))
-			let map = {
-				0: '周日',
-				1: '周一',
-				2: '周二',
-				3: '周三',
-				4: '周四',
-				5: '周五',
-				6: '周六'
-			}
-			let obj = {
-				date: everyDay,
-				week: map[new Date(date2.setDate(today.getDate() + i)).getDay()]
-			}
-			dateArray.push(obj)
+	bookAppointment(e) {
+		const patientName = wx.getStorageSync('name') || '未设置';
+		const doctorName = this.data.doctor.name || '医生信息未加载';
+		const appointmentInfo = e.currentTarget.dataset.info || {};
+
+		// 根据挂号信息获取详细显示内容
+		let slotTypeText = '';
+		switch (appointmentInfo.slotType) {
+			case 1: slotTypeText = '普通'; break;
+			case 2: slotTypeText = '专家'; break;
+			default: slotTypeText = '特需';
 		}
 
-		function easy() {
-			let arr = []
-			dateArray.forEach((item, index) => {
-				let obj = {
-					date: item.date.slice(item.date.length - 2, item.date.length),
-					week: item.week
-				}
-				arr.push(obj)
-			})
-			arr[0].week = '今日'
-			return arr
+		let slotPeriodText = '';
+		switch (appointmentInfo.slotPeriod) {
+			case 1: slotPeriodText = '8:00-8:30'; break;
+			case 2: slotPeriodText = '8:30-9:00'; break;
+			case 3: slotPeriodText = '9:00-9:30'; break;
+			case 4: slotPeriodText = '9:30-10:00'; break;
+			case 5: slotPeriodText = '10:00-10:30'; break;
+			case 6: slotPeriodText = '10:30-11:00'; break;
+			case 7: slotPeriodText = '13:30-14:00'; break;
+			case 8: slotPeriodText = '14:00-14:30'; break;
+			case 9: slotPeriodText = '14:30-15:00'; break;
+			case 10: slotPeriodText = '15:00-15:30'; break;
+			case 11: slotPeriodText = '15:30-16:00'; break;
+			case 12: slotPeriodText = '16:00-16:30'; break;
+			default: slotPeriodText = appointmentInfo.slotPeriod;
 		}
-		return iseasy ? easy() : dateArray
+
+		const appointmentDetails = `
+患者姓名：${patientName}\n
+医生姓名：${doctorName}\n
+挂号类型：${slotTypeText}\n
+挂号时间：${appointmentInfo.scheduleDate} ${slotPeriodText}\n
+挂号费用：¥${appointmentInfo.fee || 0}
+		`;
+
+		wx.showModal({
+			title: '确认预约',
+			content: appointmentDetails,
+			success: (res) => {
+				if (res.confirm) {
+					console.log('预约成功.');
+				}
+			}
+		});
 	},
-	uigoDoctor(e){
+	uigoDoctor(e) {
 		const pages = getCurrentPages()
 		const perpage = pages[pages.length - 1] //当前页面
 		let keys = `?depTwoId=${this.data.depTwoId}&hosName=${this.data.hosName}&depName=${this.data.depName}&doctorId=${e.currentTarget.dataset.orderid}`
@@ -200,7 +189,7 @@ Page({
 		wx.navigateTo({
 			url: '/' + perpage.route + keys
 		})
-	  
+
 	},
 	onReady() {
 

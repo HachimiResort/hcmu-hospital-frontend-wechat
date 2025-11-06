@@ -125,8 +125,10 @@ Page({
 		console.log(this.data.docList);
 	},
 	go(e) {
+		console.log(this.data.docList);
+		console.log(e);
 		wx.navigateTo({
-			url: `../doctorInfo/doctorInfo?docId=${this.data.docList[e.currentTarget.dataset.index].userId}`,
+			url: `../doctorInfo/doctorInfo?docId=${e.currentTarget.dataset.name}`,
 		})
 	},
 
