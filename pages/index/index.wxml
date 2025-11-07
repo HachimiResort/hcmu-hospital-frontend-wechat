@@ -19,7 +19,7 @@
 			<text class="tit">智能问诊</text>
 			<text class="ftit">AI病情分析</text>
 		</view>
-		<image class="zhuImg zhuImg2" src="../../image/AI.jpg"></image>
+		<image class="zhuImg zhuImg2" src="../../image/AI.png"></image>
 	</view>
 </view>
 <view class="mor">
@@ -29,7 +29,7 @@
 	</view>
 	<view class="morBlock" bindtap="indexMake">
 		<image src="../../image/mz.png"></image>
-		<text>正在预约</text>
+		<text>当前预约</text>
 	</view>
 	<view class="morBlock" bindtap="refund">
 		<image src="../../image/tk.png"></image>

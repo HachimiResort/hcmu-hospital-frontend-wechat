@@ -1,32 +1,64 @@
-<!--pages/appointment/doctorInfo/doctorInfo.wxml-->
+<!-- pages/appointment/doctorInfo/doctorInfo.wxml -->
 <wxs module="tool" src="/utils/tool.wxs"></wxs>
 <view class="doc-block">
-	<image src="{{url + doctor.photo}}" mode="scaleToFill"></image>
+	<image src="../../../image/dr.png" mode="scaleToFill"></image>
 	<view class="doc">
 		<text class="name">{{doctor.name}}</text>
-		<text class="pos">{{doctor.position}}</text>
+		<text class="pos">{{doctor.departmentName}}</text>
+		<text class="pos">{{doctor.title}}</text>
 	</view>
-	<text class="brief">医生简介：{{doctor.brief}}</text>
+	<text class="brief">专长：{{doctor.specialty}}</text>
+	<text class="brief">简介：{{doctor.bio}}</text>
 </view>
-<text class="title">医生全部排班</text>
+<text class="title">医生七天排班</text>
 <view class="doctor-list-box">
-	<text class="hod">{{depName}}</text>
-	<view class="time-list" wx:for="{{arrange}}" wx:key="index">
-		<view class="time">{{item.time}} <text class="time-week">{{item.week}}</text> </view>
-		<text class="cont" wx:if="{{item.Mnum != null}}">上午预约总量: {{item.Mnum}} <text class="duan">时间段: {{item.MtimeSegment}}</text> <text class="price">￥{{tool.moenyago(tool.sum(doctor.dia,doctor.reg))}}</text>  </text>
-		<text class="cont" wx:if="{{item.Anum != null}}">下午预约总量: {{item.Anum}} <text class="duan">时间段: {{item.AtimeSegment}}</text> <text class="price">￥{{tool.moenyago(tool.sum(doctor.dia,doctor.reg))}}</text>  </text>
-	</view>
+	<!-- 横向滚动的日期选择器 -->
+	<scroll-view scroll-x="true" class="date-scroll-container">
+		<view class="time-list" wx:for="{{scheduleList}}" wx:key="index" 
+			style="background-color: {{index===scheduleChoice ? '#fff' : '#f6f6f7'}}; border: {{index===scheduleChoice ? '2px solid #006eff' : '1px solid #eee'}};" 
+			data-index="{{index}}" bindtap="changeSchedule">
+			<view class="time-date" style="color: {{index===scheduleChoice ? '#006eff' : '#333'}}; text-align: center; display: flex; align-items: center; justify-content: center; height: 100%;">{{tool.formatDate(item.scheduleDate)}}</view>
+		</view>
+	</scroll-view>
+	<view class="schedule" wx:for="{{scheduleList[scheduleChoice].schedules}}" wx:for-item="item1" wx:key="index1">
+			<view class="schedule-content">
+				<view class="schedule-info">
+					<!-- 展示排班类型 -->
+					<view class="slot-type">
+						<text wx:if="{{item1.slotType === 1}}">普通</text>
+						<text wx:elif="{{item1.slotType === 2}}">专家</text>
+						<text wx:else>特需</text>
+					</view>
+					<!-- 展示时间段 -->
+					<view class="slot-period">
+						<text wx:if="{{item1.slotPeriod === 1}}">8:00-8:30</text>
+						<text wx:elif="{{item1.slotPeriod === 2}}">8:30-9:00</text>
+						<text wx:elif="{{item1.slotPeriod === 3}}">9:00-9:30</text>
+						<text wx:elif="{{item1.slotPeriod === 4}}">9:30-10:00</text>
+						<text wx:elif="{{item1.slotPeriod === 5}}">10:00-10:30</text>
+						<text wx:elif="{{item1.slotPeriod === 6}}">10:30-11:00</text>
+						<text wx:elif="{{item1.slotPeriod === 7}}">13:30-14:00</text>
+						<text wx:elif="{{item1.slotPeriod === 8}}">14:00-14:30</text>
+						<text wx:elif="{{item1.slotPeriod === 9}}">14:30-15:00</text>
+						<text wx:elif="{{item1.slotPeriod === 10}}">15:00-15:30</text>
+						<text wx:elif="{{item1.slotPeriod === 11}}">15:30-16:00</text>
+						<text wx:elif="{{item1.slotPeriod === 12}}">16:00-16:30</text>
+						<text wx:else>{{item1.slotPeriod}}</text>
+					</view>
+					<!-- 展示号源信息 -->
+					<view class="slot-number">
+						<text>{{item1.availableSlots}}/{{item1.totalSlots}}</text>
+					</view>
+					<!-- 展示费用 -->
+					<view class="slot-fee">¥{{item1.fee}}</view>
+				</view>
+				<!-- 展示状态 -->
+				<view class="slot-status">
+					<text wx:if="{{item1.status === 1}}" class="status-available" data-info="{{item1}}"bindtap="bookAppointment">预约</text>
+					<text wx:elif="{{item1.status === 2}}" class="status-full">约满</text>
+					<text wx:else class="status-unavailable">不可约</text>
+				</view>
+			</view>
+		</view>
 </view>
-<text class="title">同科室医生推荐</text>
-<view class="tui-doc-block" wx:for="{{doctorList}}" wx:key="index" wx:if="{{item.state != 0}}" bindtap="uigoDoctor" data-orderId="{{item.id}}">
-	<image src="{{url + item.photo}}" mode="scaleToFill"></image>
-	<view class="doc">
-		<text class="name">{{item.name}}<text class="pos">{{item.position}}</text></text>
-		<text class="brief">{{item.brief}}</text>
-	</view>
-</view>
-<view wx:if="{{doctorList.length == 0}}" class="not">
-		<image src="../../../image/not.png"></image>
-		<text>暂无数据</text>
-	</view>
 <view style="width: 1;height: 35px;"></view>

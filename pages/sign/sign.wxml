@@ -2,25 +2,23 @@
 <view wx:if="{{issign}}" class="content">
 	<text class="title">登录进入小程序</text>
 	<text class="ftitle">登录后使用小程序所有功能</text>
-	<input model:value="{{userName}}" type="text" placeholder="请输入登录账号" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>
-	<input model:value="{{password}}" type="password" placeholder="请输入登录密码" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>
+	<input model:value="{{userName}}" type="text" placeholder="请输入登录账号" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
+	<input model:value="{{password}}" type="password" placeholder="请输入登录密码" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
 	<text class="seek" bindtap="seek">找回密码</text>
 	<view class="button" style="margin-top: 40px;" bindtap="into">登录</view>
 	<text class="and" bindtap="change">还没有账号？<text style="color: #3478f7;">立即注册</text></text>
 </view>
 <view wx:else class="content reg">
 	<text class="title">注册小程序账号</text>
-	<text class="ftitle">登录后使用小程序所有功能</text>
-	<text class="hr">请填写账号信息</text>
-	<input model:value="{{userName}}" type="text" placeholder="请输入用户名" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>
-	<input model:value="{{name}}" type="nickname" placeholder="请输入真实姓名" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>
-	<input model:value="{{email}}" type="text" placeholder="请输入绑定邮箱" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>
-	<input model:value="{{password}}" type="password" placeholder="请输入登录密码" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>
-	<input model:value="{{checkPassword}}" type="password" placeholder="请重复输入登录密码" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>
+	<input model:value="{{userName}}" type="text" placeholder="请输入用户名" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
+	<input model:value="{{name}}" type="nickname" placeholder="请输入真实姓名" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
+	<input model:value="{{email}}" type="text" placeholder="请输入绑定邮箱" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
+	<input model:value="{{password}}" type="password" placeholder="请输入登录密码" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
+	<input model:value="{{checkPassword}}" type="password" placeholder="请重复输入登录密码" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
 	
-	<input model:value="{{phone}}" type="number" placeholder="请输入绑定手机号" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>
+	<input model:value="{{phone}}" type="number" placeholder="请输入绑定手机号" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
 	<view style="display: flex; margin-top: 20px; align-items: center; width: 658rpx; position: relative; left: 49rpx; top: -14rpx">
-		<input model:value="{{code}}" type="number" placeholder="请输入验证码" placeholder-style="color:#ccc;font-size:13px;" maxlength="22" style="flex: 1; margin-right: 10px;"/>
+		<input model:value="{{code}}" type="number" placeholder="请输入验证码" placeholder-style="color:#ccc;font-size:13px;" maxlength="50" style="flex: 1; margin-right: 10px;"/>
 		<view class="button" bindtap="register" style="width: 310rpx; display: block; box-sizing: border-box">获取邮箱验证码</view>
 	</view>
 	<view class="button" style="margin-top: 40px; position: relative; left: 2rpx; top: -49rpx" bindtap="registerVerify">立即注册</view>

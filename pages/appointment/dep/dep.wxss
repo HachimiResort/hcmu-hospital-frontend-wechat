@@ -1,3 +1,8 @@
+page {
+	height: 100vh;
+	overflow: hidden;
+}
+
 .choice-hos-box{
 	margin-top: 10px;
 	width: 750rpx;
@@ -19,20 +24,29 @@
 	line-height: 32px;
 	box-sizing: border-box;
 }
+
 .main{
 	margin-top: 10px;
 	display: flex;
+	height: calc(100vh - 55px);
 }
+
 .left{
 	width: 35%;
 	box-sizing: border-box;
+	height: 100%;
+	overflow-y: auto;
 }
+
 .right{
 	width: 64%;
 	padding-left: 15px;
 	box-sizing: border-box;
+	height: 100%;
+	overflow-y: auto;
 }
-.left-block,.right-block{
+
+.left-block{
 	padding: 0 10px 0 25px;
 	box-sizing: border-box;
 	width: 100%;
@@ -44,19 +58,71 @@
 	font-size: 15px;
 	font-weight: 300;
 }
+
+.right-block{
+	padding: 12px;
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 90px;
+	display: flex;
+	align-items: center;
+	background-color: #fff;
+	border-radius: 8px;
+	margin-bottom: 10px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.right-block:active {
+	transform: scale(0.98);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 医生头像样式 */
+.doc-avatar {
+	width: 60px;
+	height: 80px;
+	border-radius: 20%;
+	background-color: #f5f5f5;
+	margin-right: 12px;
+}
+
+/* 医生信息容器 */
+.doc-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+/* 医生姓名样式 */
+.doc-name {
+	font-size: 16px;
+	font-weight: 500;
+	color: #333;
+	margin-bottom: 4px;
+}
+
+/* 医生职称样式 */
+.doc-title {
+	font-size: 13px;
+	color: #666;
+	line-height: 1.4;
+}
+
 .not{
-	width: 100%;
-	height: 300px;
-	margin-top: 30px;
+	width: 64%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
-.not image{
-	width: 100%;
-}
+
 .not text{
 	font-size: 15px;
 	color: #ccc;
 	display: block;
-	width: 100%;
 	text-align: center;
 	margin-top: 20px;
 }

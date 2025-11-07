@@ -5,18 +5,18 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
-		url:getApp().globalData.$url,
-		swiper:[],
-		msgNum:0
+		url: getApp().globalData.$url,
+		swiper: [],
+		msgNum: 0
 	},
-	swiperUigo:(id)=>{
+	swiperUigo: (id) => {
 		wx.navigateTo({
 			url: `/pages/article/content/content?id=${id.currentTarget.dataset.patid}`,
-		  })
+		})
 	},
-	message(){
+	message() {
 		wx.navigateTo({
-		  url: '../my/message/message',
+			url: '../my/message/message',
 		})
 	},
 	/**
@@ -24,41 +24,41 @@ Page({
 	 */
 	onLoad: function (options) {
 		wx.showLoading({
-		  title: '加载中...',
+			title: '加载中...',
 		})
 		this.url = getApp().globalData.$url;
 		wx.request({
-		  url: this.url +'/api/swiper',
-		  method:'get',
-		  success:(res)=>{
-			  wx.hideLoading()
-			  this.setData({
-				  swiper:res.data.data
-			  })
-			  let userId = wx.getStorageSync('userId')
+			url: this.url + '/api/swiper',
+			method: 'get',
+			success: (res) => {
+				wx.hideLoading()
+				this.setData({
+					swiper: res.data.data
+				})
+				let userId = wx.getStorageSync('userId')
 				let token = wx.getStorageSync('token')
-			  wx.request({
-				url: this.url + `/simple/getMessageNum?userId=${userId}`,
-				method: 'get',
-				header: {
-					'Authorization': token
-				},
-				success: (reslut) => {
-					this.setData({
-						msgNum: reslut.data.num == null ? 0 : reslut.data.num
-					})
-				}
-			})
-		   }
+				wx.request({
+					url: this.url + `/simple/getMessageNum?userId=${userId}`,
+					method: 'get',
+					header: {
+						'Authorization': token
+					},
+					success: (reslut) => {
+						this.setData({
+							msgNum: reslut.data.num == null ? 0 : reslut.data.num
+						})
+					}
+				})
+			}
 		})
 	},
 	imageError($event) {
 		let arr = this.data.swiper
 		arr[$event.currentTarget.dataset.index].imgUrl = '../../image/bg.png';
 		this.setData({
-			swiper:arr
+			swiper: arr
 		})
-	 },	
+	},
 
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
@@ -73,58 +73,106 @@ Page({
 	onShow: function () {
 		let userId = wx.getStorageSync('userId')
 		let token = wx.getStorageSync('token')
-			wx.request({
-				url: this.url + `/simple/getMessageNum?userId=${userId}`,
-				method: 'get',
-				header: {
-					'Authorization': token
-				},
-				success: (reslut) => {
-					this.setData({
-						msgNum: reslut.data.num == null ? 0 : reslut.data.num
+		wx.request({
+			url: this.url + `/simple/getMessageNum?userId=${userId}`,
+			method: 'get',
+			header: {
+				'Authorization': token
+			},
+			success: (reslut) => {
+				this.setData({
+					msgNum: reslut.data.num == null ? 0 : reslut.data.num
+				})
+			}
+		})
+	},
+	course_uigo() {
+		wx.navigateTo({
+			url: '/pages/course/course',
+		})
+	},
+	articleUigo(e) {
+		wx.navigateTo({
+			url: `/pages/article/article?name=${e.currentTarget.dataset.name}`,
+		})
+	},
+	navUigo() {
+		wx.navigateTo({
+			url: '/pages/navigation/navigation',
+		})
+	},
+	indexPay() {
+		wx.navigateTo({
+			url: '../my/payOrder/payOrder?type=index'
+		})
+	},
+	indexMake() {
+		let token = wx.getStorageSync('token')
+		wx.showLoading({
+			title: '加载中...',
+		})
+		wx.request({
+			url: this.data.url + `/patient-profiles/${wx.getStorageSync('userId')}/appointments`,
+			header: {
+				'Authorization': token
+			},
+			success: (res) => {
+				if (res.data.code == 200) {
+					wx.navigateTo({
+						url: '/pages/make/make',
+					})
+				} else {
+					wx.navigateTo({
+						url: '/pages/sign/sign',
 					})
 				}
-			})
-	},
-	course_uigo(){
-		wx.navigateTo({
-		  url: '/pages/course/course',
+			},
+			fail: (err) => {
+				wx.hideLoading()
+				wx.showToast({
+					title: '请检查网络连接',
+					icon: 'error'
+				})
+			}
 		})
 	},
-	articleUigo(e){
+	refund() {
 		wx.navigateTo({
-		  url: `/pages/article/article?name=${e.currentTarget.dataset.name}`,
+			url: '../refund/refund',
 		})
 	},
-	navUigo(){
-		wx.navigateTo({
-		  url: '/pages/navigation/navigation',
-		})
-	},
-	indexPay(){
-		wx.navigateTo({
-			url:'../my/payOrder/payOrder?type=index'
-		})
-	},
-	indexMake(){
-		wx.navigateTo({
-			url:'../make/make?type=index'
-		})
-	},
-	refund(){
-		wx.navigateTo({
-		  url: '../refund/refund',
-		})
-	},
-	recharge(){
+	recharge() {
 		wx.navigateTo({
 			url: '../recharge/recharge',
-		  })
-	},
-	make(){
-		wx.navigateTo({
-		  url: '../appointment/appointment',
 		})
+	},
+	make() {
+		let token = wx.getStorageSync('token')
+		wx.request({
+			url: this.data.url + '/departments',
+			header: {
+				'Authorization': token
+			},
+			success: (res) => {
+				if (res.data.code == 200) {
+					wx.navigateTo({
+						url: '../appointment/dep/dep',
+					})
+				} else {
+					wx.navigateTo({
+						url: '/pages/sign/sign',
+					})
+				}
+			},
+			fail: (err) => {
+				wx.hideLoading()
+				wx.showToast({
+					title: '请检查网络连接',
+					icon: 'error'
+				})
+			}
+		})
+
 	},
 	/**
 	 * 生命周期函数--监听页面隐藏

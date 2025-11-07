@@ -31,11 +31,13 @@ Page({
 				if (res.data.code == 200) {
 					wx.setStorageSync('userName', res.data.data.userName);
 					wx.setStorageSync('name', res.data.data.name);
-					wx.setStorageSync('userId', res.data.data.userId)
+					wx.setStorageSync('userId', res.data.data.userId);
+					wx.setStorageSync('userInfo', res.data.data);
 					this.setData({
 						info: res.data.data,
 						isLogin: true
 					})
+					console.log(this.data.info);
 				} else {
 					this.setData({
 						isLogin: false
@@ -101,7 +103,7 @@ Page({
 						url: that.url + '/auth/logout/' + wx.getStorageSync('userId'),
 						method: 'post',
 						success: (res1) => {
-							console.log(res1);	
+							console.log(res1);
 						},
 						fail: (err) => {
 							console.log(err);

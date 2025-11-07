@@ -117,10 +117,90 @@
 .block{
 	border: 1px solid #eee;
 	width: 89%;
-	padding: 10px 13px;
+	padding: 15px;
 	box-sizing: border-box;
 	margin: 15px auto;
-	border-radius: 3px;
+	border-radius: 8px;
+	background-color: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	transition: box-shadow 0.3s ease;
+}
+
+.block:active {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 头部样式 */
+.block-header {
+	padding-bottom: 12px;
+	margin-bottom: 12px;
+	border-bottom: 1px solid #f0f0f0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.order-no {
+	max-width: 75%;
+	font-size: 14px;
+	color: #666;
+	font-weight: 500;
+}
+
+.order-status {
+	font-size: 14px;
+	font-weight: 500;
+	padding: 3px 5px;
+	border-radius: 5px;
+}
+
+/* 内容区域样式 */
+.block-content {
+	padding: 5px 0;
+}
+
+.info-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px 0;
+	border-bottom: 1px solid #f8f8f8;
+}
+
+.info-row:last-child {
+	border-bottom: none;
+}
+
+.info-label {
+	font-size: 13px;
+	color: #888;
+	width: 70px;
+	flex-shrink: 0;
+}
+
+.info-value {
+	font-size: 13px;
+	color: #333;
+	flex: 1;
+	text-align: right;
+	padding-left: 10px;
+}
+
+/* 针对不同状态的特殊样式 */
+.status-available {
+	color: #4caf50;
+}
+
+.status-pending {
+	color: #ff9800;
+}
+
+.status-cancelled {
+	color: #607d8b;
+}
+
+.status-completed {
+	color: #9e9e9e;
 }
 .top{
 	display: flex;
