@@ -52,9 +52,7 @@ Page({
 					wx.setStorageSync('token', res.data.data.token);
 					console.log(wx.getStorageSync('token'));
 					wx.setStorageSync('userId', res.data.data.userId);
-					wx.reLaunch({
-						url: '/pages/my/my',
-					})
+					wx.navigateBack()
 				} else {
 					wx.showToast({
 						title: res.data.msg,
