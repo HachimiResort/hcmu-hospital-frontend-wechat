@@ -109,10 +109,7 @@ Page({
 						},
 						fail: (err) => {
 							console.log(err);
-							wx.showToast({
-								title: '请检查网络连接',
-								icon:'none'
-							})
+							this.show("请检查网络连接")
 						}
 					})
 					wx.setStorageSync('token', '')

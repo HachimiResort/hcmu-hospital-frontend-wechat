@@ -31,10 +31,8 @@ Page({
 		})
 	},
 	into() {
-		if (this.data.userName == "" || this.data.password == '') return wx.showToast({
-			title: '请输入完整',
-			icon:'none'
-		})
+		if (this.data.userName == "" || this.data.password == '')
+			return this.show("请输入完整")
 		wx.showLoading({
 			title: '身份验证中..',
 		})
@@ -56,31 +54,21 @@ Page({
 					wx.setStorageSync('userId', res.data.data.userId);
 					wx.navigateBack()
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon:'none'
-				})
+				this.show('请检查网络连接')
 			}
 		})
 	},
 	register() {
 		if (this.data.userName == "" || this.data.password == '' || this.data.checkPassword == ''
-			|| this.data.name == "" || this.data.email == '') return wx.showToast({
-				title: '请输入完整',
-				icon:'none'
-			})
-		if (this.data.password != this.data.checkPassword) return wx.showToast({
-			title: '两次密码不一致',
-			icon:'none'
-		})
+			|| this.data.name == "" || this.data.email == '')
+			return this.show("请输入完整")
+		if (this.data.password != this.data.checkPassword)
+			return this.show("两次密码不一致")
 		wx.showLoading({
 			title: '获取验证码中...',
 		})
@@ -105,31 +93,21 @@ Page({
 						title: '验证码发送成功!',
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon:'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},
 	registerVerify() {
 		if (this.data.userName == "" || this.data.password == '' || this.data.checkPassword == ''
-			|| this.data.name == "" || this.data.email == '' || this.data.code == '') return wx.showToast({
-				title: '请输入完整',
-				icon:'none'
-			})
-		if (this.data.password != this.data.checkPassword) return wx.showToast({
-			title: '两次密码不一致',
-			icon:'none'
-		})
+			|| this.data.name == "" || this.data.email == '' || this.data.code == '') 
+			return this.show("请输入完整")
+		if (this.data.password != this.data.checkPassword) 
+			return this.show("两次密码不一致")
 		wx.showLoading({
 			title: '注册中...',
 		})
@@ -152,18 +130,12 @@ Page({
 						issign: true
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon:'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},

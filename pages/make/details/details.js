@@ -48,14 +48,11 @@ Page({
 									title: '支付成功',
 								})
 							} else {
-								// wx.showToast({
-								// 	title: res1.data.msg,
-								// 	icon:'none'
-								// })
 								wx.showToast({
 									title: '暂时无法支付',
 									icon:'none',
 								})
+								// this.show(res1.data.msg)
 							}
 						}
 					})
@@ -97,18 +94,12 @@ Page({
 										title: '已取消',
 									})
 								} else {
-									wx.showToast({
-										title: res1.data.msg,
-										icon:'none'
-									})
+									this.show(res.data.msg)
 								}
 							}
 						})
 					} else {
-						wx.showToast({
-							title: '请输入取消原因',
-							icon:'none'
-						})
+						this.show("请输入取消原因")
 					}
 				} else if (res.cancel) {
 

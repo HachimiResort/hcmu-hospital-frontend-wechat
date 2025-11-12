@@ -55,19 +55,13 @@ Page({
 						doctor: res.data.data
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				console.log(err)
 				wx.hideLoading()
-				wx.showToast({
-					title: '出现错误',
-					icon:'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 		let requestDTO = {
@@ -117,10 +111,7 @@ Page({
 						scheduleList: arr
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			}
 		})
@@ -194,19 +185,12 @@ Page({
 							} else {
 								wx.hideLoading()
 								this.show(res.data.msg)
-								// wx.showToast({
-								// 	title: res.data.msg,
-								// 	icon:'none'
-								// })
 							}
 						},
 						fail: (err) => {
 							console.log(err)
 							wx.hideLoading()
-							wx.showToast({
-								title: '出现错误',
-								icon:'none'
-							})
+							this.show("请检查网络连接")
 						}
 					})
 				}

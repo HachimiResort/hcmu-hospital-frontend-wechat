@@ -131,10 +131,7 @@ Page({
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon:'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},
@@ -168,10 +165,7 @@ Page({
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon:'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 

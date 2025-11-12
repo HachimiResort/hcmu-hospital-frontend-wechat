@@ -20,14 +20,10 @@ Page({
 		this.url = getApp().globalData.$url;
 	},
 	into() {
-		if (this.data.oldPassword == '' || this.data.newPassword == '' || this.data.checkPassword == '') return wx.showToast({
-			title: '请输入完整',
-			icon:'none'
-		})
-		if (this.data.newPassword != this.data.checkPassword) return wx.showToast({
-			title: '两次密码不一致',
-			icon:'none'
-		})
+		if (this.data.oldPassword == '' || this.data.newPassword == '' || this.data.checkPassword == '')
+			return this.show("请输入完整")
+		if (this.data.newPassword != this.data.checkPassword)
+			return this.show("两次密码不一致")
 		wx.showLoading({
 			title: '修改中..',
 		})
@@ -53,18 +49,12 @@ Page({
 						url: '/pages/my/my',
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon:'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},

@@ -33,18 +33,12 @@ Page({
 				}else if(res.data.code == 403){
 					getApp().notPermission()
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon:'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},

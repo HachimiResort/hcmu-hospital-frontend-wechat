@@ -46,30 +46,22 @@ Page({
 					wx.navigateBack({
 						delta: 1,
 					})
-					wx.showToast({
-						title: '出现错误',
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.navigateBack({
 					delta: 1,
 				})
-				wx.showToast({
-					title: '请检查网络连接',
-					icon: 'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},
 	change() {
 	},
 	register() {
-		if (this.data.nickname == "") return wx.showToast({
-			title: '请输入完整',
-			icon:'none'
-		})
+		if (this.data.nickname == "")
+			return this.show("请输入昵称")
 		wx.showLoading({
 			title: '修改中...',
 		})
@@ -93,18 +85,12 @@ Page({
 						title: '修改成功',
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon:'none'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},
@@ -149,17 +135,11 @@ Page({
 							title: '修改成功',
 						})
 					} else {
-						wx.showToast({
-							title: res.msg,
-							icon: "error"
-						})
+						this.show(res.data.msg)
 					}
 				},
 				fail: (err) => {
-					wx.showToast({
-						title: '请检查网络连接',
-						icon: "error"
-					})
+					this.show("请检查网络连接")
 				}
 			})
 		}

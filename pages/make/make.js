@@ -32,10 +32,7 @@ Page({
 						orderList: res.data.data.list
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			}
 		})
@@ -72,10 +69,7 @@ Page({
 					})
 				} else {
 					console.log(res.data)
-					wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					})
+					this.show(res.data.msg)
 				}
 			}
 		})
