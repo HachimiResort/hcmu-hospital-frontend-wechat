@@ -1,4 +1,5 @@
 // pages/appointment/hosChange/hosChange.js
+const app = getApp()
 Page({
 
 	/**
@@ -23,6 +24,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		this.setData({
 			docId: parseInt(options.docId)
 		})
@@ -191,10 +193,11 @@ Page({
 								})
 							} else {
 								wx.hideLoading()
-								wx.showToast({
-									title: res.data.msg,
-									icon:'none'
-								})
+								this.show(res.data.msg)
+								// wx.showToast({
+								// 	title: res.data.msg,
+								// 	icon:'none'
+								// })
 							}
 						},
 						fail: (err) => {

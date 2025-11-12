@@ -1,4 +1,5 @@
 /**app.wxss**/
+@import "./component/appToast/appToast.wxss"; 
 .container {
   height: 100%;
   display: flex;

@@ -11,8 +11,8 @@
 	padding-top: 15px;
 }
 .doc-block image{
-	width: 48px;
-	height: 48px;
+	width: 60px;
+	height: 80px;
 	border-radius: 5px;
 	background-color: #e6f1ff;
 	margin-right: 15px;
@@ -20,7 +20,7 @@
 	margin-left: 10px;
 }
 .doc-block .doc{
-	width: calc(100% - 81px);
+	width: calc(100% - 100px);
 	display: block;
 }
 .doc-block .doc .name{
@@ -53,14 +53,16 @@
 	margin-bottom: 10px;
 }
 .title{
-	font-weight: 500;
-	font-size: 15px;
-	color: #333;
+	font-weight: 600;
+	font-size: 17px;
 	display: block;
 	width: 100%;
 	padding-left: 15px;
 	margin: 20px 0;
+	position: relative;
+	padding-left: 20px;
 }
+
 .doctor-list-box{
 	width: 90%;
 	margin: 5px auto;
@@ -129,7 +131,7 @@
 	overflow-x: auto;
 	white-space: nowrap;
 	margin-bottom: 15px;
-	padding-bottom: 5px;
+	padding-bottom: 15px;
 
 }
 
