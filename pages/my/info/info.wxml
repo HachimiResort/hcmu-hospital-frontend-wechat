@@ -1,4 +1,6 @@
 <!-- pages/sign/sign.wxml -->
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <view class="content reg">
 				<view class="head">
 								<image src="{{avatar}}" bindtap="look"></image>

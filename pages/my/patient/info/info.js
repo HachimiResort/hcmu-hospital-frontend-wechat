@@ -1,4 +1,5 @@
 // pages/my/message/message.js
+const app = getApp()
 Page({
 
 	/**
@@ -35,6 +36,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		let info = this.data.info
 		info.id = (options.id === ''|| options.id == null) ? 0 : options.id
 		this.setData({

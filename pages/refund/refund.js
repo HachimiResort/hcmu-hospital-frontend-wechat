@@ -1,4 +1,5 @@
 // pages/my/message/message.js
+const app = getApp()
 Page({
 
 	/**
@@ -19,6 +20,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		let token = wx.getStorageSync('token')
 		wx.showLoading({
 			title: '加载中...',

@@ -1,4 +1,6 @@
 <!--pages/course/process/process.wxml-->
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <view wx:if="{{type == '添加就诊人'}}">
 	<text class="h1">1、先注册登录小程序</text>
 	<text class="h1">2、点击左下角 “个人中心” ，之后点击 “管理就诊人”</text>

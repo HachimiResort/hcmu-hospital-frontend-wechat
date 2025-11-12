@@ -1,3 +1,5 @@
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <image src="{{url + info.imgUrl}}" wx:if="{{info.imgUrl}}" class="headImg" mode="scaleToFill"></image>
 <view class="main">
 	<text class="title">{{info.title}}</text>

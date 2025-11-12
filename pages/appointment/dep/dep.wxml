@@ -1,3 +1,6 @@
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
+
 <view class="main">
 	<view class="left" style="background-color: #f6f6f7;">
 		<view class="left-block" wx:for="{{depList}}" wx:key="index" style="background-color: {{depChoice[index] ? '#fff' : '#f6f6f7'}};color: {{depChoice[index] ? '#006eff' : '#333'}};" data-index="{{index}}" bindtap="depChange">

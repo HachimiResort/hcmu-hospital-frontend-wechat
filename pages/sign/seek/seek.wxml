@@ -1,3 +1,5 @@
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <view class="content" wx:if="{{isemail}}">
 	<text class="hr">请填写注册时绑定邮箱</text>
 	<input model:value="{{email}}" type="text" placeholder="请输入邮箱" placeholder-style="color:#ccc;font-size:13px;" maxlength="22"/>

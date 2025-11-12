@@ -1,4 +1,5 @@
 // pages/my/feedback/feedback.js
+const app = getApp()
 Page({
 
 	/**

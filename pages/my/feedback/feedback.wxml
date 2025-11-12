@@ -1,3 +1,5 @@
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <text class="ts">请填写反馈信息</text>
 <view class="block" bindchange="changeValue">
 	<text class="tit">问题类型</text>

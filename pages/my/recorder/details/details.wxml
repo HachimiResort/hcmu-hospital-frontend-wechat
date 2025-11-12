@@ -1,3 +1,5 @@
+<import src="../../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <wxs module="filter" src="../../../../utils/tool.wxs"></wxs>
 <text wx:if="{{order.orderId != '' && order.orderId != null}}"  class="title" style="color:{{order.balance == 0 ? '#006eff' : '#F46363'}};">{{order.balance == 0 ? '未支付' : '+' + filter.moenyago(order.auantity)}}</text>
 <text wx:if="{{order.orderId != '' && order.orderId != null}}"  class="ts" >{{order.balance == 0 ? '欲充值金额：￥'+filter.moenyago(order.auantity) : '充值成功'}}</text>
