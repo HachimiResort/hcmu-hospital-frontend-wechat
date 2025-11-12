@@ -19,7 +19,7 @@ Page({
 	register(){
 		if(this.data.email=="") return wx.showToast({
 		  title: '请输入邮箱',
-		  icon:'error'
+		  icon:'none'
 		})
 		wx.showLoading({
 		  title: '获取中..',
@@ -43,7 +43,7 @@ Page({
 			  }else{
 				  wx.showToast({
 					title: res.data.msg,
-					icon:'error'
+					icon:'none'
 				  })
 			  }
 		  },
@@ -51,7 +51,7 @@ Page({
 			wx.hideLoading()
 			  wx.showToast({
 				title: '请检查网络连接',
-				icon:'error'
+				icon:'none'
 			  })
 		  }
 		})
@@ -59,11 +59,11 @@ Page({
 	into(){
 		if(this.data.email=="") return wx.showToast({
 		  title: '请输入邮箱',
-		  icon:'error'
+		  icon:'none'
 		})
 		if(this.data.code=="") return wx.showToast({
 		  title: '请输入验证码',
-		  icon:'error'
+		  icon:'none'
 		})
 		wx.showLoading({
 		  title: '修改中..',
@@ -91,7 +91,7 @@ Page({
 			  }else{
 				  wx.showToast({
 					title: res.data.msg,
-					icon:'error'
+					icon:'none'
 				  })
 			  }
 		  },
@@ -99,7 +99,7 @@ Page({
 			wx.hideLoading()
 			  wx.showToast({
 				title: '请检查网络连接',
-				icon:'error'
+				icon:'none'
 			  })
 		  }
 		})

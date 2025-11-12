@@ -54,7 +54,7 @@ Page({
 							  }else{
 								  wx.showToast({
 									title: res.data.msg,
-									icon:'error'
+									icon:'none'
 								  })
 							  }
 						 }
@@ -68,7 +68,7 @@ Page({
 					wx.hideLoading()
 					wx.showToast({
 					  title: res.data.msg,
-					  icon:'error'
+					  icon:'none'
 					})
 				}
 		   },
@@ -76,7 +76,7 @@ Page({
 			wx.hideLoading()
 			   wx.showToast({
 				 title: '请检查网络连接',
-				 icon:'error'
+				 icon:'none'
 			   })
 		   }
 		})
@@ -123,7 +123,7 @@ Page({
 						  } else if (rest.cancel) {
 							wx.showToast({
 							  title: '取消支付',
-							  icon:'error'
+							  icon:'none'
 							})
 						  }
 						}
@@ -131,7 +131,7 @@ Page({
 				}else{
 					wx.showToast({
 					  title: res.data.msg,
-					  icon:'error'
+					  icon:'none'
 					})
 				}
 			}
@@ -169,7 +169,7 @@ Page({
 					}else{
 						wx.showToast({
 						  title: res.data.msg,
-						  icon:'error'
+						  icon:'none'
 						})
 					}
 				}
@@ -204,7 +204,7 @@ Page({
 				if(res.content == ''){
 					wx.showToast({
 					  title: '请输入金额',
-					  icon:'error'
+					  icon:'none'
 					})
 					that.setData({
 						money:50,
@@ -213,7 +213,7 @@ Page({
 				}else if(Number(res.content) == NaN){
 					wx.showToast({
 						title: '请输入数值',
-						icon:'error'
+						icon:'none'
 					  })
 					  that.setData({
 						money:50,

@@ -131,7 +131,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})
@@ -168,7 +168,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})

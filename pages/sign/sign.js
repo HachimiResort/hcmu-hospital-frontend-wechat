@@ -31,7 +31,7 @@ Page({
 	into() {
 		if (this.data.userName == "" || this.data.password == '') return wx.showToast({
 			title: '请输入完整',
-			icon: 'error'
+			icon:'none'
 		})
 		wx.showLoading({
 			title: '身份验证中..',
@@ -56,7 +56,7 @@ Page({
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			},
@@ -64,7 +64,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})
@@ -73,11 +73,11 @@ Page({
 		if (this.data.userName == "" || this.data.password == '' || this.data.checkPassword == ''
 			|| this.data.name == "" || this.data.email == '') return wx.showToast({
 				title: '请输入完整',
-				icon: 'error'
+				icon:'none'
 			})
 		if (this.data.password != this.data.checkPassword) return wx.showToast({
 			title: '两次密码不一致',
-			icon: 'error'
+			icon:'none'
 		})
 		wx.showLoading({
 			title: '获取验证码中...',
@@ -105,7 +105,7 @@ Page({
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			},
@@ -113,7 +113,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})
@@ -122,11 +122,11 @@ Page({
 		if (this.data.userName == "" || this.data.password == '' || this.data.checkPassword == ''
 			|| this.data.name == "" || this.data.email == '' || this.data.code == '') return wx.showToast({
 				title: '请输入完整',
-				icon: 'error'
+				icon:'none'
 			})
 		if (this.data.password != this.data.checkPassword) return wx.showToast({
 			title: '两次密码不一致',
-			icon: 'error'
+			icon:'none'
 		})
 		wx.showLoading({
 			title: '注册中...',
@@ -152,7 +152,7 @@ Page({
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			},
@@ -160,7 +160,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})

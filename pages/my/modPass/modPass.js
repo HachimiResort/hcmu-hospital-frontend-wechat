@@ -20,11 +20,11 @@ Page({
 	into() {
 		if (this.data.oldPassword == '' || this.data.newPassword == '' || this.data.checkPassword == '') return wx.showToast({
 			title: '请输入完整',
-			icon: 'error'
+			icon:'none'
 		})
 		if (this.data.newPassword != this.data.checkPassword) return wx.showToast({
 			title: '两次密码不一致',
-			icon: 'error'
+			icon:'none'
 		})
 		wx.showLoading({
 			title: '修改中..',
@@ -53,7 +53,7 @@ Page({
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			},
@@ -61,7 +61,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})

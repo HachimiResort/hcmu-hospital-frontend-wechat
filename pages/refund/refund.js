@@ -51,7 +51,7 @@ Page({
 							} else {
 								wx.showToast({
 									title: res.data.msg,
-									icon: 'error'
+									icon:'none'
 								})
 							}
 						}
@@ -65,7 +65,7 @@ Page({
 					wx.hideLoading()
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			},
@@ -73,7 +73,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})
@@ -92,7 +92,7 @@ Page({
 		if (this.data.money == '' || this.data.money == null) return;
 		if (this.data.money > this.data.balance) return wx.showToast({
 			title: '余额不足',
-			icon: 'error'
+			icon:'none'
 		})
 		wx.showModal({
 			title: '提示',
@@ -129,7 +129,7 @@ Page({
 					} else {
 						wx.showToast({
 							title: res.data.msg,
-							icon: 'error'
+							icon:'none'
 						})
 					}
 				}

@@ -46,7 +46,7 @@ Page({
 					})
 					wx.showToast({
 						title: '出现错误',
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			},
@@ -66,7 +66,7 @@ Page({
 	register() {
 		if (this.data.nickname == "") return wx.showToast({
 			title: '请输入完整',
-			icon: 'error'
+			icon:'none'
 		})
 		wx.showLoading({
 			title: '修改中...',
@@ -93,7 +93,7 @@ Page({
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			},
@@ -101,7 +101,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})

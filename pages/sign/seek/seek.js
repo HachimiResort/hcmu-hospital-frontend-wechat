@@ -17,7 +17,7 @@ Page({
 	into(){
 		if(this.data.email == '') return wx.showToast({
 		  title: '请输入邮箱',
-		  icon:'error'
+		  icon:'none'
 		})
 		wx.showLoading({
 			title: '发送中...',
@@ -42,7 +42,7 @@ Page({
 			}else{
 				wx.showToast({
 				  title: res.data.msg,
-				  icon:'error'
+				  icon:'none'
 				})
 			}
 		  }
@@ -51,7 +51,7 @@ Page({
 	vercode(){
 		if(this.data.code == '') return wx.showToast({
 			title: '请输入验证码',
-			icon:'error'
+			icon:'none'
 		  })
 		  wx.showLoading({
 			title: '验证中...',
@@ -77,7 +77,7 @@ Page({
 			  }else{
 				  wx.showToast({
 					title: res.data.msg,
-					icon:'error'
+					icon:'none'
 				  })
 			  }
 			}
@@ -86,11 +86,11 @@ Page({
 	modpass(){
 		if(this.data.password == '' || this.data.newpassword == '') return wx.showToast({
 			title: '请输入完整',
-			icon:'error'
+			icon:'none'
 		  })
 		  if(this.data.password != this.data.newpassword) return wx.showToast({
 			title: '两次密码不一致',
-			icon:'error'
+			icon:'none'
 		  })
 		  wx.showLoading({
 			title: '重置中...',
@@ -124,7 +124,7 @@ Page({
 			  }else{
 				  wx.showToast({
 					title: res.data.msg,
-					icon:'error'
+					icon:'none'
 				  })
 			  }
 			}

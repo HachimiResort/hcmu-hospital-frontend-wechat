@@ -48,11 +48,11 @@ Page({
 							} else {
 								// wx.showToast({
 								// 	title: res1.data.msg,
-								// 	icon: 'error'
+								// 	icon:'none'
 								// })
 								wx.showToast({
 									title: '暂时无法支付',
-									icon: 'error',
+									icon:'none',
 								})
 							}
 						}
@@ -97,7 +97,7 @@ Page({
 								} else {
 									wx.showToast({
 										title: res1.data.msg,
-										icon: 'error'
+										icon:'none'
 									})
 								}
 							}
@@ -105,7 +105,7 @@ Page({
 					} else {
 						wx.showToast({
 							title: '请输入取消原因',
-							icon: 'error'
+							icon:'none'
 						})
 					}
 				} else if (res.cancel) {

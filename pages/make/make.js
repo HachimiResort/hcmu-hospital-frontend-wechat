@@ -32,7 +32,7 @@ Page({
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			}
@@ -72,7 +72,7 @@ Page({
 					console.log(res.data)
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			}
