@@ -6,9 +6,9 @@ Page({
 	 */
 	data: {
 		url: getApp().globalData.$url,
-		item:{},
-		id:'',
-		doctor:{}
+		item: {},
+		id: '',
+		doctor: {}
 	},
 
 	/**
@@ -16,104 +16,103 @@ Page({
 	 */
 	onLoad(options) {
 		this.setData({
-			id:options.id
-		})
-		let token = wx.getStorageSync('token')
-		wx.showLoading({
-		  title: '加载中...',
-		})
-		wx.request({
-		  url: this.data.url + `/make/getMakeInf?id=${this.data.id}`,
-		  header: {
-			'Authorization': token
-		   },
-		   success:(res)=>{
-			   wx.hideLoading()
-				if(res.data.code == 200){
-					wx.request({
-						url: this.data.url + `/simple/getDoctorInfo?id=${res.data.rows[0].doctorId}`,
-						header: {
-							'Authorization': token
-						},
-						success:(result)=>{
-							let arr = res.data.rows[0];
-							arr.idCard = arr.idCard.slice(0, 4) + "*******" + arr.idCard.slice(arr.idCard.length - 4);
-						   this.setData({
-							   item:arr,
-							   doctor:result.data.data[0]
-						   })
-					   }
-					})
-				}else if(res.data.code == 403){
-					getApp().notPermission()
-				}else{
-					wx.showToast({
-					  title: res.data.msg,
-					  icon:'error'
-					})
-				}
-		   },
-		   fail:(err)=>{
-			   wx.showToast({
-				 title: '请检查网络连接',
-				 icon:'error'
-			   })
-		   }
+			item: JSON.parse(options.item)
 		})
 	},
-	cancel(){
+	pay() {
 		let that = this;
 		wx.showModal({
-			title: '确定要取消预约吗？',
-			editable:true,
-			placeholderText:'请输入取消原因',
-			success (res) {
-			  if (res.confirm) {
-				  if(res.content != ''){
-					  wx.showLoading({
-						title: '取消中...',
-					  })
+			title: '支付确认',
+			content: '应付:¥' + that.data.item.actualFee,
+			success(res) {
+				if (res.confirm) {
+					wx.showLoading({
+						title: '支付中...',
+					})
 					let token = wx.getStorageSync('token')
 					wx.request({
-						url:that.data.url + '/make/cancelMake',
-						method:'post',
-						data:{
-							id:that.data.item.id,
-							remarks:res.content
-						},
+						url: that.data.url + `/appointments/${that.data.id}/pay`,
+						method: 'POST',
 						header: {
 							'Authorization': token
-						},success:(rest)=>{
+						},
+						success: (res1) => {
 							wx.hideLoading()
-							if(rest.data.code == 200){
-								let obj = that.data.item
-								obj.state = 2;
-								obj.remarks = res.content
-								that.setData({
-									item:obj
+							if (res1.data.code == 200) {
+								this.setData({
+									item: res1.data.data
 								})
 								wx.showToast({
-								  title: '已取消',
+									title: '支付成功',
 								})
-							}else{
+							} else {
+								// wx.showToast({
+								// 	title: res1.data.msg,
+								// 	icon: 'error'
+								// })
 								wx.showToast({
-								  title: rest.data.msg,
-								  icon:'error'
+									title: '暂时无法支付',
+									icon: 'error',
 								})
 							}
 						}
 					})
-				  }else{
-					  wx.showToast({
-						title: '请输入取消原因',
-						icon:'error'
-					  })
-				  }
-			  } else if (res.cancel) {
-				
-			  }
+				} else if (res.cancel) {
+
+				}
 			}
-		  })
+		})
+	},
+	cancel() {
+		let that = this;
+		wx.showModal({
+			title: '确定要取消预约吗？',
+			editable: true,
+			placeholderText: '请输入取消原因',
+			success(res) {
+				if (res.confirm) {
+					if (res.content != '') {
+						wx.showLoading({
+							title: '取消中...',
+						})
+						let token = wx.getStorageSync('token')
+						wx.request({
+							url: that.data.url + `/appointments/${that.data.id}/cancel`,
+							method: 'PUT',
+							data: {
+								reason: res.content
+							},
+							header: {
+								'Authorization': token
+							},
+							success: (res1) => {
+								wx.hideLoading()
+								if (res1.data.code == 200) {
+									this.setData({
+										item: res1.data.data
+									})
+									wx.showToast({
+										title: '已取消',
+									})
+								} else {
+									wx.showToast({
+										title: res1.data.msg,
+										icon: 'error'
+									})
+								}
+							}
+						})
+					} else {
+						wx.showToast({
+							title: '请输入取消原因',
+							icon: 'error'
+						})
+					}
+				} else if (res.cancel) {
+
+				}
+			}
+		})
 	},
 	/**
 	 * 生命周期函数--监听页面初次渲染完成

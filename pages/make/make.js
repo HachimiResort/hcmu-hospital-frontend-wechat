@@ -79,8 +79,9 @@ Page({
 		})
 	},
 	uigo(e) {
+		console.log(e.currentTarget.dataset);
 		wx.navigateTo({
-			url: `./details/details?id=${e.currentTarget.dataset.id}`,
+			url: `./details/details?item=${JSON.stringify(e.currentTarget.dataset.data)}`,
 		})
 	},
 
@@ -95,35 +96,7 @@ Page({
 	 * 生命周期函数--监听页面显示
 	 */
 	onShow() {
-		if (this.data.patList.length == 0) return true;
-		console.log(11);
-		let token = wx.getStorageSync('token')
-		let url = this.data.url + `/make/userGetList?patId=${this.data.patList[this.data.ind].id}`;
-		if (this.data.type == 'index') url = this.data.url + `/make/userGetList?patId=${this.data.patList[this.data.ind].id}&state=0`
-		wx.request({
-			url: url,
-			header: {
-				'Authorization': token
-			},
-			success: (res) => {
-				wx.hideLoading()
-				if (res.data.code == 200) {
-					this.setData({
-						orderList: res.data.rows
-					})
-				} else if (res.data.code == 204) {
-					this.setData({
-						orderList: []
-					})
-				} else {
-					console.log(res.data)
-					wx.showToast({
-						title: res.data.msg,
-						icon: 'error'
-					})
-				}
-			}
-		})
+		this.onLoad()
 	},
 
 	/**

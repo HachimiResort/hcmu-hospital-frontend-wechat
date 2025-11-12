@@ -140,7 +140,7 @@ Page({
 			})
 		}
 	},
-	payOrder() {
+	payOrder() {make
 		if (this.data.isLogin) {
 			wx.navigateTo({
 				url: './payOrder/payOrder',
@@ -151,6 +151,10 @@ Page({
 		if (this.data.isLogin) {
 			wx.navigateTo({
 				url: '../make/make',
+			})
+		}else {
+			wx.navigateTo({
+				url: '/pages/sign/sign',
 			})
 		}
 	},

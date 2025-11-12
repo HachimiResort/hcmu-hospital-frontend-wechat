@@ -9,7 +9,7 @@
 		<text>数据为空</text>
 	</view>
 	<view wx:else>
-		<view class="block" wx:for="{{orderList}}" wx:key="index" data-id="{{item.id}}">
+		<view class="block" wx:for="{{orderList}}" wx:key="index" data-id="{{item.appointmentId	}}"data-data="{{item}}" bindtap="uigo">
 			<view class="block-header">
 				<text class="order-no">预约编号：{{item.appointmentNo}}</text>
 				<text class="order-status" wx:if="{{item.status === 1}}" style="color: #ff9800;">待支付</text>
