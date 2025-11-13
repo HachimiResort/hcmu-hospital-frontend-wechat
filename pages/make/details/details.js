@@ -87,19 +87,19 @@ Page({
 							success: (res1) => {
 								wx.hideLoading()
 								if (res1.data.code == 200) {
-									this.setData({
+									that.setData({
 										item: res1.data.data
 									})
 									wx.showToast({
 										title: '已取消',
 									})
 								} else {
-									this.show(res.data.msg)
+									that.show(res1.data.msg)
 								}
 							}
 						})
 					} else {
-						this.show("请输入取消原因")
+						that.show("请输入取消原因")
 					}
 				} else if (res.cancel) {
 

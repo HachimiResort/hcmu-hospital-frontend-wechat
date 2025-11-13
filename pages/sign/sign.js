@@ -31,6 +31,7 @@ Page({
 		})
 	},
 	into() {
+		
 		if (this.data.userName == "" || this.data.password == '')
 			return this.show("请输入完整")
 		wx.showLoading({
@@ -140,9 +141,7 @@ Page({
 		})
 	},
 	seek() {
-		wx.navigateTo({
-			url: './seek/seek',
-		})
+		this.show("111")
 	},
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
