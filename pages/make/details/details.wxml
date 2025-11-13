@@ -18,6 +18,43 @@
 				<text class="info-value" wx:else style="color: #f44336;">看见这个信息请联系管理员</text>
 			</view>
 		</view>
+		<view class="info-title">排班信息：
+			<view class="info-item">
+				<text class="info-label">排班编号：</text>
+				<text class="info-value">{{item.scheduleId}}</text>
+			</view>
+			<view class="info-item">
+				<text class="info-label">就诊时间：</text>
+				<text class="info-value">
+					{{item.scheduleDate}} 
+					<text wx:if="{{item.slotPeriod === 1}}">8:00-8:30</text>
+					<text wx:elif="{{item.slotPeriod === 2}}">8:30-9:00</text>
+					<text wx:elif="{{item.slotPeriod === 3}}">9:00-9:30</text>
+					<text wx:elif="{{item.slotPeriod === 4}}">9:30-10:00</text>
+					<text wx:elif="{{item.slotPeriod === 5}}">10:00-10:30</text>
+					<text wx:elif="{{item.slotPeriod === 6}}">10:30-11:00</text>
+					<text wx:elif="{{item.slotPeriod === 7}}">13:30-14:00</text>
+					<text wx:elif="{{item.slotPeriod === 8}}">14:00-14:30</text>
+					<text wx:elif="{{item.slotPeriod === 9}}">14:30-15:00</text>
+					<text wx:elif="{{item.slotPeriod === 10}}">15:00-15:30</text>
+					<text wx:elif="{{item.slotPeriod === 11}}">15:30-16:00</text>
+					<text wx:elif="{{item.slotPeriod === 12}}">16:00-16:30</text>
+					<text wx:else>{{item.slotPeriod}}</text>
+				</text>
+			</view>
+			<view class="info-item">
+				<text class="info-label">排班类型：</text>
+				<text class="info-value">
+					<text wx:if="{{item.slotType === 1}}">普通</text>
+					<text wx:elif="{{item.slotType === 2}}">专家</text>
+					<text wx:else>特需</text>
+				</text>
+			</view>
+			<view class="info-item" wx:if="{{item.status === 3}}">
+				<text class="info-label">排队顺序号：</text>
+				<text class="info-value">{{item.visitNo}}</text>
+			</view>
+		</view>
 		<view class="info-title">患者信息：
 			<view class="info-item">
 				<text class="info-label">患者姓名：</text>
@@ -26,21 +63,18 @@
 		</view>
 		<view class="info-title">医生信息：
 			<view class="info-item">
-				<text class="info-label">暂无:</text>
-				<text class="info-value">暂无</text>
+				<text class="info-label">医生姓名：</text>
+				<text class="info-value">{{item.doctorName}}</text>
 			</view>
-		</view>
-		<view class="info-title">排班信息：
 			<view class="info-item">
-				<text class="info-label">排班编号：</text>
-				<text class="info-value">{{item.scheduleId}}</text>
+				<text class="info-label">医生职称：</text>
+				<text class="info-value">{{item.doctorTitle}}</text>
 			</view>
-			<view class="info-item" wx:if="{{item.status === 3}}">
-				<text class="info-label">排队顺序号：</text>
-				<text class="info-value">{{item.visitNo}}</text>
+			<view class="info-item">
+				<text class="info-label">医生科室：</text>
+				<text class="info-value">{{item.departmentName}}</text>
 			</view>
 		</view>
-		
 		<view class="info-title">费用信息：
 			<view class="info-item">
 				<text class="info-label">原始费用：</text>

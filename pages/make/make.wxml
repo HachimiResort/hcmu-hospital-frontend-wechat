@@ -24,8 +24,26 @@
 			</view>
 			<view class="block-content">
 				<view class="info-row">
-					<text class="info-label">排班编号：</text>
-					<text class="info-value">{{item.scheduleId}}</text>
+					<text class="info-label">就诊时间：</text>
+					<text class="info-value">{{item.scheduleDate+" "}} 
+						<text wx:if="{{item.slotPeriod === 1}}">8:00-8:30</text>
+						<text wx:elif="{{item.slotPeriod === 2}}">8:30-9:00</text>
+						<text wx:elif="{{item.slotPeriod === 3}}">9:00-9:30</text>
+						<text wx:elif="{{item.slotPeriod === 4}}">9:30-10:00</text>
+						<text wx:elif="{{item.slotPeriod === 5}}">10:00-10:30</text>
+						<text wx:elif="{{item.slotPeriod === 6}}">10:30-11:00</text>
+						<text wx:elif="{{item.slotPeriod === 7}}">13:30-14:00</text>
+						<text wx:elif="{{item.slotPeriod === 8}}">14:00-14:30</text>
+						<text wx:elif="{{item.slotPeriod === 9}}">14:30-15:00</text>
+						<text wx:elif="{{item.slotPeriod === 10}}">15:00-15:30</text>
+						<text wx:elif="{{item.slotPeriod === 11}}">15:30-16:00</text>
+						<text wx:elif="{{item.slotPeriod === 12}}">16:00-16:30</text>
+						<text wx:else>{{item.slotPeriod}}</text>
+					</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">就诊科室：</text>
+					<text class="info-value">{{item.departmentName}}</text>
 				</view>
 				<view class="info-row">
 					<text class="info-label">原始费用：</text>
@@ -42,10 +60,6 @@
 				<view class="info-row" wx:if="{{item.status === 5}}">
 					<text class="info-label">取消时间：</text>
 					<text class="info-value">{{filter.formatDate(item.cancellationTime)}}</text>
-				</view>
-				<view class="info-row" wx:if="{{item.status === 5 && item.cancellationReason}}">
-					<text class="info-label">取消原因：</text>
-					<text class="info-value">{{item.cancellationReason}}</text>
 				</view>
 				<view class="info-row">
 					<text class="info-label">创建时间：</text>
