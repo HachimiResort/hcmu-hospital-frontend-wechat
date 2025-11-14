@@ -48,7 +48,10 @@ Page({
 									title: '支付成功',
 								})
 							} else {
-								this.show("暂时无法支付")
+								// wx.showToast({
+								// 	title: '支付成功',
+								// })
+								that.show("暂时无法支付")
 								// this.show(res1.data.msg)
 							}
 						}

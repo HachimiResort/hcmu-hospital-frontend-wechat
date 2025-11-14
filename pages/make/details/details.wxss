@@ -56,11 +56,12 @@
 	color: #333;
 	flex: 1;
 	text-align: right;
-	word-break: break-all;
+	word-break: normal;
 	word-wrap: break-word;
 	padding-left: 10px;
-	white-space: pre-wrap;
+	white-space: nowrap;
 	max-height: none;
+	overflow: visible;
 }
 
 /* 预约编号特殊处理 */
