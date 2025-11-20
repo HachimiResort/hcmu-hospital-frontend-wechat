@@ -91,12 +91,126 @@
 	color: #006eff;
 	box-sizing: border-box;
 }
+
 .tap .tapLeft{
 	width: 18px;
 	height: 7px;
 	border-radius: 3px;
 	background-color: #006eff;
 	margin-right: 10px;
+}
+
+/* 筛选展开/收起按钮样式 */
+.filter-toggle {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 0;
+	background-color: #fff;
+	border-bottom: 1px solid #e6e6e6;
+	margin-bottom: 10px;
+}
+
+.filter-toggle text {
+	font-size: 14px;
+	color: #2196f3;
+}
+
+.toggle-icon {
+	margin-left: 4px;
+	font-size: 12px;
+	transition: transform 0.3s ease;
+}
+
+/* 筛选区域样式 */
+.filter-section {
+	//padding: 0px 5%;
+	background-color: #fff;
+	margin-bottom: 10px;
+	overflow: hidden;
+	transition: all 0.3s ease-in-out;
+	max-height: 0;
+	opacity: 0;
+	transform: translateY(-10px);
+}
+
+.filter-section.active {
+	max-height: 1000px;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.filter-row {
+	margin-bottom: 15px;
+}
+
+.filter-row:last-child {
+	margin-bottom: 0;
+}
+
+.filter-label {
+	display: block;
+	font-size: 14px;
+	color: #666;
+	margin-bottom: 8px;
+	font-weight: 500;
+}
+
+.filter-options {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.filter-option {
+	padding: 6px 12px;
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	font-size: 13px;
+	color: #666;
+	transition: all 0.3s ease;
+}
+
+.filter-option.active {
+	background-color: #006eff;
+	color: #fff;
+	border-color: #006eff;
+}
+
+.filter-option:active {
+	opacity: 0.8;
+}
+
+/* 排序区域样式 */
+.sort-section {
+	padding: 10px 5%;
+	background-color: #fff;
+	margin-bottom: 15px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.sort-row {
+	display: flex;
+	gap: 30px;
+}
+
+.sort-item {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 14px;
+	color: #666;
+	padding: 5px 0;
+}
+
+.sort-item.active {
+	color: #006eff;
+	font-weight: 500;
+}
+
+.sort-icon {
+	font-size: 12px;
+	color: inherit;
 }
 .not{
 	width: 100%;

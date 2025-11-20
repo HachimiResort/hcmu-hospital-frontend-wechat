@@ -41,7 +41,7 @@ Page({
 						success: (res1) => {
 							wx.hideLoading()
 							if (res1.data.code == 200) {
-								this.setData({
+								that.setData({
 									item: res1.data.data
 								})
 								wx.showToast({

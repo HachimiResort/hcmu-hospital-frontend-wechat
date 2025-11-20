@@ -6,12 +6,58 @@
 		<view class="tapLeft"></view>
 		<text>预约记录</text>
 	</view>
-	<view wx:if="{{orderList.length == 0}}" class="not">
+	
+	<!-- 筛选展开/收起按钮 -->
+	<view class="filter-toggle" bindtap="toggleFilter">
+		<text>{{filterVisible ? '收起筛选' : '展开筛选'}}</text>
+		<text class="toggle-icon">{{filterVisible ? '↑' : '↓'}}</text>
+	</view>
+	
+	<!-- 筛选条件区域 -->
+	<view class="filter-section {{filterVisible ? 'active' : ''}}">
+		<!-- 预约状态筛选 -->
+		<view class="filter-row">
+			<text class="filter-label">预约状态：</text>
+			<view class="filter-options">
+				<view class="filter-option {{statusFilter === '' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="">全部</view>
+				<view class="filter-option {{statusFilter === '1' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="1">待支付</view>
+				<view class="filter-option {{statusFilter === '2' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="2">已预约</view>
+				<view class="filter-option {{statusFilter === '3' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="3">已签到</view>
+				<view class="filter-option {{statusFilter === '4' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="4">已就诊</view>
+				<view class="filter-option {{statusFilter === '5' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="5">已取消</view>
+				<view class="filter-option {{statusFilter === '6' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="6">爽约</view>
+			</view>
+		</view>
+		
+		<!-- 科室筛选 -->
+		<view class="filter-row">
+			<text class="filter-label">就诊科室：</text>
+			<view class="filter-options">
+				<view class="filter-option {{deptFilter === '' ? 'active' : ''}}" bindtap="changeDeptFilter" data-dept="">全部</view>
+				<view wx:for="{{departmentList}}" wx:key="index" class="filter-option {{deptFilter === item ? 'active' : ''}}" bindtap="changeDeptFilter" data-dept="{{item}}">{{item}}</view>
+			</view>
+		</view>
+	</view>
+	
+	<!-- 排序选项区域 -->
+	<view class="sort-section">
+		<view class="sort-row">
+			<view class="sort-item {{sortBy === 'schedule' ? 'active' : ''}}" bindtap="changeSort" data-sort="schedule">
+				<text>就诊时间</text>
+				<text class="sort-icon" wx:if="{{sortBy === 'schedule'}}">{{sortOrder === 'asc' ? '↑' : '↓'}}</text>
+			</view>
+			<view class="sort-item {{sortBy === 'create' ? 'active' : ''}}" bindtap="changeSort" data-sort="create">
+				<text>创建时间</text>
+				<text class="sort-icon" wx:if="{{sortBy === 'create'}}">{{sortOrder === 'asc' ? '↑' : '↓'}}</text>
+			</view>
+		</view>
+	</view>
+	<view wx:if="{{filteredList.length == 0}}" class="not">
 		<image src="../../image/not.png"></image>
 		<text>数据为空</text>
 	</view>
 	<view wx:else>
-		<view class="block" wx:for="{{orderList}}" wx:key="index" data-id="{{item.appointmentId	}}"data-data="{{item}}" bindtap="uigo">
+		<view class="block" wx:for="{{filteredList}}" wx:key="index" data-id="{{item.appointmentId}}" data-data="{{item}}" bindtap="uigo">
 			<view class="block-header">
 				<text class="order-no">预约编号：{{item.appointmentNo}}</text>
 				<text class="order-status" wx:if="{{item.status === 1}}" style="color: #ff9800;">待支付</text>
@@ -25,33 +71,11 @@
 			<view class="block-content">
 				<view class="info-row">
 					<text class="info-label">就诊时间：</text>
-					<text class="info-value">{{item.scheduleDate+" "}} 
-						<text wx:if="{{item.slotPeriod === 1}}">8:00-8:30</text>
-						<text wx:elif="{{item.slotPeriod === 2}}">8:30-9:00</text>
-						<text wx:elif="{{item.slotPeriod === 3}}">9:00-9:30</text>
-						<text wx:elif="{{item.slotPeriod === 4}}">9:30-10:00</text>
-						<text wx:elif="{{item.slotPeriod === 5}}">10:00-10:30</text>
-						<text wx:elif="{{item.slotPeriod === 6}}">10:30-11:00</text>
-						<text wx:elif="{{item.slotPeriod === 7}}">13:30-14:00</text>
-						<text wx:elif="{{item.slotPeriod === 8}}">14:00-14:30</text>
-						<text wx:elif="{{item.slotPeriod === 9}}">14:30-15:00</text>
-						<text wx:elif="{{item.slotPeriod === 10}}">15:00-15:30</text>
-						<text wx:elif="{{item.slotPeriod === 11}}">15:30-16:00</text>
-						<text wx:elif="{{item.slotPeriod === 12}}">16:00-16:30</text>
-						<text wx:else>{{item.slotPeriod}}</text>
-					</text>
+					<text class="info-value">{{item.scheduleDate}} <text wx:if="{{item.slotPeriod === 1}}">8:00-8:30</text><text wx:elif="{{item.slotPeriod === 2}}">8:30-9:00</text><text wx:elif="{{item.slotPeriod === 3}}">9:00-9:30</text><text wx:elif="{{item.slotPeriod === 4}}">9:30-10:00</text><text wx:elif="{{item.slotPeriod === 5}}">10:00-10:30</text><text wx:elif="{{item.slotPeriod === 6}}">10:30-11:00</text><text wx:elif="{{item.slotPeriod === 7}}">13:30-14:00</text><text wx:elif="{{item.slotPeriod === 8}}">14:00-14:30</text><text wx:elif="{{item.slotPeriod === 9}}">14:30-15:00</text><text wx:elif="{{item.slotPeriod === 10}}">15:00-15:30</text><text wx:elif="{{item.slotPeriod === 11}}">15:30-16:00</text><text wx:elif="{{item.slotPeriod === 12}}">16:00-16:30</text><text wx:else>{{item.slotPeriod}}</text></text>
 				</view>
 				<view class="info-row">
 					<text class="info-label">就诊科室：</text>
 					<text class="info-value">{{item.departmentName}}</text>
-				</view>
-				<view class="info-row">
-					<text class="info-label">原始费用：</text>
-					<text class="info-value">¥{{item.originalFee}}</text>
-				</view>
-				<view class="info-row">
-					<text class="info-label">实际费用：</text>
-					<text class="info-value">¥{{item.actualFee}}</text>
 				</view>
 				<view class="info-row" wx:if="{{item.status !== 1&&item.status !== 5}}">
 					<text class="info-label">支付时间：</text>
