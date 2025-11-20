@@ -1,23 +1,64 @@
-<!-- pages/sign/sign.wxml -->
+<!-- pages/my/info/info.wxml -->
 <import src="../../../component/appToast/appToast.wxml"/>
 <template is="toast" data="{{ ..._toast_ }}"/>
-<view class="content reg">
-				<view class="head">
-								<image src="{{avatar}}" bindtap="look"></image>
-				</view>
-				<text class="hr">您的账号：</text>
-				<input model:value="{{userName}}" type="text" disabled="true" placeholder="您的账号" placeholder-style="color:#ccc;font-size:13px;" style="color: #CCC;" maxlength="50" />
-				<text class="hr">真实姓名：</text>
-				<input model:value="{{name}}" type="name" disabled="true" placeholder="您的账号昵称" placeholder-style="color:#ccc;font-size:13px;" style="color: #CCC;" maxlength="50" />
-				<text class="hr">绑定邮箱：</text>
-				<input model:value="{{email}}" type="text" disabled="true" placeholder="账号所绑定邮箱" placeholder-style="color:#ccc;font-size:13px;" style="color: #CCC;" maxlength="50" />
-				<text class="hr">账号昵称：</text>
-				<input model:value="{{nickname}}" type="nickname" placeholder="您的账号昵称" placeholder-style="color:#ccc;font-size:13px;" maxlength="50" />
-				<text class="hr">绑定手机号：</text>
-				<input model:value="{{phone}}" type="number" placeholder="绑定手机号" placeholder-style="color:#ccc;font-size:13px;" maxlength="50" />
-				<view class="button" style="margin-top: 40px;" bindtap="register">提交修改</view>
-				<view style="display: flex; margin-top: 20px; align-items: center; width: 658rpx; position: relative; left: 49rpx; top: -14rpx">
-								<text class="and" bindtap="changeEmail">修改邮箱</text>
-								<text class="and" bindtap="uigo">修改密码</text>
-				</view>
+
+<view class="content">
+  <!-- 头像部分 -->
+  <view class="head">
+    <image src="{{avatar}}" bindtap="look"></image>
+  </view>
+
+  <!-- 基本信息部分 -->
+  <view class="form-section">
+    <text class="section-title">基本信息</text>
+    
+    <text class="hr">您的账号：</text>
+    <input class="input-field input-disabled" model:value="{{userName}}" type="text" disabled="true" placeholder="您的账号" maxlength="50" />
+    
+    <text class="hr">真实姓名：</text>
+    <input class="input-field input-disabled" model:value="{{name}}" type="name" disabled="true" placeholder="您的账号昵称" maxlength="50" />
+    
+    <text class="hr">绑定邮箱：</text>
+    <input class="input-field input-disabled" model:value="{{email}}" type="text" disabled="true" placeholder="账号所绑定邮箱" maxlength="50" />
+    
+    <text class="hr">账号昵称：</text>
+    <input class="input-field" model:value="{{nickname}}" type="nickname" placeholder="您的账号昵称" maxlength="50" />
+    
+    <text class="hr">绑定手机号：</text>
+    <input class="input-field" model:value="{{phone}}" type="number" placeholder="绑定手机号" maxlength="50" />
+  </view>
+
+  <!-- 患者信息部分 -->
+  <view class="form-section">
+    <text class="section-title">患者信息</text>
+    
+    <text class="hr">身份类型：</text>
+    <input class="input-field input-disabled" type="text" value="{{patient_profiles.identityType === 1 ? '学生' : patient_profiles.identityType === 2 ? '教职工' : '其他'}}" disabled="true" />
+    
+    <block wx:if="{{patient_profiles.identityType === 1 || patient_profiles.identityType === 2}}">
+      <text class="hr">{{patient_profiles.identityType === 1 ? '学号' : '工号'}}：</text>
+      <input class="input-field input-disabled" type="text" value="{{patient_profiles.studentTeacherId || '暂无'}}" disabled="true" />
+    </block>
+    
+    <text class="hr">紧急联系人：</text>
+    <input class="input-field" model:value="{{emergencyContact}}" type="text" placeholder="紧急联系人" maxlength="50" />
+    
+    <text class="hr">紧急联系人电话：</text>
+    <input class="input-field" model:value="{{emergencyContactPhone}}" type="number" placeholder="紧急联系人电话" maxlength="20" />
+    
+    <text class="hr">病历：</text>
+    <textarea class="textarea-field" model:value="{{medicalHistory}}" placeholder="请输入病历信息" />
+    
+    <text class="hr">过敏史：</text>
+    <textarea class="textarea-field" model:value="{{allergyHistory}}" placeholder="请输入过敏史信息" />
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="button" bindtap="register">提交修改</view>
+  
+  <!-- 辅助链接 -->
+  <view class="link-group">
+    <text class="link-item" bindtap="changeEmail">修改邮箱</text>
+    <text class="link-item" bindtap="uigo">修改密码</text>
+  </view>
 </view>

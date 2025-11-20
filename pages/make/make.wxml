@@ -22,7 +22,7 @@
 				<view class="filter-option {{statusFilter === '' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="">全部</view>
 				<view class="filter-option {{statusFilter === '1' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="1">待支付</view>
 				<view class="filter-option {{statusFilter === '2' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="2">已预约</view>
-				<view class="filter-option {{statusFilter === '3' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="3">已签到</view>
+				<view class="filter-option {{statusFilter === '3' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="3">已喊号</view>
 				<view class="filter-option {{statusFilter === '4' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="4">已就诊</view>
 				<view class="filter-option {{statusFilter === '5' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="5">已取消</view>
 				<view class="filter-option {{statusFilter === '6' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="6">爽约</view>
@@ -62,7 +62,7 @@
 				<text class="order-no">预约编号：{{item.appointmentNo}}</text>
 				<text class="order-status" wx:if="{{item.status === 1}}" style="color: #ff9800;">待支付</text>
 				<text class="order-status" wx:elif="{{item.status === 2}}" style="color: #2196f3;">已预约</text>
-				<text class="order-status" wx:elif="{{item.status === 3}}" style="color: #4caf50;">已签到</text>
+				<text class="order-status" wx:elif="{{item.status === 3}}" style="color: #4caf50;">已喊号</text>
 				<text class="order-status" wx:elif="{{item.status === 4}}" style="color: #9e9e9e;">已就诊</text>
 				<text class="order-status" wx:elif="{{item.status === 5}}" style="color: #607d8b;">已取消</text>
 				<text class="order-status" wx:elif="{{item.status === 6}}" style="color: #f44336;">爽约</text>
