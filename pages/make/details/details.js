@@ -34,7 +34,7 @@ Page({
 					let token = wx.getStorageSync('token')
 					wx.request({
 						url: that.data.url + `/appointments/${that.data.item.appointmentId}/pay`,
-						method: 'POST',
+						method: 'PUT',
 						header: {
 							'Authorization': token
 						},
@@ -48,11 +48,7 @@ Page({
 									title: '支付成功',
 								})
 							} else {
-								// wx.showToast({
-								// 	title: '支付成功',
-								// })
-								that.show("暂时无法支付")
-								// this.show(res1.data.msg)
+								that.show(res1.data.msg)
 							}
 						}
 					})
