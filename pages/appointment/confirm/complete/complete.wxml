@@ -1,4 +1,6 @@
 <!--pages/appointment/confirm/complete/complete.wxml-->
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <image src="../../../../image/u225.svg" mode="scaleToFill"></image>
 <text class="title">预约成功</text>
 <text class="ts">您已预约成功，请您持本人身份证按时就诊</text>

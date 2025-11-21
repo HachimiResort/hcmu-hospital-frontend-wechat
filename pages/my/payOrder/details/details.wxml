@@ -1,3 +1,5 @@
+<import src="../../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <wxs module="filter" src="/utils/tool.wxs"></wxs>
 <view class="main" wx:if="{{item.orderId != null}}">
 	<image src="{{item.state==0?'../../../../image/dzf.png': '../../../../image/u2165.svg'}}" mode="scaleToFill" class="logo"></image>

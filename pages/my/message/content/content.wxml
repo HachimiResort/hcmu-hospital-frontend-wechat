@@ -1,3 +1,5 @@
+<import src="../../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <text class="title">{{item.title}}</text>
 <view class="name">
 	<text>{{item.source}}</text>

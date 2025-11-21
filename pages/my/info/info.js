@@ -1,4 +1,5 @@
 // pages/sign/sign.js
+const app = getApp()
 Page({
 
 	/**
@@ -13,12 +14,18 @@ Page({
 		email: '',
 		info: {},
 		avatar: '../../../image/avatar.png',
-		isMod: false
+		isMod: false,
+		patient_profiles: {},
+		emergencyContact: "",
+    	emergencyContactPhone: "",
+    	medicalHistory: "",
+    	allergyHistory: "",
 	},
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		wx.showLoading({
 			title: '加载中...',
 		})
@@ -44,65 +51,111 @@ Page({
 					wx.navigateBack({
 						delta: 1,
 					})
-					wx.showToast({
-						title: '出现错误',
-						icon: 'error'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.navigateBack({
 					delta: 1,
 				})
-				wx.showToast({
-					title: '请检查网络连接',
-					icon: 'none'
+				this.show("请检查网络连接")
+			}
+		})
+		wx.request({
+			url: this.url + '/patient-profiles/' + wx.getStorageSync('userId'),
+			header: {
+				'Authorization': token
+			},
+			method: 'GET',
+			success: (res) => {
+				wx.hideLoading()
+				if (res.data.code == 200) {
+					this.setData({
+						patient_profiles: res.data.data,
+						emergencyContact: res.data.data.emergencyContact,
+						emergencyContactPhone: res.data.data.emergencyContactPhone,
+						medicalHistory: res.data.data.medicalHistory,
+						allergyHistory: res.data.data.allergyHistory,
+					})
+				} else {
+					wx.navigateBack({
+						delta: 1,
+					})
+					this.show(res.data.msg)
+				}
+			},
+			fail: (err) => {
+				wx.navigateBack({
+					delta: 1,
 				})
+				this.show("请检查网络连接")
 			}
 		})
 	},
 	change() {
 	},
 	register() {
-		if (this.data.nickname == "") return wx.showToast({
-			title: '请输入完整',
-			icon: 'error'
-		})
+		if (this.data.nickname == "")
+			return this.show("请输入昵称")
 		wx.showLoading({
 			title: '修改中...',
 		})
-		let data = {
+		let token = wx.getStorageSync('token')
+		
+		// 先更新用户基本信息
+		let userData = {
 			nickname: this.data.nickname,
 			phone: this.data.phone,
 		}
-		let token = wx.getStorageSync('token')
+		
 		wx.request({
 			url: this.url + '/users/' + wx.getStorageSync('userId'),
 			method: 'put',
-			data: data,
+			data: userData,
 			header: {
 				'Authorization': token
 			},
 			success: (res) => {
 				console.log(res)
-				wx.hideLoading()
 				if (res.data.code == 200) {
-					wx.showToast({
-						title: '修改成功',
+					// 用户基本信息更新成功后，更新患者信息
+					let patientData = {
+						emergencyContact: this.data.emergencyContact,
+						emergencyContactPhone: this.data.emergencyContactPhone,
+						medicalHistory: this.data.medicalHistory,
+						allergyHistory: this.data.allergyHistory
+					}
+					
+					wx.request({
+						url: this.url + '/patient-profiles/self',
+						method: 'put',
+						data: patientData,
+						header: {
+							'Authorization': token
+						},
+						success: (patientRes) => {
+							wx.hideLoading()
+							if (patientRes.data.code == 200) {
+								wx.showToast({
+									title: '修改成功',
+								})
+							} else {
+								this.show(patientRes.data.msg)
+							}
+						},
+						fail: (err) => {
+							wx.hideLoading()
+							this.show("患者信息更新失败，请检查网络连接")
+						}
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon: 'error'
-					})
+					wx.hideLoading()
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon: 'error'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},
@@ -147,17 +200,11 @@ Page({
 							title: '修改成功',
 						})
 					} else {
-						wx.showToast({
-							title: res.msg,
-							icon: "error"
-						})
+						this.show(res.data.msg)
 					}
 				},
 				fail: (err) => {
-					wx.showToast({
-						title: '请检查网络连接',
-						icon: "error"
-					})
+					this.show("请检查网络连接")
 				}
 			})
 		}

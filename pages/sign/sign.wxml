@@ -1,3 +1,5 @@
+<import src="../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <!--pages/sign/sign.wxml-->
 <view wx:if="{{issign}}" class="content">
 	<text class="title">登录进入小程序</text>

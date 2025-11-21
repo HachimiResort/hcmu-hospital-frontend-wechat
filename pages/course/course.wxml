@@ -1,3 +1,5 @@
+<import src="../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <text class="title">预约业务</text>
 <view class="block" bindtap="uigo" data-type="添加就诊人">
 	<text>添加就诊人</text>

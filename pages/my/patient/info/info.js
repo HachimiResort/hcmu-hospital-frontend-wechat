@@ -1,4 +1,5 @@
 // pages/my/message/message.js
+const app = getApp()
 Page({
 
 	/**
@@ -35,6 +36,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		let info = this.data.info
 		info.id = (options.id === ''|| options.id == null) ? 0 : options.id
 		this.setData({
@@ -73,7 +75,7 @@ Page({
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			},
@@ -81,7 +83,7 @@ Page({
 				wx.hideLoading()
 				wx.showToast({
 					title: '请检查网络连接',
-					icon: 'error'
+					icon:'none'
 				})
 			}
 		})
@@ -112,7 +114,7 @@ Page({
 	mod(){
 		if(this.data.info.certificate == '' || this.data.info.name==''|| this.data.info.phone=='' || this.data.info.card == '') return wx.showToast({
 		  title: '请输入完整',
-		  icon:'error'
+		  icon:'none'
 		})
 		wx.showLoading({
 			title: '保存中...',
@@ -134,7 +136,7 @@ Page({
 				} else {
 					wx.showToast({
 						title: res.data.msg,
-						icon: 'error'
+						icon:'none'
 					})
 				}
 			}
@@ -143,7 +145,7 @@ Page({
 	post(e) {
 		if(this.data.info.certificate == '' || this.data.info.name==''|| this.data.info.phone=='' || this.data.info.card == '') return wx.showToast({
 			title: '请先输入完整',
-			icon:'error'
+			icon:'none'
 		  })
 		  wx.showLoading({
 			  title: '保存中...',
@@ -165,7 +167,7 @@ Page({
 				  } else {
 					  wx.showToast({
 						  title: res.data.msg,
-						  icon: 'error'
+						  icon:'none'
 					  })
 				  }
 			  }
@@ -201,7 +203,7 @@ Page({
 							}else{
 								wx.showToast({
 								  title: rest.data.msg,
-								  icon:'error'
+								  icon:'none'
 								})
 							}
 						}
@@ -209,7 +211,7 @@ Page({
 				  }else{
 					  wx.showToast({
 						title: '确认错误',
-						icon:'error'
+						icon:'none'
 					  })
 				  }
 			  } else if (res.cancel) {

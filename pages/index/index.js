@@ -1,4 +1,5 @@
 // pages/index.js
+const app = getApp()
 Page({
 
 	/**
@@ -23,6 +24,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad: function (options) {
+		new app.ToastPannel();
 		wx.showLoading({
 			title: '加载中...',
 		})
@@ -129,10 +131,7 @@ Page({
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon: 'error'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},
@@ -166,10 +165,7 @@ Page({
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon: 'error'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 

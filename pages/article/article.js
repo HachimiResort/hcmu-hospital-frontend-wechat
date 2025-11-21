@@ -1,4 +1,5 @@
 // pages/article/article.js
+const app = getApp()
 Page({
 
 	/**
@@ -17,6 +18,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		let name = options.name
 		this.setData({
 			name:name,
@@ -65,7 +67,7 @@ Page({
 			}else{
 				wx.showToast({
 				  title: res.data.msg,
-				  icon:'error',
+				  icon:'none',
 				  duration:2000
 				})
 			}
@@ -74,7 +76,7 @@ Page({
 			  console.log(err)
 			  wx.showToast({
 				title: '请检查网络连接',
-				icon:'error'
+				icon:'none'
 			  })
 		  }
 		})

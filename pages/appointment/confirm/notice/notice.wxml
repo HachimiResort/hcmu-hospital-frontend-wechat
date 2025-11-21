@@ -1,4 +1,6 @@
 <!--pages/appointment/confirm/notice/notice.wxml-->
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <text class="title">预约挂号须知</text>
 <text class="content">
 我院门诊严格执行非急诊全面预约挂号就诊制度和分时段报到、错峰就诊制度。候诊时段前半小时允许患者持纸质版或电子版预约凭证进院，候诊时段前半小时可以在自助机报到。

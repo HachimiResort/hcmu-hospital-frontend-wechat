@@ -1,4 +1,5 @@
 // pages/my/my.js
+const app = getApp()
 Page({
 
 	/**
@@ -15,6 +16,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		wx.showLoading({
 			title: '加载中...',
 		})
@@ -107,10 +109,7 @@ Page({
 						},
 						fail: (err) => {
 							console.log(err);
-							wx.showToast({
-								title: '请检查网络连接',
-								icon: 'error'
-							})
+							this.show("请检查网络连接")
 						}
 					})
 					wx.setStorageSync('token', '')
@@ -140,7 +139,7 @@ Page({
 			})
 		}
 	},
-	payOrder() {
+	payOrder() {make
 		if (this.data.isLogin) {
 			wx.navigateTo({
 				url: './payOrder/payOrder',
@@ -151,6 +150,10 @@ Page({
 		if (this.data.isLogin) {
 			wx.navigateTo({
 				url: '../make/make',
+			})
+		}else {
+			wx.navigateTo({
+				url: '/pages/sign/sign',
 			})
 		}
 	},

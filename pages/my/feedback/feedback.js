@@ -1,4 +1,5 @@
 // pages/my/feedback/feedback.js
+const app = getApp()
 Page({
 
 	/**
@@ -23,7 +24,7 @@ Page({
 	  post(){
 			if(this.data.title == '' || this.data.content == '') return wx.showToast({
 			  title: '请输入完整',
-			  icon:'error'
+			  icon:'none'
 			})
 			let data = {
 				title:this.data.title,
@@ -54,7 +55,7 @@ Page({
 				  }else{
 					  wx.showToast({
 						title: res.data.msg,
-						icon:'error'
+						icon:'none'
 					  })
 				  }
 			  }

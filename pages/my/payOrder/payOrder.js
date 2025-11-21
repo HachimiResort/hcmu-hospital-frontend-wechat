@@ -1,4 +1,5 @@
 // pages/my/message/message.js
+const app = getApp()
 Page({
 
 	/**
@@ -20,6 +21,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		this.setData({
 			type:options.type?'index':'my'
 		})
@@ -56,7 +58,7 @@ Page({
 							  }else{
 								  wx.showToast({
 									title: res.data.msg,
-									icon:'error'
+									icon:'none'
 								  })
 							  }
 						 }
@@ -75,7 +77,7 @@ Page({
 							  }else{
 								  wx.showToast({
 									title: res.data.msg,
-									icon:'error'
+									icon:'none'
 								  })
 							  }
 						 }
@@ -89,7 +91,7 @@ Page({
 					wx.hideLoading()
 					wx.showToast({
 					  title: res.data.msg,
-					  icon:'error'
+					  icon:'none'
 					})
 				}
 		   },
@@ -97,7 +99,7 @@ Page({
 			wx.hideLoading()
 			   wx.showToast({
 				 title: '请检查网络连接',
-				 icon:'error'
+				 icon:'none'
 			   })
 		   }
 		})
@@ -135,7 +137,7 @@ Page({
 					  console.log(res.data)
 					  wx.showToast({
 						title: res.data.msg,
-						icon:'error'
+						icon:'none'
 					  })
 				  }
 			 }
@@ -181,7 +183,7 @@ Page({
 					  console.log(res.data)
 					  wx.showToast({
 						title: res.data.msg,
-						icon:'error'
+						icon:'none'
 					  })
 				  }
 			 }

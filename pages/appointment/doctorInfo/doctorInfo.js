@@ -1,4 +1,5 @@
 // pages/appointment/hosChange/hosChange.js
+const app = getApp()
 Page({
 
 	/**
@@ -23,6 +24,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		this.setData({
 			docId: parseInt(options.docId)
 		})
@@ -53,19 +55,13 @@ Page({
 						doctor: res.data.data
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon: 'error'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				console.log(err)
 				wx.hideLoading()
-				wx.showToast({
-					title: '出现错误',
-					icon: 'error'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 		let requestDTO = {
@@ -115,10 +111,7 @@ Page({
 						scheduleList: arr
 					})
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon: 'error'
-					})
+					this.show(res.data.msg)
 				}
 			}
 		})
@@ -191,19 +184,13 @@ Page({
 								})
 							} else {
 								wx.hideLoading()
-								wx.showToast({
-									title: res.data.msg,
-									icon: 'error'
-								})
+								this.show(res.data.msg)
 							}
 						},
 						fail: (err) => {
 							console.log(err)
 							wx.hideLoading()
-							wx.showToast({
-								title: '出现错误',
-								icon: 'error'
-							})
+							this.show("请检查网络连接")
 						}
 					})
 				}

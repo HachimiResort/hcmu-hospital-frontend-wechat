@@ -1,4 +1,6 @@
 <!-- pages/sign/sign.wxml -->
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <view class="content">
 				<text class="hr">请填写新的邮箱</text>
 				<input model:value="{{email}}" type="email" placeholder="请输入新邮箱" placeholder-style="color:#ccc;font-size:13px;" maxlength="40" />

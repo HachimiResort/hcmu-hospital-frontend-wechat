@@ -1,4 +1,5 @@
 // pages/appointment/confirm/notice/notice.js
+const app = getApp()
 Page({
 
 	/**
@@ -12,11 +13,11 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-
+		new app.ToastPannel();
 	},
-	back(){
+	back() {
 		wx.navigateBack({
-		  delta: 1,
+			delta: 1,
 		})
 	},
 

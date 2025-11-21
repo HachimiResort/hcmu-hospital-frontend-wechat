@@ -1,3 +1,5 @@
+<import src="../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <view class="head">
 	<image  bindtap="sign" src="{{isLogin ? '../../image/avatar.png' : '../../image/boy.jpeg'}}" mode="scaleToFill"></image>
 	<view class="headRight" bindtap="sign">

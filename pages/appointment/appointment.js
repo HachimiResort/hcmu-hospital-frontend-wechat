@@ -1,4 +1,5 @@
 // pages/my/message/message.js
+const app = getApp()
 Page({
 
 	/**
@@ -13,6 +14,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
+		new app.ToastPannel();
 		let token = wx.getStorageSync('token')
 		wx.showLoading({
 			title: '加载中...',
@@ -31,18 +33,12 @@ Page({
 				}else if(res.data.code == 403){
 					getApp().notPermission()
 				} else {
-					wx.showToast({
-						title: res.data.msg,
-						icon: 'error'
-					})
+					this.show(res.data.msg)
 				}
 			},
 			fail: (err) => {
 				wx.hideLoading()
-				wx.showToast({
-					title: '请检查网络连接',
-					icon: 'error'
-				})
+				this.show("请检查网络连接")
 			}
 		})
 	},

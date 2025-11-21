@@ -1,4 +1,6 @@
 <!--pages/my/feedback/his/his.wxml-->
+<import src="../../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <view wx:if="{{list.length == 0}}" class="not">
 	<image src="../../../../image/not.png"></image>
 	<text>暂无数据</text>

@@ -1,3 +1,5 @@
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
 <view class="main">
 	<view class="block">
 		<image mode="scaleToFill" class="logo" src="../../../image/56560.png"></image>

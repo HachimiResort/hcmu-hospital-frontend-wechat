@@ -1,4 +1,7 @@
 <!-- pages/appointment/doctorInfo/doctorInfo.wxml -->
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
+
 <wxs module="tool" src="/utils/tool.wxs"></wxs>
 <view class="doc-block">
 	<image src="../../../image/dr.png" mode="scaleToFill"></image>

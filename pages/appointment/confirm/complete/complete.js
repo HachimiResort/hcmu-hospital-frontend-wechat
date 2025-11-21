@@ -1,4 +1,5 @@
 // pages/appointment/confirm/complete/complete.js
+const app = getApp()
 Page({
 
 	/**
@@ -7,14 +8,14 @@ Page({
 	data: {
 
 	},
-	look(){
+	look() {
 		wx.navigateTo({
-		  url: '../../../make/make',
+			url: '../../../make/make',
 		})
 	},
-	gohome(){
+	gohome() {
 		wx.navigateBack({
-		  delta: 5,
+			delta: 5,
 		})
 	},
 
@@ -22,7 +23,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-
+		new app.ToastPannel();
 	},
 
 	/**
