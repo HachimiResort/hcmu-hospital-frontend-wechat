@@ -36,7 +36,9 @@
 		"pages/appointment/confirm/complete/complete",
 		"pages/appointment/doctorInfo/doctorInfo",
 		"pages/course/process/process",
-		"pages/my/feedback/his/his"
+		"pages/my/feedback/his/his",
+		"pages/waitlist/waitlist",
+		"pages/waitlist/details/details"
 	],
 	"window": {
 		"backgroundTextStyle": "light",

@@ -1,0 +1,89 @@
+<import src="../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
+<wxs module="filter" src="/utils/tool.wxs"></wxs>
+<view class="main">
+	<view class="tap">
+		<view class="tapLeft"></view>
+		<text>候补记录</text>
+	</view>
+	
+	<!-- 筛选展开/收起按钮 -->
+	<view class="filter-toggle" bindtap="toggleFilter">
+		<text>{{filterVisible ? '收起筛选' : '展开筛选'}}</text>
+		<text class="toggle-icon">{{filterVisible ? '↑' : '↓'}}</text>
+	</view>
+	
+	<!-- 筛选条件区域 -->
+	<view class="filter-section {{filterVisible ? 'active' : ''}}">
+		<!-- 预约状态筛选 -->
+		<view class="filter-row">
+			<text class="filter-label">候补状态：</text>
+			<view class="filter-options">
+				<view class="filter-option {{statusFilter === '' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="">全部</view>
+				<view class="filter-option {{statusFilter === '1' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="1">候补中</view>
+				<view class="filter-option {{statusFilter === '2' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="2">已通知</view>
+				<view class="filter-option {{statusFilter === '3' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="3">已预约</view>
+				<view class="filter-option {{statusFilter === '4' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="4">已过期</view>
+				<view class="filter-option {{statusFilter === '5' ? 'active' : ''}}" bindtap="changeStatusFilter" data-status="5">已取消</view>
+			</view>
+		</view>
+		
+		<!-- 科室筛选 -->
+		<view class="filter-row">
+			<text class="filter-label">就诊科室：</text>
+			<view class="filter-options">
+				<view class="filter-option {{deptFilter === '' ? 'active' : ''}}" bindtap="changeDeptFilter" data-dept="">全部</view>
+				<view wx:for="{{departmentList}}" wx:key="index" class="filter-option {{deptFilter === item ? 'active' : ''}}" bindtap="changeDeptFilter" data-dept="{{item}}">{{item}}</view>
+			</view>
+		</view>
+	</view>
+	
+	<!-- 排序选项区域 -->
+	<view class="sort-section">
+		<view class="sort-row">
+			<view class="sort-item {{sortBy === 'schedule' ? 'active' : ''}}" bindtap="changeSort" data-sort="schedule">
+				<text>就诊时间</text>
+				<text class="sort-icon" wx:if="{{sortBy === 'schedule'}}">{{sortOrder === 'asc' ? '↑' : '↓'}}</text>
+			</view>
+			<view class="sort-item {{sortBy === 'create' ? 'active' : ''}}" bindtap="changeSort" data-sort="create">
+				<text>创建时间</text>
+				<text class="sort-icon" wx:if="{{sortBy === 'create'}}">{{sortOrder === 'asc' ? '↑' : '↓'}}</text>
+			</view>
+		</view>
+	</view>
+	<view wx:if="{{filteredList.length == 0}}" class="not">
+		<image src="../../image/not.png"></image>
+		<text>数据为空</text>
+	</view>
+	<view wx:else>
+		<view class="block" wx:for="{{filteredList}}" wx:key="index" data-id="{{item.waitlistId}}" data-data="{{item}}" bindtap="uigo">
+			<view class="block-header">
+				<text class="order-no">候补编号：{{item.waitlistId}}</text>
+				<text class="order-status" wx:if="{{item.status === 1}}" style="color: #ff9800;">候补中</text>
+				<text class="order-status" wx:elif="{{item.status === 2}}" style="color: #2196f3;">已通知</text>
+				<text class="order-status" wx:elif="{{item.status === 3}}" style="color: #4caf50;">已预约</text>
+				<text class="order-status" wx:elif="{{item.status === 4}}" style="color: #9e9e9e;">已过期</text>
+				<text class="order-status" wx:elif="{{item.status === 5}}" style="color: #607d8b;">已取消</text>
+				<text class="order-status" wx:else style="color: #f44336;">看见这个信息请联系管理员</text>
+			</view>
+			<view class="block-content">
+				<view class="info-row">
+					<text class="info-label">就诊时间：</text>
+					<text class="info-value">{{item.scheduleDate}} <text wx:if="{{item.slotPeriod === 1}}">8:00-8:30</text><text wx:elif="{{item.slotPeriod === 2}}">8:30-9:00</text><text wx:elif="{{item.slotPeriod === 3}}">9:00-9:30</text><text wx:elif="{{item.slotPeriod === 4}}">9:30-10:00</text><text wx:elif="{{item.slotPeriod === 5}}">10:00-10:30</text><text wx:elif="{{item.slotPeriod === 6}}">10:30-11:00</text><text wx:elif="{{item.slotPeriod === 7}}">13:30-14:00</text><text wx:elif="{{item.slotPeriod === 8}}">14:00-14:30</text><text wx:elif="{{item.slotPeriod === 9}}">14:30-15:00</text><text wx:elif="{{item.slotPeriod === 10}}">15:00-15:30</text><text wx:elif="{{item.slotPeriod === 11}}">15:30-16:00</text><text wx:elif="{{item.slotPeriod === 12}}">16:00-16:30</text><text wx:else>{{item.slotPeriod}}</text></text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">就诊科室：</text>
+					<text class="info-value">{{item.departmentName}}</text>
+				</view>
+				<view class="info-row" wx:if="{{item.status === 1 && item.notifiedTime}}">
+					<text class="info-label">通知时间：</text>
+					<text class="info-value">{{filter.formatDate(item.notifiedTime)}}</text>
+				</view>
+				<view class="info-row" wx:if="{{item.status === 5 && item.lockExpireTime}}">
+					<text class="info-label">锁号截止时间：</text>
+					<text class="info-value">{{filter.formatDate(item.lockExpireTime)}}</text>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>
