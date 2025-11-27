@@ -25,7 +25,7 @@ Page({
 	 */
 	onLoad: function (options) {
 		new app.ToastPannel();
-		wx.showLoading({
+		/*wx.showLoading({
 			title: '加载中...',
 		})
 		this.url = getApp().globalData.$url;
@@ -52,7 +52,7 @@ Page({
 					}
 				})
 			}
-		})
+		})*/
 	},
 	imageError($event) {
 		let arr = this.data.swiper

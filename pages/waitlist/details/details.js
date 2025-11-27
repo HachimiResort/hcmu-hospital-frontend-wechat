@@ -47,11 +47,6 @@ Page({
 							wx.showToast({
 								title: '支付成功',
 							})
-							// 支付成功后跳转到首页，并在首页自动进入 make 列表
-							wx.setStorageSync('redirectToMakeAfterPay', '1')
-							wx.switchTab({
-								url: '/pages/index/index'
-							})
 						} else {
 							that.show(res1.data.msg)
 						}
