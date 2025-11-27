@@ -25,7 +25,7 @@ Page({
 		let that = this;
 		wx.showModal({
 			title: '支付确认',
-			content: '确认支付？',
+			content: '应付:¥' + that.data.item.actualFee,
 			success(res) {
 				if (res.confirm) {
 					wx.showLoading({
@@ -34,7 +34,7 @@ Page({
 					let token = wx.getStorageSync('token')
 					wx.request({
 						url: that.data.url + `/waitlists/${that.data.item.waitlistId}/pay`,
-						method: 'PUT',
+						method: 'POST',
 						header: {
 							'Authorization': token
 						},
@@ -75,7 +75,7 @@ Page({
 					let token = wx.getStorageSync('token')
 					wx.request({
 						url: that.data.url + `/waitlists/${that.data.item.waitlistId}/cancel`,
-						method: 'PUT',
+						method: 'POST',
 						header: {
 							'Authorization': token
 						},

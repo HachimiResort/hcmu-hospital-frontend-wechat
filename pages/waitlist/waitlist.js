@@ -32,13 +32,10 @@ Page({
 			header: {
 				'Authorization': token
 			},
-			data: {
-				patientUserId: this.data.userId
-			},
 			success: (res) => {
 				wx.hideLoading()
-				if (res.data.code == 0) {
-					let originalList = (res.data && res.data.data && res.data.data.list) ? res.data.data.list : [];
+				if (res.data.code == 200) {
+					let originalList = (res.data && res.data.data) ? res.data.data: [];
 					const departmentSet = new Set();
 					originalList.forEach(item => {
 						if (item.departmentName) {

@@ -20,10 +20,6 @@
         </view>
         <view class="info-title">排班信息：
             <view class="info-item">
-                <text class="info-label">排班编号：</text>
-                <text class="info-value">{{item.scheduleId}}</text>
-            </view>
-            <view class="info-item">
                 <text class="info-label">就诊时间：</text>
                 <text class="info-value">
                     {{item.scheduleDate}} 
@@ -97,9 +93,16 @@
                 <text class="info-value">{{filter.formatDate(item.lockExpireTime)}}</text>
             </view>
         </view>
+
+        <view class="info-title">费用信息：
+            <view class="info-item" wx:if="{{item.actualFee != null}}">
+                <text class="info-label">应付金额：</text>
+                <text class="info-value">¥{{item.actualFee}}</text>
+            </view>
+        </view>
 		
 		
 	</view>
-    <view class="button" wx:if="{{item.status === 1}}" bindtap="pay">支付</view>
+    <view class="button" wx:if="{{item.status === 2}}" bindtap="pay">支付</view>
     <view class="button" wx:if="{{item.status === 1 || item.status === 2}}" bindtap="cancel">取消</view>
 </view>
