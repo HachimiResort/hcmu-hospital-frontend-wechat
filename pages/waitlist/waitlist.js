@@ -28,7 +28,7 @@ Page({
 			title: '加载中...',
 		})
 		wx.request({
-			url: this.data.url + `/patient-profiles/${this.data.userId}/waitlists`,
+			url: this.data.url + `/patient-profiles/${wx.getStorageSync('userId')}/waitlists`,
 			header: {
 				'Authorization': token
 			},

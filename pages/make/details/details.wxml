@@ -50,6 +50,10 @@
 				<text class="info-label">排队顺序号：</text>
 				<text class="info-value">{{item.visitNo}}</text>
 			</view>
+			<view class="info-item" wx:if="{{(item.status === 3 || item.status === 4) && item.callingTime}}">
+				<text class="info-label">喊号时间：</text>
+				<text class="info-value">{{item.callingTime}}</text>
+			</view>
 		</view>
 		<view class="info-title">患者信息：
 			<view class="info-item">
@@ -80,6 +84,10 @@
 				<text class="info-label">实际费用：</text>
 				<text class="info-value">¥{{item.actualFee}}</text>
 			</view>
+            <view class="info-item" wx:if="{{item.status === 1 && item.lockExpireTime}}">
+                <text class="info-label">支付截止时间：</text>
+                <text class="info-value">{{item.lockExpireTime}}</text>
+            </view>
 			<view class="info-item" wx:if="{{item.status !== 1 && item.status !== 5}}">
 				<text class="info-label">支付时间：</text>
 				<text class="info-value">{{item.paymentTime}}</text>
@@ -99,6 +107,10 @@
 			<view class="info-item">
 				<text class="info-label">创建时间：</text>
 				<text class="info-value">{{item.createTime}}</text>
+			</view>
+			<view class="info-item" wx:if="{{item.status === 4 && item.completionTime}}">
+				<text class="info-label">就诊时间：</text>
+				<text class="info-value">{{item.completionTime}}</text>
 			</view>
 		</view>
 		

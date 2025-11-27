@@ -74,21 +74,17 @@
                 <text class="info-label">医生科室：</text>
                 <text class="info-value">{{item.departmentName}}</text>
             </view>
-            <view class="info-item">
-                <text class="info-label">医生编号：</text>
-                <text class="info-value">{{item.doctorUserId}}</text>
-            </view>
         </view>
         <view class="info-title">时间信息：
             <view class="info-item">
                 <text class="info-label">创建时间：</text>
                 <text class="info-value">{{filter.formatDate(item.createTime)}}</text>
             </view>
-            <view class="info-item" wx:if="{{item.status === 1 && item.notifiedTime}}">
+            <view class="info-item" wx:if="{{item.status === 2 && item.notifiedTime}}">
                 <text class="info-label">通知时间：</text>
                 <text class="info-value">{{filter.formatDate(item.notifiedTime)}}</text>
             </view>
-            <view class="info-item" wx:if="{{item.status === 5 && item.lockExpireTime}}">
+            <view class="info-item" wx:if="{{item.status === 2 && item.lockExpireTime}}">
                 <text class="info-label">锁号截止时间：</text>
                 <text class="info-value">{{filter.formatDate(item.lockExpireTime)}}</text>
             </view>
