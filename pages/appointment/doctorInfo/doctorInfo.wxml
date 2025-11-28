@@ -23,8 +23,8 @@
 			<view class="time-date" style="color: {{index===scheduleChoice ? '#006eff' : '#333'}}; text-align: center; display: flex; align-items: center; justify-content: center; height: 100%;">{{tool.formatDate(item.scheduleDate)}}</view>
 		</view>
 	</scroll-view>
-	<view class="schedule" wx:for="{{scheduleList[scheduleChoice].schedules}}" wx:for-item="item1" wx:key="index1">
-			<view class="schedule-content" wx:if="{{item1.status === 1}}">
+	<view class="schedule" wx:for="{{scheduleList[scheduleChoice].schedules}}" wx:if="{{item1.status === 1}}" wx:for-item="item1" wx:key="index1">
+			<view class="schedule-content" >
 				<view class="schedule-info">
 					<!-- 展示排班类型 -->
 					<view class="slot-type">
