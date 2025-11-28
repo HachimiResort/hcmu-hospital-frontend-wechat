@@ -1,0 +1,104 @@
+<import src="../../../component/appToast/appToast.wxml"/>
+<template is="toast" data="{{ ..._toast_ }}"/>
+<wxs module="filter" src="/utils/tool.wxs"></wxs>
+<view class="main">
+	<view class="info-container">
+    <view class="info-title">候补信息：
+            <view class="info-item">
+                <text class="info-label">候补编号：</text>
+                <text class="info-value appointment-no">{{item.waitlistId}}</text>
+            </view>
+            <view class="info-item">
+                <text class="info-label">状态：</text>
+                <text class="info-value" wx:if="{{item.status === 1}}" style="color: #ff9800;">候补中</text>
+                <text class="info-value" wx:elif="{{item.status === 2}}" style="color: #2196f3;">已通知</text>
+                <text class="info-value" wx:elif="{{item.status === 3}}" style="color: #4caf50;">已预约</text>
+                <text class="info-value" wx:elif="{{item.status === 4}}" style="color: #9e9e9e;">已过期</text>
+                <text class="info-value" wx:elif="{{item.status === 5}}" style="color: #607d8b;">已取消</text>
+                <text class="info-value" wx:else style="color: #f44336;">看见这个信息请联系管理员</text>
+            </view>
+        </view>
+        <view class="info-title">排班信息：
+            <view class="info-item">
+                <text class="info-label">就诊时间：</text>
+                <text class="info-value">
+                    {{item.scheduleDate}} 
+                    <text wx:if="{{item.slotPeriod === 1}}">8:00-8:30</text>
+                    <text wx:elif="{{item.slotPeriod === 2}}">8:30-9:00</text>
+                    <text wx:elif="{{item.slotPeriod === 3}}">9:00-9:30</text>
+                    <text wx:elif="{{item.slotPeriod === 4}}">9:30-10:00</text>
+                    <text wx:elif="{{item.slotPeriod === 5}}">10:00-10:30</text>
+                    <text wx:elif="{{item.slotPeriod === 6}}">10:30-11:00</text>
+                    <text wx:elif="{{item.slotPeriod === 7}}">13:30-14:00</text>
+                    <text wx:elif="{{item.slotPeriod === 8}}">14:00-14:30</text>
+                    <text wx:elif="{{item.slotPeriod === 9}}">14:30-15:00</text>
+                    <text wx:elif="{{item.slotPeriod === 10}}">15:00-15:30</text>
+                    <text wx:elif="{{item.slotPeriod === 11}}">15:30-16:00</text>
+                    <text wx:elif="{{item.slotPeriod === 12}}">16:00-16:30</text>
+                    <text wx:else>{{item.slotPeriod}}</text>
+                </text>
+            </view>
+            <view class="info-item">
+                <text class="info-label">排班类型：</text>
+                <text class="info-value">
+                    <text wx:if="{{item.slotType === 1}}">普通</text>
+                    <text wx:elif="{{item.slotType === 2}}">专家</text>
+                    <text wx:else>特需</text>
+                </text>
+            </view>
+        </view>
+        <view class="info-title">患者信息：
+            <view class="info-item">
+                <text class="info-label">患者姓名：</text>
+                <text class="info-value">{{item.patientName}}</text>
+            </view>
+            <view class="info-item">
+                <text class="info-label">用户名：</text>
+                <text class="info-value">{{item.patientUserName}}</text>
+            </view>
+            <view class="info-item">
+                <text class="info-label">联系电话：</text>
+                <text class="info-value">{{item.patientPhone}}</text>
+            </view>
+        </view>
+        <view class="info-title">医生信息：
+            <view class="info-item">
+                <text class="info-label">医生姓名：</text>
+                <text class="info-value">{{item.doctorName}}</text>
+            </view>
+            <view class="info-item">
+                <text class="info-label">医生职称：</text>
+                <text class="info-value">{{item.doctorTitle}}</text>
+            </view>
+            <view class="info-item">
+                <text class="info-label">医生科室：</text>
+                <text class="info-value">{{item.departmentName}}</text>
+            </view>
+        </view>
+        <view class="info-title">时间信息：
+            <view class="info-item">
+                <text class="info-label">创建时间：</text>
+                <text class="info-value">{{filter.formatDate(item.createTime)}}</text>
+            </view>
+            <view class="info-item" wx:if="{{item.status === 2 && item.notifiedTime}}">
+                <text class="info-label">通知时间：</text>
+                <text class="info-value">{{filter.formatDate(item.notifiedTime)}}</text>
+            </view>
+            <view class="info-item" wx:if="{{item.status === 2 && item.lockExpireTime}}">
+                <text class="info-label">锁号截止时间：</text>
+                <text class="info-value">{{filter.formatDate(item.lockExpireTime)}}</text>
+            </view>
+        </view>
+
+        <view class="info-title">费用信息：
+            <view class="info-item" wx:if="{{item.actualFee != null}}">
+                <text class="info-label">应付金额：</text>
+                <text class="info-value">¥{{item.actualFee}}</text>
+            </view>
+        </view>
+		
+		
+	</view>
+    <view class="button" wx:if="{{item.status === 2}}" bindtap="pay">支付</view>
+    <view class="button" wx:if="{{item.status === 1 || item.status === 2}}" bindtap="cancel">取消</view>
+</view>

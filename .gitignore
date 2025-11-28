@@ -1,11 +1,12 @@
 # 微信小程序 .gitignore
 dist/
 build/
+.trae/
 *.log
 node_modules/
 .DS_Store
 *.pem
-
+.trae
 # 本地配置文件
 project.private.config.json
 

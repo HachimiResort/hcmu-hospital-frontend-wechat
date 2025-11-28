@@ -24,7 +24,7 @@
 		</view>
 	</scroll-view>
 	<view class="schedule" wx:for="{{scheduleList[scheduleChoice].schedules}}" wx:for-item="item1" wx:key="index1">
-			<view class="schedule-content">
+			<view class="schedule-content" wx:if="{{item1.status === 1}}">
 				<view class="schedule-info">
 					<!-- 展示排班类型 -->
 					<view class="slot-type">
@@ -57,8 +57,8 @@
 				</view>
 				<!-- 展示状态 -->
 				<view class="slot-status">
-					<text wx:if="{{item1.status === 1}}" class="status-available" data-info="{{item1}}"bindtap="bookAppointment">预约</text>
-					<text wx:elif="{{item1.status === 2}}" class="status-full">约满</text>
+					<text wx:if="{{item1.availableSlots > 0 }}" class="status-available" data-info="{{item1}}"bindtap="bookAppointment">预约</text>
+					<text wx:elif="{{item1.availableSlots === 0 }}" class="status-available" data-info="{{item1}}"bindtap="addWaitlist">候补</text>
 					<text wx:else class="status-unavailable">不可约</text>
 				</view>
 			</view>

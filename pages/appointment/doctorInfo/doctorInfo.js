@@ -122,6 +122,85 @@ Page({
 			scheduleChoice: e.currentTarget.dataset.index
 		})
 	},
+	addWaitlist(e) {
+		const patientName = wx.getStorageSync('name') || '未设置';
+		const doctorName = this.data.doctor.name || '医生信息未加载';
+		const appointmentInfo = e.currentTarget.dataset.info || {};
+
+		// 根据挂号信息获取详细显示内容
+		let slotTypeText = '';
+		switch (appointmentInfo.slotType) {
+			case 1: slotTypeText = '普通'; break;
+			case 2: slotTypeText = '专家'; break;
+			default: slotTypeText = '特需';
+		}
+
+		let slotPeriodText = '';
+		switch (appointmentInfo.slotPeriod) {
+			case 1: slotPeriodText = '8:00-8:30'; break;
+			case 2: slotPeriodText = '8:30-9:00'; break;
+			case 3: slotPeriodText = '9:00-9:30'; break;
+			case 4: slotPeriodText = '9:30-10:00'; break;
+			case 5: slotPeriodText = '10:00-10:30'; break;
+			case 6: slotPeriodText = '10:30-11:00'; break;
+			case 7: slotPeriodText = '13:30-14:00'; break;
+			case 8: slotPeriodText = '14:00-14:30'; break;
+			case 9: slotPeriodText = '14:30-15:00'; break;
+			case 10: slotPeriodText = '15:00-15:30'; break;
+			case 11: slotPeriodText = '15:30-16:00'; break;
+			case 12: slotPeriodText = '16:00-16:30'; break;
+			default: slotPeriodText = appointmentInfo.slotPeriod;
+		}
+
+		const appointmentDetails = `
+患者姓名：${patientName}\n
+医生姓名：${doctorName}\n
+挂号类型：${slotTypeText}\n
+挂号时间：${appointmentInfo.scheduleDate} ${slotPeriodText}\n
+挂号费用：¥${appointmentInfo.fee || 0}
+		`;
+
+		wx.showModal({
+			title: '确认候补',
+			content: appointmentDetails,
+			success: (res) => {
+				if (res.confirm) {
+					wx.showLoading({
+						title: '加载中...',
+					})
+					let token = wx.getStorageSync('token')
+					wx.request({
+						url: this.data.url + `/waitlists/join`,
+						header: {
+							'Authorization': token
+						},
+						method: 'POST',
+						data: {
+							"userId": wx.getStorageSync('userId'),
+    						"scheduleId": appointmentInfo.scheduleId
+						},
+						success: (res) => {
+							wx.hideLoading()
+							if (res.data.code == 200) {
+								wx.hideLoading()
+								wx.reLaunch({
+									url: '/pages/index/index',
+								})
+							} else {
+								wx.hideLoading()
+								this.show(res.data.msg)
+							}
+						},
+						fail: (err) => {
+							console.log(err)
+							wx.hideLoading()
+							this.show("请检查网络连接")
+						}
+					})
+				}
+			}
+		});
+	},
 	bookAppointment(e) {
 		const patientName = wx.getStorageSync('name') || '未设置';
 		const doctorName = this.data.doctor.name || '医生信息未加载';

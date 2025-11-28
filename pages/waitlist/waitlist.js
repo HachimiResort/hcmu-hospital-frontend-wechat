@@ -28,15 +28,14 @@ Page({
 			title: '加载中...',
 		})
 		wx.request({
-			url: this.data.url + `/patient-profiles/${wx.getStorageSync('userId')}/appointments`,
+			url: this.data.url + `/patient-profiles/${wx.getStorageSync('userId')}/waitlists`,
 			header: {
 				'Authorization': token
 			},
 			success: (res) => {
 				wx.hideLoading()
 				if (res.data.code == 200) {
-					let originalList = res.data.data.list;
-					// 提取唯一的科室列表
+					let originalList = (res.data && res.data.data) ? res.data.data: [];
 					const departmentSet = new Set();
 					originalList.forEach(item => {
 						if (item.departmentName) {
@@ -48,7 +47,6 @@ Page({
 						orderList: originalList,
 						departmentList: departmentList
 					});
-					// 应用筛选和排序
 					this.applyFilterAndSort();
 				} else {
 					this.show(res.data.msg)

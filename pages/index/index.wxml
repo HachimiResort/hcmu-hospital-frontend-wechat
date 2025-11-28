@@ -33,9 +33,9 @@
 		<image src="../../image/mz.png"></image>
 		<text>当前预约</text>
 	</view>
-	<view class="morBlock" bindtap="refund">
+	<view class="morBlock" bindtap="waitlist">
 		<image src="../../image/tk.png"></image>
-		<text>取消预约</text>
+		<text>当前候补</text>
 	</view>
 	<view class="morBlock" bindtap="message">
 		<view class="msgNum"  wx:if="{{msgNum > 0}}">{{msgNum}}</view>

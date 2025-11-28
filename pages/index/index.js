@@ -25,7 +25,7 @@ Page({
 	 */
 	onLoad: function (options) {
 		new app.ToastPannel();
-		wx.showLoading({
+		/*wx.showLoading({
 			title: '加载中...',
 		})
 		this.url = getApp().globalData.$url;
@@ -52,7 +52,7 @@ Page({
 					}
 				})
 			}
-		})
+		})*/
 	},
 	imageError($event) {
 		let arr = this.data.swiper
@@ -87,6 +87,12 @@ Page({
 				})
 			}
 		})
+		// 如果支付成功后需要自动进入 make 列表
+		const needRedirect = wx.getStorageSync('redirectToMakeAfterPay')
+		if (needRedirect === '1') {
+			wx.removeStorageSync('redirectToMakeAfterPay')
+			this.indexMake()
+		}
 	},
 	course_uigo() {
 		wx.navigateTo({
@@ -119,6 +125,7 @@ Page({
 				'Authorization': token
 			},
 			success: (res) => {
+				wx.hideLoading()
 				if (res.data.code == 200) {
 					wx.navigateTo({
 						url: '/pages/make/make',
@@ -135,9 +142,35 @@ Page({
 			}
 		})
 	},
-	refund() {
-		wx.navigateTo({
-			url: '../refund/refund',
+	waitlist() {
+		let token = wx.getStorageSync('token')
+		wx.showLoading({
+			title: '加载中...',
+		})
+		wx.request({
+			url: this.data.url + `/patient-profiles/${wx.getStorageSync('userId')}/waitlists`,
+			header: {
+				'Authorization': token
+			},
+			data: {
+				patientUserId: wx.getStorageSync('userId')
+			},
+			success: (res) => {
+				wx.hideLoading()
+				if (res.data.code == 200) {
+					wx.navigateTo({
+						url: '/pages/waitlist/waitlist',
+					})
+				} else {
+					wx.navigateTo({
+						url: '/pages/sign/sign',
+					})
+				}
+			},
+			fail: (err) => {
+				wx.hideLoading()
+				this.show("请检查网络连接")
+			}
 		})
 	},
 	recharge() {
@@ -147,12 +180,16 @@ Page({
 	},
 	make() {
 		let token = wx.getStorageSync('token')
+		wx.showLoading({
+			title: '加载中...',
+		})
 		wx.request({
 			url: this.data.url + '/departments',
 			header: {
 				'Authorization': token
 			},
 			success: (res) => {
+				wx.hideLoading()
 				if (res.data.code == 200) {
 					wx.navigateTo({
 						url: '../appointment/dep/dep',
