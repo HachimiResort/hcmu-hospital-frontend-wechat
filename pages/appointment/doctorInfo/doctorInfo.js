@@ -264,6 +264,7 @@ Page({
 							} else {
 								wx.hideLoading()
 								this.show(res.data.msg)
+								this.onLoad()
 							}
 						},
 						fail: (err) => {

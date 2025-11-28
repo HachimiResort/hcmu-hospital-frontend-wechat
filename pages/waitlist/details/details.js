@@ -40,16 +40,16 @@ Page({
 						},
 						success: (res1) => {
 							wx.hideLoading()
-						if (res1.data.code == 0) {
-							that.setData({
-								item: res1.data.data
-							})
-							wx.showToast({
-								title: '支付成功',
-							})
-						} else {
-							that.show(res1.data.msg)
-						}
+							if (res1.data.code == 200) {
+								that.setData({
+									item: res1.data.data
+								})
+								wx.showToast({
+									title: '支付成功',
+								})
+							} else {
+								that.show(res1.data.msg)
+							}
 						}
 					})
 				} else if (res.cancel) {
@@ -76,7 +76,7 @@ Page({
 						},
 						success: (res1) => {
 							wx.hideLoading()
-							if (res1.data.code == 0) {
+							if (res1.data.code == 200) {
 								that.setData({
 									item: res1.data.data
 								})
