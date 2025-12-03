@@ -118,4 +118,5 @@
 	</view>
 	<view class="button" wx:if="{{item.status === 1}}" bindtap="pay">支付</view>
 	<view class="button" wx:if="{{item.status === 1 || item.status === 2}}" bindtap="cancel">取消</view>
+	<view class="button" wx:if="{{item.status === 3 || item.status === 2}}" bindtap="scanCode">扫码</view>
 </view>

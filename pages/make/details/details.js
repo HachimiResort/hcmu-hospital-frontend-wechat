@@ -102,11 +102,22 @@ Page({
 				}
 			}
 		})
-	},
-	/**
-	 * 生命周期函数--监听页面初次渲染完成
-	 */
-	onReady() {
+  },
+  scanCode() {
+    wx.scanCode({
+      scanType: ['qrCode', 'barCode'],
+      success: (res) => {
+        this.show(res.result || '扫码结果为空')
+      },
+      fail: () => {
+        this.show('扫码失败')
+      }
+    })
+  },
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady() {
 
 	},
 
