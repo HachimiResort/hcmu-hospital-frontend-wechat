@@ -74,9 +74,16 @@ Page({
 				if (res.data.code == 200) {
 					wx.showToast({
 						title: '修改成功',
-					})
-					wx.relaunch({
-						url: 'pages/my/my',
+						icon: 'success',
+						duration: 1500,
+						mask: true,
+						success: () => {
+							setTimeout(() => {
+								wx.reLaunch({
+									url: '/pages/index/index'
+								})
+							}, 1500)
+						}
 					})
 				} else {
 					this.show(res.data.msg)
