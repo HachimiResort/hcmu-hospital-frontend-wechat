@@ -12,7 +12,7 @@ Page({
 		userId: wx.getStorageSync('userId'),
 		statusFilter: '', // 预约状态筛选，默认为全部
 		deptFilter: '', // 科室筛选，默认为全部
-		sortBy: 'schedule', // 排序字段：schedule-就诊时间，create-创建时间
+		sortBy: 'create', // 排序字段：schedule-就诊时间，create-创建时间
 		sortOrder: 'desc', // 排序顺序：asc-升序，desc-降序
 		departmentList: [], // 科室列表，动态从数据中提取
 		filterVisible: false // 控制筛选部分显示/隐藏，默认隐藏
