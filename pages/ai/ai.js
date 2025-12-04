@@ -27,6 +27,7 @@ Page({
     const history = this.toOpenAIHistory(this.data.messages)
     const assistId = 'm_' + Date.now() + '_a'
     this.setData({ sending: true })
+    wx.showLoading({ title: '基米思考中...' })
     const data = { 
       model: 'deepseek-chat', 
       stream: false, 
@@ -41,6 +42,7 @@ Page({
       },
       data,
       success: (res) => {
+        wx.hideLoading()
         let obj = res && res.data ? res.data : {}
         if (typeof obj === 'string') {
           try { obj = JSON.parse(obj) } catch (e) { obj = {} }
@@ -53,7 +55,7 @@ Page({
         const list = this.data.messages.concat({ id: assistId, role: 'assistant', content: txt, mdNodes: r.mdNodes, html: r.html })
         this.setData({ messages: list, lastId: assistId })
       },
-      fail: () => this.show('网络异常'),
+      fail: () => { wx.hideLoading(); this.show('网络异常') },
       complete: () => this.setData({ sending: false })
     })
   },

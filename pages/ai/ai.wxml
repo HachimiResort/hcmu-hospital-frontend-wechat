@@ -7,7 +7,7 @@
           <image class="avatar" style="width:64rpx;height:64rpx;border-radius:50%;margin:0 12rpx;" mode="aspectFill" src="../../image/avatar.png"></image>
         </block>
         <block wx:else>
-          <image class="avatar" style="width:64rpx;height:64rpx;border-radius:50%;margin:0 12rpx;" mode="aspectFill" src="../../image/AI.png"></image>
+          <image class="avatar" style="width:64rpx;height:64rpx;border-radius:50%;margin:0 12rpx;" mode="aspectFill" src="../../image/ai_avatar.png"></image>
           <view class="bubble">
             <block wx:if="{{item.mdNodes}}"><towxml nodes="{{item.mdNodes}}"/></block>
             <block wx:elif="{{item.html}}"><rich-text nodes="{{item.html}}"/></block>
