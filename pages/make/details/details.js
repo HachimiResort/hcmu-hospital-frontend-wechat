@@ -102,22 +102,49 @@ Page({
 				}
 			}
 		})
-  },
-  scanCode() {
-    wx.scanCode({
-      scanType: ['qrCode', 'barCode'],
-      success: (res) => {
-        this.show(res.result || '扫码结果为空')
-      },
-      fail: () => {
-        this.show('扫码失败')
-      }
-    })
-  },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
+	},
+	scanCode() {
+		wx.scanCode({
+			scanType: ['qrCode', 'barCode'],
+			success: (res) => {
+				const key = (res.result || '').trim()
+				if (!key) {
+					this.show('扫码结果为空')
+					return
+				}
+				const that = this
+				wx.showLoading({
+					title: '请等待...',
+				})
+				wx.request({
+					url: `${that.data.url}/appointments/${that.data.item.appointmentId}/signIn`,
+					method: 'PUT',
+					data: { key: key },
+					header: {
+						'Authorization': wx.getStorageSync('token')
+					},
+					success: (res1) => {
+						wx.hideLoading();
+						if (res1.data.code == 200) {
+							that.setData({ item: res1.data.data })
+							wx.showToast({ title: '成功签到' })
+						} else {
+							that.show(res1.data.msg)
+						}
+					},
+					fail: () => {
+						that.show('请检查网络连接')
+					}
+				})
+			},
+			fail: () => {
+			}
+		})
+	},
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady() {
 
 	},
 
