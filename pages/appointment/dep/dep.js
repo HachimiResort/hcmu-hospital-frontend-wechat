@@ -28,7 +28,7 @@ Page({
 		})
 		new Promise((resolve, reject) => {
 			wx.request({
-				url: this.data.url + '/departments',
+				url: this.data.url + '/departments?pageSize=10000',
 				header: {
 					'Authorization': token
 				},
