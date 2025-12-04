@@ -1,0 +1,10 @@
+{
+	"navigationBarBackgroundColor": "#ffffff",
+	"navigationBarTextStyle": "black",
+	"navigationBarTitleText": "AI智能导诊",
+	"backgroundColor": "#eeeeee",
+	"backgroundTextStyle": "light",
+	"usingComponents": {
+		"towxml": "/towxml/towxml"
+	}
+  }

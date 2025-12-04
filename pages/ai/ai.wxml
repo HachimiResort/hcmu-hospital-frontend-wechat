@@ -1,0 +1,24 @@
+<view class="chat">
+  <scroll-view scroll-y="true" class="list" scroll-with-animation="true" scroll-into-view="{{lastId}}">
+    <block wx:for="{{messages}}" wx:key="id">
+      <view id="{{item.id}}" class="row {{item.role === 'user' ? 'right' : 'left'}}">
+        <block wx:if="{{item.role === 'user'}}">
+          <view class="bubble">{{item.content}}</view>
+          <image class="avatar" style="width:64rpx;height:64rpx;border-radius:50%;margin:0 12rpx;" mode="aspectFill" src="../../image/avatar.png"></image>
+        </block>
+        <block wx:else>
+          <image class="avatar" style="width:64rpx;height:64rpx;border-radius:50%;margin:0 12rpx;" mode="aspectFill" src="../../image/AI.png"></image>
+          <view class="bubble">
+            <block wx:if="{{item.mdNodes}}"><towxml nodes="{{item.mdNodes}}"/></block>
+            <block wx:elif="{{item.html}}"><rich-text nodes="{{item.html}}"/></block>
+            <block wx:else>{{item.content}}</block>
+          </view>
+        </block>
+      </view>
+    </block>
+  </scroll-view>
+  <view class="composer">
+    <textarea class="input" value="{{inputText}}" bindinput="onInput" placeholder="输入内容" auto-height="true"/>
+    <button class="send" bindtap="onSend" loading="{{sending}}" disabled="{{sending || !inputText}}">发送</button>
+  </view>
+</view>

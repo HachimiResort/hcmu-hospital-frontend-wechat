@@ -173,10 +173,35 @@ Page({
 			}
 		})
 	},
-	recharge() {
-		wx.navigateTo({
-			url: '../recharge/recharge',
+	ai() {
+		let token = wx.getStorageSync('token')
+		wx.showLoading({
+			title: '加载中...',
 		})
+		wx.request({
+			url: this.data.url + '/departments',
+			header: {
+				'Authorization': token
+			},
+			success: (res) => {
+				wx.hideLoading()
+				if (res.data.code == 200) {
+					wx.navigateTo({
+						url: '../ai/ai',
+					})
+				} else {
+					wx.navigateTo({
+						url: '/pages/sign/sign',
+					})
+				}
+			},
+			fail: (err) => {
+				wx.hideLoading()
+				this.show("请检查网络连接")
+			}
+		})
+
+
 	},
 	make() {
 		let token = wx.getStorageSync('token')

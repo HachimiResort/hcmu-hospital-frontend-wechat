@@ -38,7 +38,8 @@
 		"pages/course/process/process",
 		"pages/my/feedback/his/his",
 		"pages/waitlist/waitlist",
-		"pages/waitlist/details/details"
+		"pages/waitlist/details/details",
+		"pages/ai/ai"
 	],
 	"window": {
 		"backgroundTextStyle": "light",

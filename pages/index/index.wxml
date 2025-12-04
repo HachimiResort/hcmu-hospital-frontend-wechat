@@ -16,7 +16,7 @@
 		</view>
 		<image class="zhuImg" src="../../image/yy.png"></image>
 	</view>
-	<view class="zhuBlock zhubotm" bindtap="recharge">
+	<view class="zhuBlock zhubotm" bindtap="ai">
 		<view>
 			<text class="tit">智能问诊</text>
 			<text class="ftit">AI病情分析</text>

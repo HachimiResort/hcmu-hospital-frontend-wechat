@@ -33,8 +33,8 @@ Page({
 					'Authorization': token
 				},
 				success: (res) => {
-					if (res.data.data.total == 0) return wx.hideLoading()
 					if (res.data.code == 200) {
+						if (res.data.data.total == 0) return wx.hideLoading()
 						resolve(res.data.data.list)
 					} else if (res.data.code == 403) {
 						getApp().notPermission()
@@ -49,14 +49,19 @@ Page({
 			})
 		}).then(res => {
 			let arr = new Array(res.length).fill(false);
-			arr[0] = true;
+			let defaultIndex = 0;
+			if (options && options.departmentId) {
+				const idx = res.findIndex(item => String(item.departmentId) === String(options.departmentId));
+				if (idx !== -1) defaultIndex = idx;
+			}
+			arr[defaultIndex] = true;
 			this.setData({
 				depList: res,
 				depChoice: arr,
 			})
 			return new Promise((resolve, reject) => {
 				wx.request({
-					url: this.data.url + `/departments/${res[0].departmentId}/doctors`,
+					url: this.data.url + `/departments/${res[defaultIndex].departmentId}/doctors`,
 					header: {
 						'Authorization': token
 					},
