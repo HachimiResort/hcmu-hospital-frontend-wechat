@@ -12,6 +12,7 @@ Page({
 		userId: wx.getStorageSync('userId'),
 		statusFilter: '', // 预约状态筛选，默认为全部
 		deptFilter: '', // 科室筛选，默认为全部
+		checkInFilter: '',
 		sortBy: 'create', // 排序字段：schedule-就诊时间，create-创建时间
 		sortOrder: 'desc', // 排序顺序：asc-升序，desc-降序
 		departmentList: [], // 科室列表，动态从数据中提取
@@ -135,6 +136,14 @@ Page({
 		this.applyFilterAndSort();
 	},
 
+	changeCheckInFilter(e) {
+		const v = (e.currentTarget.dataset.checkin || '').trim();
+		this.setData({
+			checkInFilter: v
+		});
+		this.applyFilterAndSort();
+	},
+
 	/**
 	 * 切换排序方式
 	 */
@@ -172,6 +181,14 @@ Page({
 		// 应用科室筛选
 		if (this.data.deptFilter !== '') {
 			list = list.filter(item => item.departmentName === this.data.deptFilter);
+		}
+
+		if (this.data.checkInFilter !== '') {
+			const isChecked = this.data.checkInFilter === 'checked';
+			list = list.filter(item => {
+				const checkedIn = !!item.checkInTime && item.checkInTime !== '0';
+				return isChecked ? checkedIn : !checkedIn;
+			});
 		}
 
 		// 应用排序

@@ -98,7 +98,9 @@
         </view>
 		
 		
+		</view>
+		<view class="bottom-bar">
+			<view class="button" wx:if="{{item.status === 2}}" bindtap="pay">支付</view>
+			<view class="button" wx:if="{{item.status === 1 || item.status === 2}}" bindtap="cancel">取消</view>
+		</view>
 	</view>
-    <view class="button" wx:if="{{item.status === 2}}" bindtap="pay">支付</view>
-    <view class="button" wx:if="{{item.status === 1 || item.status === 2}}" bindtap="cancel">取消</view>
-</view>
