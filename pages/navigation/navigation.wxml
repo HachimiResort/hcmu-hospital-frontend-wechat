@@ -1,16 +1,17 @@
-<import src="../../component/appToast/appToast.wxml"/>
-<template is="toast" data="{{ ..._toast_ }}"/>
-<view wx:if="{{list.length == 0}}" class="not">
-	<image src="../../image/not.png"></image>
-	<text>数据为空</text>
-</view>
-<view wx:else>
-	<view class="block" wx:for="{{list}}" wx:key="index" bindtap="uigo" data-id="{{item.id}}">
-		<image mode="scaleToFill" class="logo" src="../../image/56560.png"></image>
-		<view>
-			<text class="name">{{item.name}}</text>
-			<text class="address">{{item.address}}</text>
-		</view>
-		<image class="next" src="../../image/next.svg"></image>
-	</view>
+<view style="display:flex;flex-direction:column;height:100vh;">
+  <view id="topbar" style="display:flex;align-items:center;gap:12rpx;padding:12rpx;border-bottom:1px solid #eee;">
+    <picker mode="selector" range="{{maps}}" value="{{selectedMapIndex}}" bindchange="bindMapChange">
+      <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">{{(maps[selectedMapIndex] && maps[selectedMapIndex].mapName) || '当前地图'}}</view>
+    </picker>
+    <picker mode="selector" range="{{roomPoints}}" value="{{selectedStartIndex}}" bindchange="bindStartChange">
+      <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">{{(roomPoints[selectedStartIndex] && roomPoints[selectedStartIndex].pointName) || '起点'}}</view>
+    </picker>
+    <picker mode="selector" range="{{roomPoints}}" value="{{selectedEndIndex}}" bindchange="bindEndChange">
+      <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">{{(roomPoints[selectedEndIndex] && roomPoints[selectedEndIndex].pointName) || '终点'}}</view>
+    </picker>
+    <button size="mini" bindtap="onQuery">查询</button>
+  </view>
+  <view style="flex:1;display:flex;justify-content:center;align-items:center;">
+    <canvas canvas-id="navCanvas" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;" width="{{canvasWidth}}" height="{{canvasHeight}}" bindtap="onCanvasTap"></canvas>
+  </view>
 </view>

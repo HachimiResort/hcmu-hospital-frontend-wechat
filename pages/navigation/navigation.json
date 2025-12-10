@@ -1,7 +1,7 @@
 {
 	"navigationBarBackgroundColor": "#ffffff",
 	"navigationBarTextStyle": "black",
-	"navigationBarTitleText": "选择院区",
+	"navigationBarTitleText": "医院导航",
 	"backgroundColor": "#eeeeee",
 	"backgroundTextStyle": "light"
   }
