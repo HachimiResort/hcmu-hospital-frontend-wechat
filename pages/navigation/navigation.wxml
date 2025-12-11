@@ -1,17 +1,32 @@
 <view style="display:flex;flex-direction:column;height:100vh;">
-  <view id="topbar" style="display:flex;align-items:center;gap:12rpx;padding:12rpx;border-bottom:1px solid #eee;">
-    <picker mode="selector" range="{{maps}}" value="{{selectedMapIndex}}" bindchange="bindMapChange">
-      <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">{{(maps[selectedMapIndex] && maps[selectedMapIndex].mapName) || '当前地图'}}</view>
-    </picker>
-    <picker mode="selector" range="{{roomPoints}}" value="{{selectedStartIndex}}" bindchange="bindStartChange">
-      <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">{{(roomPoints[selectedStartIndex] && roomPoints[selectedStartIndex].pointName) || '起点'}}</view>
-    </picker>
-    <picker mode="selector" range="{{roomPoints}}" value="{{selectedEndIndex}}" bindchange="bindEndChange">
-      <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">{{(roomPoints[selectedEndIndex] && roomPoints[selectedEndIndex].pointName) || '终点'}}</view>
-    </picker>
-    <button size="mini" bindtap="onQuery">查询</button>
+  <view id="topbar" style="display:flex;flex-direction:column;gap:12rpx;padding:12rpx;border-bottom:1px solid #eee;">
+    <view style="display:flex;align-items:center;gap:12rpx;">
+      <picker mode="selector" range="{{maps}}" value="{{selectedMapIndex}}" bindchange="bindMapChange">
+        <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">当前地图：{{(maps[selectedMapIndex] && maps[selectedMapIndex].mapName) || ''}}</view>
+      </picker>
+      <picker mode="selector" range="{{roomPoints}}" value="{{selectedStartIndex}}" bindchange="bindStartChange">
+        <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">起点：{{(roomPoints[selectedStartIndex] && roomPoints[selectedStartIndex].pointName) || ''}}</view>
+      </picker>
+      <picker mode="selector" range="{{roomPoints}}" value="{{selectedEndIndex}}" bindchange="bindEndChange">
+        <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">终点：{{(roomPoints[selectedEndIndex] && roomPoints[selectedEndIndex].pointName) || ''}}</view>
+      </picker>
+    </view>
+    <view style="display:flex;align-items:center;gap:12rpx;">
+      <button size="mini" wx:if="{{showLine}}" disabled="{{selectedPathIndex <= 0}}" bindtap="onPrevPath">上一页</button>
+      <button size="mini" bindtap="onQuery">查询</button>
+      <button size="mini" wx:if="{{showLine}}" disabled="{{selectedPathIndex >= (paths.length - 1)}}" bindtap="onNextPath">下一页</button>
+    </view>
   </view>
   <view style="flex:1;display:flex;justify-content:center;align-items:center;">
-    <canvas canvas-id="navCanvas" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;" width="{{canvasWidth}}" height="{{canvasHeight}}" bindtap="onCanvasTap"></canvas>
+    <block wx:if="{{!gotmaps}}">
+      
+      <view style="display:flex;flex-direction:column;align-items:center;gap:16rpx;color:#666;">
+        <image mode="aspectFit" src="../../image/not.png"></image>
+        <text>无法查看地图</text>
+      </view>
+    </block>
+    <block wx:else>
+      <canvas canvas-id="navCanvas" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;" width="{{canvasWidth}}" height="{{canvasHeight}}" bindtap="onCanvasTap"></canvas>
+    </block>
   </view>
 </view>
