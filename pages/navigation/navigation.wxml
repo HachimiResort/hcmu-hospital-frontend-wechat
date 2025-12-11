@@ -1,19 +1,19 @@
 <view style="display:flex;flex-direction:column;height:100vh;">
   <view id="topbar" style="display:flex;flex-direction:column;gap:12rpx;padding:12rpx;border-bottom:1px solid #eee;">
     <view style="display:flex;align-items:center;gap:12rpx;">
-      <picker mode="selector" range="{{maps}}" value="{{selectedMapIndex}}" bindchange="bindMapChange">
-        <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">当前地图：{{(maps[selectedMapIndex] && maps[selectedMapIndex].mapName) || ''}}</view>
+      <picker mode="selector" range="{{maps}}" range-key="mapName" value="{{selectedMapIndex}}" bindchange="bindMapChange" disabled="{{showLine}}">
+        <view style="padding:8rpx 16rpx;border:1px solid {{showLine ? '#bbb' : '#ddd'}};border-radius:8rpx;background-color:{{showLine ? '#f5f5f5' : '#fff'}};color:{{showLine ? '#999' : '#333'}};">当前地图：{{(maps[selectedMapIndex] && maps[selectedMapIndex].mapName) || ''}}</view>
       </picker>
-      <picker mode="selector" range="{{roomPoints}}" value="{{selectedStartIndex}}" bindchange="bindStartChange">
-        <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">起点：{{(roomPoints[selectedStartIndex] && roomPoints[selectedStartIndex].pointName) || ''}}</view>
+      <picker mode="selector" range="{{roomPoints}}" range-key="pointName" value="{{selectedStartIndex}}" bindchange="bindStartChange" disabled="{{showLine}}">
+      <view style="padding:8rpx 16rpx;border:1px solid {{showLine ? '#bbb' : '#ddd'}};border-radius:8rpx;background-color:{{showLine ? '#f5f5f5' : '#fff'}};color:{{showLine ? '#999' : '#333'}};">起点：{{selectedStartIndex < 0 ? '走廊' : ((roomPoints[selectedStartIndex] && roomPoints[selectedStartIndex].pointName) || '')}}</view>
       </picker>
-      <picker mode="selector" range="{{roomPoints}}" value="{{selectedEndIndex}}" bindchange="bindEndChange">
-        <view style="padding:8rpx 16rpx;border:1px solid #ddd;border-radius:8rpx;">终点：{{(roomPoints[selectedEndIndex] && roomPoints[selectedEndIndex].pointName) || ''}}</view>
+      <picker mode="selector" range="{{roomPoints}}" range-key="pointName" value="{{selectedEndIndex}}" bindchange="bindEndChange" disabled="{{showLine}}">
+      <view style="padding:8rpx 16rpx;border:1px solid {{showLine ? '#bbb' : '#ddd'}};border-radius:8rpx;background-color:{{showLine ? '#f5f5f5' : '#fff'}};color:{{showLine ? '#999' : '#333'}};">终点：{{selectedEndIndex < 0 ? '走廊' : ((roomPoints[selectedEndIndex] && roomPoints[selectedEndIndex].pointName) || '')}}</view>
       </picker>
     </view>
     <view style="display:flex;align-items:center;gap:12rpx;">
       <button size="mini" wx:if="{{showLine}}" disabled="{{selectedPathIndex <= 0}}" bindtap="onPrevPath">上一页</button>
-      <button size="mini" bindtap="onQuery">查询</button>
+      <button size="mini" bindtap="onQuery">{{showLine ? '结束查询' : '开始查询'}}</button>
       <button size="mini" wx:if="{{showLine}}" disabled="{{selectedPathIndex >= (paths.length - 1)}}" bindtap="onNextPath">下一页</button>
     </view>
   </view>
