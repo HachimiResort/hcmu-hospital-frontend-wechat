@@ -125,24 +125,14 @@ Page({
 			}
 		})
 	},
-	message() {
+	waitlist() {
 		if (this.data.isLogin) {
 			wx.navigateTo({
-				url: './message/message',
+				url: '../waitlist/waitlist',
 			})
-		}
-	},
-	recorder() {
-		if (this.data.isLogin) {
+		}else {
 			wx.navigateTo({
-				url: './recorder/recorder',
-			})
-		}
-	},
-	payOrder() {make
-		if (this.data.isLogin) {
-			wx.navigateTo({
-				url: './payOrder/payOrder',
+				url: '/pages/sign/sign',
 			})
 		}
 	},
@@ -154,20 +144,6 @@ Page({
 		}else {
 			wx.navigateTo({
 				url: '/pages/sign/sign',
-			})
-		}
-	},
-	patient() {
-		if (this.data.isLogin) {
-			wx.navigateTo({
-				url: './patient/patient',
-			})
-		}
-	},
-	refund() {
-		if (this.data.isLogin) {
-			wx.navigateTo({
-				url: './refund/refund',
 			})
 		}
 	},
