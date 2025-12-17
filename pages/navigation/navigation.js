@@ -36,8 +36,19 @@ Page({
 		selectedEndIndex: 0,
 		selectedEndPointId: 0,
 		showLine: false,
+		showStartPoint: false,
 		paths: [],
 		selectedPathIndex: 0,
+	},
+	drawDot(ctx, ox, oy) {
+		const s = this.data.displayScale || ((this.data.canvasWidth && this.data.imageNaturalWidth) ? this.data.canvasWidth / this.data.imageNaturalWidth : 1);
+		const x = Math.round(ox * s);
+		const y = Math.round(oy * s);
+		const r = Math.max(6, Math.round(2 * s));
+		ctx.beginPath();
+		ctx.setFillStyle('#0066ff');
+		ctx.arc(x, y, r, 0, Math.PI * 2);
+		ctx.fill();
 	},
 
 	/**
@@ -50,7 +61,8 @@ Page({
 			selectedMapIndex: 0,
 			selectedStartIndex: 0,
 			selectedEndIndex: 0,
-			showLine: false
+			showLine: false,
+			showStartPoint: false
 		});
 		wx.showLoading({ title: '加载中', mask: true });
 		const baseUrl = this.data.url;
@@ -93,6 +105,7 @@ Page({
 						this.setData({ selectedEndPointId: tidNum, selectedEndIndex: ei >= 0 ? ei : -1 });
 					}
 					if (selectedStartPointId && selectedEndPointId) {
+						console.log(selectedStartPointId, selectedEndPointId);
 						this.onQuery();
 					}
 				}
@@ -274,6 +287,7 @@ Page({
 		const mapsArr = this.data.maps || [];
 		const mi = Number(this.data.selectedMapIndex || 0);
 		const curMapId = mapsArr[mi] ? mapsArr[mi].mapId : this.data.selectedMapId;
+		
 		const rooms = (this.data.roomPoints || []).filter(p => p.mapId === curMapId);
 		const s = this.data.displayScale || (w && this.data.imageNaturalWidth ? w / this.data.imageNaturalWidth : 1);
 		ctx.setFillStyle('#000000');
@@ -296,6 +310,15 @@ Page({
 			for (let j = 0; j < lines.length; j++) {
 				const ly = y + Math.round((j - offsetBase) * lineHeight);
 				ctx.fillText(lines[j], x, ly);
+			}
+		}
+		if (this.data.showStartPoint) {
+			const pts = this.data.points || [];
+			const pmap = new Map(pts.map(p => [p.pointId, p]));
+			const sid = Number(this.data.selectedStartPointId || 0);
+			const startPoint = pmap.get(sid);
+			if (startPoint && startPoint.mapId === curMapId) {
+				this.drawDot(ctx, startPoint.x, startPoint.y);
 			}
 		}
 		ctx.draw();
@@ -410,7 +433,6 @@ Page({
 		const s = pointsMap.get(startPointId);
 		const t = pointsMap.get(endPointId);
 		if (!s || !t) return [];
-		if (s.type !== 1 || t.type !== 1) return [];
 		if (String(startPointId) === String(endPointId)) {
 			this.setData({ paths: [] });
 			return [];
@@ -470,12 +492,16 @@ Page({
 		const t = pointsMap.get(tid);
 		if (!s || !t) {
 			this.setData({ showLine: false, paths: [], selectedPathIndex: 0 });
+			this.setData({ showStartPoint: false });
 			this.drawImage();
 			return;
 		}
+		console.log(sid, tid);
 		const segments = this.computeShortestPath(sid, tid) || [];
 		const has = Array.isArray(segments) && segments.length > 0;
 		this.setData({ showLine: has, selectedPathIndex: 0 });
+		this.setData({ showStartPoint: false });
+		console.log(segments);
 		if (has) {
 			const seg = segments[0];
 			let targetMapId;
@@ -513,6 +539,67 @@ Page({
 			this.setData({ selectedPathIndex: idx });
 			this.updateMapForCurrentPath();
 		}
+	},
+	onScanLocation() {
+		if (this.data.showStartPoint) {
+			this.setData({ showStartPoint: false });
+			this.drawImage();
+			return;
+		}
+		wx.scanCode({
+			scanType: ['qrCode', 'barCode'],
+			success: (res) => {
+				const raw = (res.result || '').trim();
+				if (!raw) { if (this.show) this.show('扫码结果为空'); return; }
+				let key = '';
+				try {
+					const obj = JSON.parse(raw);
+					const v = obj && obj['nav-token'];//TODO:名字可能会改.
+					key = typeof v === 'string' ? v.trim() : '';
+				} catch (e) { key = ''; }
+				if (!key) { if (this.show) this.show('二维码错误'); return; }
+				wx.showLoading({ title: '请等待...' });
+				wx.request({
+					url: `${this.data.url}/nav`,//TODO:名字可能会改.
+					method: 'POST',//TODO:名字可能会改.
+					data: { token: key },
+					header: { 'Authorization': wx.getStorageSync('token') },
+					success: (res1) => {
+						wx.hideLoading();
+						if (res1 && res1.data && res1.data.code == 200) {
+							const data = res1.data.data || {};
+							const sid = Number(data.startId);//TODO:名字可能会改.
+							if (isFinite(sid)) {
+								this.setData({ selectedStartPointId: sid });
+								const points = this.data.points || [];
+								const maps = this.data.maps || [];
+								const pmap = new Map(points.map(p => [p.pointId, p]));
+								const sp = pmap.get(sid);
+								if (sp) {
+									const mi = maps.findIndex(m => m && m.mapId === sp.mapId);
+									if (mi >= 0 && mi !== this.data.selectedMapIndex) {
+										this.setData({ selectedMapIndex: mi, showStartPoint: true });
+										this.updateImageFromMap();
+										return;
+									}
+								}
+								this.setData({ showStartPoint: true });
+								this.drawImage();
+							} else {
+								if (this.show) this.show('未获取到起点');
+							}
+						} else {
+							if (this.show) this.show(res1 && res1.data && res1.data.msg ? res1.data.msg : '导航失败');
+						}
+					},
+					fail: () => {
+						wx.hideLoading();
+						if (this.show) this.show('请检查网络连接');
+					}
+				});
+			},
+			fail: () => {}
+		});
 	},
 	uigo(id) {//可能已废弃
 	},

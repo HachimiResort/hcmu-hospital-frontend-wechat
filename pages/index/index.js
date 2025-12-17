@@ -119,6 +119,7 @@ Page({
 				if (res.data.code == 200) {
 					wx.navigateTo({
 						url: '/pages/navigation/navigation',
+						//可以在url后加上?selectedStartPointId=1&selectedEndPointId=20.
 					})
 				} else {
 					wx.navigateTo({

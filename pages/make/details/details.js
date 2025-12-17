@@ -11,6 +11,60 @@ Page({
 		id: '',
 		doctor: {}
 	},
+	navigate() {
+		const that = this
+		wx.scanCode({
+			scanType: ['qrCode', 'barCode'],
+			success: (res) => {
+				const raw = (res.result || '').trim()
+				if (!raw) {
+					that.show('扫码结果为空')
+					return
+				}
+				let key = ''
+				try {
+					const obj = JSON.parse(raw)
+					const v = obj && obj['nav-token']//TODO:名字可能会改.
+					key = typeof v === 'string' ? v.trim() : ''
+				} catch (e) {
+					key = ''
+				}
+				if (!key) {
+					that.show('二维码错误')
+					return
+				}
+				wx.showLoading({ title: '请等待...' })
+				wx.request({
+					url: `${that.data.url}/nav`,//TODO:名字可能会改.
+					method: 'POST',//TODO:名字可能会改.
+					data: { token: key },
+					header: { 'Authorization': wx.getStorageSync('token') },
+					success: (res1) => {
+						wx.hideLoading()
+						if (res1 && res1.data && res1.data.code == 200) {
+							const data = res1.data.data || {}
+							const sid = Number(data.startId)//TODO:名字可能会改.
+							const eid = Number(data.endId)//TODO:名字可能会改.
+							if (isFinite(sid) && isFinite(eid)) {
+								wx.navigateTo({
+									url: `/pages/navigation/navigation?selectedStartPointId=${sid}&selectedEndPointId=${eid}`
+								})
+							} else {
+								that.show('未获取到起点或终点')
+							}
+						} else {
+							that.show(res1 && res1.data && res1.data.msg ? res1.data.msg : '导航失败')
+						}
+					},
+					fail: () => {
+						wx.hideLoading()
+						that.show('请检查网络连接')
+					}
+				})
+			},
+			fail: () => { }
+		})
+	},
 
 	/**
 	 * 生命周期函数--监听页面加载
@@ -103,56 +157,56 @@ Page({
 			}
 		})
 	},
-		scanCode() {
-			wx.scanCode({
-				scanType: ['qrCode', 'barCode'],
-				success: (res) => {
-					const raw = (res.result || '').trim()
-					if (!raw) {
-						this.show('扫码结果为空')
-						return
-					}
-					let key = ''
-					try {
-						const obj = JSON.parse(raw)
-						const v = obj && obj['check-in-token']
-						key = typeof v === 'string' ? v.trim() : ''
-					} catch (e) {
-						key = ''
-					}
-					if (!key) {
-						this.show('二维码错误')
-						return
-					}
-					const that = this
-					wx.showLoading({
-						title: '请等待...',
-					})
-					wx.request({
-						url: `${that.data.url}/appointments/${that.data.item.appointmentId}/check-in`,
-						method: 'PUT',
-						data: { token: key },
-						header: {
-							'Authorization': wx.getStorageSync('token')
-						},
-						success: (res1) => {
-							wx.hideLoading();
-							if (res1.data.code == 200) {
-								that.setData({ item: res1.data.data })
-								wx.showToast({ title: '成功签到' })
-							} else {
-								that.show(res1.data.msg)
-							}
-						},
-						fail: () => {
-							that.show('请检查网络连接')
-						}
-					})
-				},
-				fail: () => {
+	scanCode() {
+		wx.scanCode({
+			scanType: ['qrCode', 'barCode'],
+			success: (res) => {
+				const raw = (res.result || '').trim()
+				if (!raw) {
+					this.show('扫码结果为空')
+					return
 				}
-			})
-		},
+				let key = ''
+				try {
+					const obj = JSON.parse(raw)
+					const v = obj && obj['check-in-token']
+					key = typeof v === 'string' ? v.trim() : ''
+				} catch (e) {
+					key = ''
+				}
+				if (!key) {
+					this.show('二维码错误')
+					return
+				}
+				const that = this
+				wx.showLoading({
+					title: '请等待...',
+				})
+				wx.request({
+					url: `${that.data.url}/appointments/${that.data.item.appointmentId}/check-in`,
+					method: 'PUT',
+					data: { token: key },
+					header: {
+						'Authorization': wx.getStorageSync('token')
+					},
+					success: (res1) => {
+						wx.hideLoading();
+						if (res1.data.code == 200) {
+							that.setData({ item: res1.data.data })
+							wx.showToast({ title: '成功签到' })
+						} else {
+							that.show(res1.data.msg)
+						}
+					},
+					fail: () => {
+						that.show('请检查网络连接')
+					}
+				})
+			},
+			fail: () => {
+			}
+		})
+	},
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
 	 */
