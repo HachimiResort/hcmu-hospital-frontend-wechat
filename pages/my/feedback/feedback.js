@@ -26,40 +26,15 @@ Page({
 			  title: '请输入完整',
 			  icon:'none'
 			})
-			let data = {
-				title:this.data.title,
-				content:this.data.content,
-				type:this.data.select,
-				email:this.data.email,
-				phone:this.data.phone
-			}
 			wx.showLoading({
 			  title: '提交中...',
 			})
-			let token = wx.getStorageSync('token')
-			wx.request({
-			  url: this.data.url+'/feedback/submit',
-			  method:'post',
-			  data:data,
-			  header: {
-				'Authorization': token
-			  },
-			  success:(res)=>{
-				  wx.hideLoading()
-				  if(res.data.code == 200){
-					  wx.showToast({
-						title: '感谢您的反馈',
-					  })
-				  }else if(res.data.code == 403){
-						getApp().notPermission()
-				  }else{
-					  wx.showToast({
-						title: res.data.msg,
-						icon:'none'
-					  })
-				  }
-			  }
-			})
+			setTimeout(()=>{
+				wx.hideLoading()
+				wx.showToast({
+					title: '感谢您的反馈',
+				})
+			}, 2000)
 	  },
 	  his(){
 		wx.navigateTo({

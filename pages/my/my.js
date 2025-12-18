@@ -90,6 +90,10 @@ Page({
 			wx.navigateTo({
 				url: './feedback/feedback',
 			})
+		} else {
+			wx.navigateTo({
+				url: '/pages/sign/sign',
+			})
 		}
 	},
 	out() {
@@ -130,7 +134,7 @@ Page({
 			wx.navigateTo({
 				url: '../waitlist/waitlist',
 			})
-		}else {
+		} else {
 			wx.navigateTo({
 				url: '/pages/sign/sign',
 			})
@@ -141,7 +145,7 @@ Page({
 			wx.navigateTo({
 				url: '../make/make',
 			})
-		}else {
+		} else {
 			wx.navigateTo({
 				url: '/pages/sign/sign',
 			})
