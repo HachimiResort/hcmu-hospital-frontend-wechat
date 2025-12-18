@@ -16,7 +16,7 @@
 		</view>
 		<image class="zhuImg" src="../../image/yy.png"></image>
 	</view>
-	<view class="zhuBlock zhubotm" bindtap="recharge">
+	<view class="zhuBlock zhubotm" bindtap="ai">
 		<view>
 			<text class="tit">智能问诊</text>
 			<text class="ftit">AI病情分析</text>
@@ -25,39 +25,20 @@
 	</view>
 </view>
 <view class="mor">
-	<view class="morBlock" bindtap="indexPay">
-		<image src="../../image/jf.png"></image>
-		<text>自助缴费</text>
-	</view>
 	<view class="morBlock" bindtap="indexMake">
 		<image src="../../image/mz.png"></image>
-		<text>当前预约</text>
+		<text>我的预约</text>
 	</view>
 	<view class="morBlock" bindtap="waitlist">
 		<image src="../../image/tk.png"></image>
-		<text>当前候补</text>
-	</view>
-	<view class="morBlock" bindtap="message">
-		<view class="msgNum"  wx:if="{{msgNum > 0}}">{{msgNum}}</view>
-		<image src="../../image/xx.png"></image>
-		<text>我的消息</text>
-	</view>
-</view>
-<view class="tap">
-	<view class="tapLeft"></view>
-	<text>医院服务</text>
-</view>
-<view class="mor his">
-	<view class="morBlock" bindtap="articleUigo" data-name="医院公告">
-		<image src="../../image/gg2.png"></image>
-		<text>健康档案</text>
+		<text>我的候补</text>
 	</view>
 	<view class="morBlock" bindtap="navUigo">
 		<image src="../../image/dh.png"></image>
 		<text>医院导航</text>
 	</view>
-	<view class="morBlock" bindtap="course_uigo">
-		<image src="../../image/zn.png"></image>
-		<text>就医指南</text>
+	<view class="morBlock" bindtap="info">
+		<image src="../../image/gg2.png"></image>
+		<text>个人信息</text>
 	</view>
 </view>

@@ -90,6 +90,10 @@ Page({
 			wx.navigateTo({
 				url: './feedback/feedback',
 			})
+		} else {
+			wx.navigateTo({
+				url: '/pages/sign/sign',
+			})
 		}
 	},
 	out() {
@@ -125,24 +129,14 @@ Page({
 			}
 		})
 	},
-	message() {
+	waitlist() {
 		if (this.data.isLogin) {
 			wx.navigateTo({
-				url: './message/message',
+				url: '../waitlist/waitlist',
 			})
-		}
-	},
-	recorder() {
-		if (this.data.isLogin) {
+		} else {
 			wx.navigateTo({
-				url: './recorder/recorder',
-			})
-		}
-	},
-	payOrder() {make
-		if (this.data.isLogin) {
-			wx.navigateTo({
-				url: './payOrder/payOrder',
+				url: '/pages/sign/sign',
 			})
 		}
 	},
@@ -151,23 +145,9 @@ Page({
 			wx.navigateTo({
 				url: '../make/make',
 			})
-		}else {
+		} else {
 			wx.navigateTo({
 				url: '/pages/sign/sign',
-			})
-		}
-	},
-	patient() {
-		if (this.data.isLogin) {
-			wx.navigateTo({
-				url: './patient/patient',
-			})
-		}
-	},
-	refund() {
-		if (this.data.isLogin) {
-			wx.navigateTo({
-				url: './refund/refund',
 			})
 		}
 	},

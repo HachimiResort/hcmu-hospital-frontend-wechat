@@ -75,18 +75,18 @@
 
 /* 按钮样式 */
 .button {
-	width: 88%;
-	margin: 25px auto;
-	height: 45px;
-	line-height: 45px;
-	text-align: center;
-	color: #006EFF;
-	background-color: #e4efff;
-	border-radius: 6px;
-	font-size: 16px;
-	font-weight: 500;
-	transition: all 0.3s ease;
-	box-shadow: 0 2px 4px rgba(0, 110, 255, 0.1);
+    width: 88%;
+    margin: 25px auto;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    color: #006EFF;
+    background-color: #e4efff;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 110, 255, 0.1);
 }
 
 /* 按钮点击效果 */
@@ -129,11 +129,30 @@
 
 /* 响应式调整 */
 @media screen and (min-width: 768px) {
-	.info-container {
-		width: 70%;
-	}
-	
-	.button {
-		width: 70%;
-	}
+    .info-container {
+        width: 70%;
+    }
+    
+    .button {
+        width: 70%;
+    }
+}
+
+/* 底部固定按钮栏 */
+.bottom-bar{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    border-top: 1px solid #e9ecef;
+}
+
+.bottom-bar .button{
+    flex: 1;
+    width: auto;
+    margin: 0 6px;
 }

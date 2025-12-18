@@ -46,15 +46,21 @@ Page({
 			},
 			success: (res) => {
 				wx.hideLoading()
-				if (res.data.code == 200) {
-					wx.showToast({
-						title: '登录成功',
-					})
-					wx.setStorageSync('token', res.data.data.token);
-					console.log(wx.getStorageSync('token'));
-					wx.setStorageSync('userId', res.data.data.userId);
-					wx.navigateBack()
-				} else {
+					if (res.data.code == 200) {
+						wx.setStorageSync('token', res.data.data.token);
+						wx.setStorageSync('userId', res.data.data.userId);
+						wx.showToast({
+							title: '登录成功',
+							icon: 'success',
+							duration: 1500,
+							mask: true,
+							success: () => {
+								setTimeout(() => {
+									wx.navigateBack()
+								}, 1500)
+							}
+						})
+					} else {
 					this.show(res.data.msg)
 				}
 			},

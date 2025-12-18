@@ -3,6 +3,8 @@ import { ToastPannel } from './component/appToast/appToast'
 App({
 	ToastPannel,
 	onLaunch() {
+		this.towxml = null
+		try { this.towxml = require('/towxml/index') } catch (e) {}
 	},
 	globalData: {
 		$url: 'http://hcmu.jiasheng.wang:8080'

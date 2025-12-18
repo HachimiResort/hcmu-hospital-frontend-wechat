@@ -1,0 +1,99 @@
+.chat {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh
+}
+
+.list {
+    flex: 1;
+    background: #f3f8ff;
+    padding-bottom: 160rpx;
+    padding-bottom: calc(132rpx + env(safe-area-inset-bottom));
+}
+
+.row {
+    display: flex;
+    margin: 16rpx 0
+}
+
+.row.left {
+    justify-content: flex-start
+}
+
+.row.right {
+    justify-content: flex-end
+}
+
+.bubble {
+    max-width: 72%;
+    padding: 22rpx;
+    border-radius: 16rpx;
+    line-height: 1.6;
+    word-break: break-word;
+    box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06)
+}
+
+.row.left .bubble {
+    background: #ffffff;
+    color: #222;
+    border: 1rpx solid #eee
+}
+
+.row.right .bubble {
+    background: #3478f7;
+    color: #ffffff;
+}
+
+.composer {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    box-sizing: border-box;
+    padding: 16rpx;
+    background: #ffffff;
+    border-top: 1rpx solid #e6eaf2;
+    box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.04);
+    padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+    padding-bottom: calc(16rpx + constant(safe-area-inset-bottom))
+}
+
+.input {
+    flex: 7;
+    min-height: 72rpx;
+    max-height: 320rpx;
+    padding: 16rpx 20rpx;
+    border: 1rpx solid #e6eaf2;
+    border-radius: 16rpx;
+    background: #f7faff;
+    color: #222;
+    font-size: 28rpx;
+    line-height: 1.6
+}
+
+.input:focus {
+    border-color: #a7c6ff;
+    background: #ffffff
+}
+
+.send {
+    flex: 2;
+    margin-left: 16rpx;
+    height: 100rpx;
+    padding: 0 28rpx;
+    line-height: 100rpx;
+    border-radius: 16rpx;
+    background: #3478f7;
+    color: #ffffff;
+    border: none;
+    font-size: 36rpx;
+    box-shadow: 0 2rpx 8rpx rgba(52,120,247,0.28)
+}
+
+.send[disabled], .send[loading] {
+    background: #aac7ff;
+    color: #fff;
+    box-shadow: none
+}

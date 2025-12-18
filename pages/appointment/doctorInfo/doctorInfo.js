@@ -17,7 +17,8 @@ Page({
 		depName: '',
 		doctorId: '',
 		weekType: 1,
-		arrange: {}
+		arrange: {},
+		options: {}
 	},
 
 	/**
@@ -26,7 +27,8 @@ Page({
 	onLoad(options) {
 		new app.ToastPannel();
 		this.setData({
-			docId: parseInt(options.docId)
+			docId: parseInt(options.docId),
+			options: options
 		})
 		// 获取当天日期和7天后日期
 		const today = new Date();
@@ -181,12 +183,21 @@ Page({
 						},
 						success: (res) => {
 							wx.hideLoading()
-							if (res.data.code == 200) {
-								wx.hideLoading()
-								wx.reLaunch({
-									url: '/pages/index/index',
-								})
-							} else {
+						if (res.data.code == 200) {
+							wx.hideLoading()
+							wx.showToast({
+								title: '候补成功',
+								duration: 1500,
+								mask: true,
+								success: () => {
+									setTimeout(() => {
+										wx.reLaunch({
+											url: '/pages/index/index'
+										})
+									}, 1500)
+								}
+							})
+						} else {
 								wx.hideLoading()
 								this.show(res.data.msg)
 							}
@@ -254,17 +265,26 @@ Page({
 							'Authorization': token
 						},
 						method: 'POST',
-						success: (res) => {
-							wx.hideLoading()
-							if (res.data.code == 200) {
+							success: (res) => {
 								wx.hideLoading()
-								wx.reLaunch({
-									url: '/pages/index/index',
-								})
-							} else {
-								wx.hideLoading()
-								this.show(res.data.msg)
-							}
+								if (res.data.code == 200) {
+									wx.hideLoading()
+									wx.showToast({
+										title: '预约成功',
+										duration: 1500,
+										mask: true,
+										success: () => {
+											setTimeout(() => {
+												wx.reLaunch({
+													url: '/pages/index/index'
+												})
+											}, 1500)
+										}
+									})
+								} else {
+									wx.hideLoading()
+									this.show(res.data.msg)
+								}
 						},
 						fail: (err) => {
 							console.log(err)
