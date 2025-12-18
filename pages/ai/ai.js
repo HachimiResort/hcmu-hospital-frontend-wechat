@@ -10,6 +10,11 @@ Page({
   },
   onLoad() {
     new app.ToastPannel()
+    const welcome = "您好！我是基米医生，一个专业的医疗助手。我的主要职责是帮助您解答医疗相关问题，尤其是根据您的症状进行初步的预诊，并推荐您前往最合适的医院科室就诊。\n\n当您向我描述症状时，我会根据我的专业知识，分析您可能的情况，并向您解释为什么推荐某个科室，以及可能涉及的疾病类型。如果您的描述不够明确，我还会主动向您提问，以获取更详细的信息，从而给出更准确的建议。\n\n我的目标是为您提供及时、准确的医疗指导，帮助您高效就医。请您随时向我描述您的不适，我会尽力为您提供帮助！"
+    const id = 'm_' + Date.now() + '_welcome'
+    const r = this.computeRender(welcome)
+    const list = this.data.messages.concat({ id, role: 'assistant', content: welcome, mdNodes: r.mdNodes, html: r.html })
+    this.setData({ messages: list, lastId: id })
   },
   onInput(e) {
     this.setData({ inputText: e.detail.value })

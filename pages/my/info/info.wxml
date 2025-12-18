@@ -46,8 +46,8 @@
     <text class="hr">紧急联系人电话：</text>
     <input class="input-field" model:value="{{emergencyContactPhone}}" type="number" placeholder="紧急联系人电话" maxlength="20" />
     
-    <text class="hr">病历：</text>
-    <textarea class="textarea-field" model:value="{{medicalHistory}}" placeholder="请输入病历信息" />
+    <text class="hr">患病史：</text>
+    <textarea class="textarea-field" model:value="{{medicalHistory}}" placeholder="请输入患病史信息" />
     
     <text class="hr">过敏史：</text>
     <textarea class="textarea-field" model:value="{{allergyHistory}}" placeholder="请输入过敏史信息" />

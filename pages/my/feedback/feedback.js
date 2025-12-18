@@ -32,7 +32,7 @@ Page({
 			setTimeout(()=>{
 				wx.hideLoading()
 				wx.showToast({
-					title: '感谢您的反馈',
+					title: '反馈成功，感谢您的反馈...？',
 				})
 			}, 2000)
 	  },

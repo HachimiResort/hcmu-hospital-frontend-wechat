@@ -6,7 +6,7 @@
 	<text class="ftitle">登录后使用小程序所有功能</text>
 	<input model:value="{{userName}}" type="text" placeholder="请输入登录账号" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
 	<input model:value="{{password}}" type="password" placeholder="请输入登录密码" placeholder-style="color:#ccc;font-size:13px;" maxlength="50"/>
-	<text class="seek" bindtap="seek">找回密码</text>
+	<text wx:if="{{false}}" class="seek" bindtap="seek">找回密码</text>
 	<view class="button" style="margin-top: 40px;" bindtap="into">登录</view>
 	<text class="and" bindtap="change">还没有账号？<text style="color: #3478f7;">立即注册</text></text>
 </view>
