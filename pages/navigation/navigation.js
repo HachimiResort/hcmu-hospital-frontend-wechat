@@ -78,9 +78,9 @@ Page({
 					}
 					const rooms = this.data.roomPoints || [];
 					const ei = rooms.findIndex(p => p && Number(p.pointId) === endId);
-					this.setData({ selectedEndPointId: endId, selectedEndIndex: ei >= 0 ? ei : -1, showOrderPicker: false ,locatedEndPoint:true});
+					this.setData({ selectedEndPointId: endId, selectedEndIndex: ei >= 0 ? ei : -1, showOrderPicker: false, locatedEndPoint: true });
 					wx.showToast({ title: '已更新终点', icon: 'none' });
-					if(this.data.locatedStartPoint){
+					if (this.data.locatedStartPoint) {
 						this.onQuery();
 					}
 				} else {
@@ -107,7 +107,7 @@ Page({
 		const tipX = x - r - 1;
 		const tipY = y;
 		ctx.beginPath();
-		ctx.setStrokeStyle('#ff0000');
+		ctx.setStrokeStyle('#ee0000');
 		ctx.setLineWidth(2);
 		ctx.moveTo(x - L, y);
 		ctx.lineTo(tipX, tipY);
@@ -135,7 +135,9 @@ Page({
 			selectedStartIndex: 0,
 			selectedEndIndex: 0,
 			showLine: false,
-			showStartPoint: false
+			showStartPoint: false,
+			locatedStartPoint: false,
+			locatedEndPoint: false,
 		});
 		wx.showLoading({ title: '加载中', mask: true });
 		const baseUrl = this.data.url;
@@ -180,17 +182,17 @@ Page({
 					const { selectedMapId, selectedStartPointId, selectedEndPointId } = options;
 					if (selectedMapId) {
 						const mi = maps.findIndex(m => m && m.mapId === Number(selectedMapId));
-						this.setData({ selectedMapId: Number(selectedMapId), selectedMapIndex: mi >= 0 ? mi : this.data.selectedMapIndex });
+						this.setData({ selectedMapId: Number(selectedMapId), selectedMapIndex: mi >= 0 ? mi : this.data.selectedMapIndex});
 					}
 					if (selectedStartPointId) {
 						const sidNum = Number(selectedStartPointId);
 						const si = roomPoints.findIndex(p => p && p.pointId === sidNum);
-						this.setData({ selectedStartPointId: sidNum, selectedStartIndex: si >= 0 ? si : -1 });
+						this.setData({ selectedStartPointId: sidNum, selectedStartIndex: si >= 0 ? si : -1 ,locatedStartPoint:true});
 					}
 					if (selectedEndPointId) {
 						const tidNum = Number(selectedEndPointId);
 						const ei = roomPoints.findIndex(p => p && p.pointId === tidNum);
-						this.setData({ selectedEndPointId: tidNum, selectedEndIndex: ei >= 0 ? ei : -1 });
+						this.setData({ selectedEndPointId: tidNum, selectedEndIndex: ei >= 0 ? ei : -1 ,locatedEndPoint:true});
 					}
 					if (selectedStartPointId && selectedEndPointId) {
 						console.log(this.data.points);
@@ -295,14 +297,14 @@ Page({
 		const y2 = Math.round(oy2 * s);
 		const lw = 2;
 		ctx.beginPath();
-		ctx.setStrokeStyle('#ff0000');
+		ctx.setStrokeStyle('#ee0000');
 		ctx.setLineWidth(lw);
 		ctx.moveTo(x1, y1);
 		ctx.lineTo(x2, y2);
 		ctx.stroke();
 		const r = lw / 2;
 		ctx.beginPath();
-		ctx.setFillStyle('#ff0000');
+		ctx.setFillStyle('#ee0000');
 		ctx.arc(x1, y1, r, 0, Math.PI * 2);
 		ctx.fill();
 		ctx.beginPath();
@@ -558,14 +560,20 @@ Page({
 		const idx = Number(e.detail.value || 0);
 		const rooms = this.data.roomPoints || [];
 		const pid = rooms[idx] ? rooms[idx].pointId : 0;
-		this.setData({ showStartPoint: false, selectedStartIndex: idx, selectedStartPointId: pid ,locatedStartPoint:false});
+		this.setData({ showStartPoint: false, selectedStartIndex: idx, selectedStartPointId: pid, locatedStartPoint: true });
+		if (this.data.locatedEndPoint) {
+			this.onQuery();
+		}
 		this.drawImage();
 	},
 	bindEndChange(e) {//界面修改终点下拉框绑定函数
 		const idx = Number(e.detail.value || 0);
 		const rooms = this.data.roomPoints || [];
 		const pid = rooms[idx] ? rooms[idx].pointId : 0;
-		this.setData({ selectedEndIndex: idx, selectedEndPointId: pid ,locatedEndPoint:false});
+		this.setData({ selectedEndIndex: idx, selectedEndPointId: pid, locatedEndPoint: true });
+		if (this.data.locatedStartPoint) {
+			this.onQuery();
+		}
 	},
 	onQuery() {//查询按钮绑定函数
 		this.setData({ locatedStartPoint: false, locatedEndPoint: false });
@@ -655,7 +663,7 @@ Page({
 				if (sp) {
 					const mi = maps.findIndex(m => m && m.mapId === sp.mapId);
 					if (mi >= 0 && mi !== this.data.selectedMapIndex) {
-						this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false ,locatedStartPoint:true});
+						this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false, locatedStartPoint: true });
 						this.updateImageFromMap();
 						wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
 						if (this.data.locatedEndPoint) {
@@ -664,7 +672,7 @@ Page({
 						return;
 					}
 				}
-				this.setData({ showStartPoint: true, showLine: false ,locatedStartPoint:true});
+				this.setData({ showStartPoint: true, showLine: false, locatedStartPoint: true });
 				if (this.data.locatedEndPoint) {
 					this.onQuery();
 				}
@@ -698,7 +706,7 @@ Page({
 			if (sp) {
 				const mi = maps.findIndex(m => m && m.mapId === sp.mapId);
 				if (mi >= 0 && mi !== this.data.selectedMapIndex) {
-					this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false ,locatedStartPoint:true});
+					this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false, locatedStartPoint: true });
 					this.updateImageFromMap();
 					wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
 					if (this.data.locatedEndPoint) {
@@ -707,7 +715,7 @@ Page({
 					return;
 				}
 			}
-			this.setData({ showStartPoint: true, showLine: false ,locatedStartPoint:true});
+			this.setData({ showStartPoint: true, showLine: false, locatedStartPoint: true });
 			wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
 			if (this.data.locatedEndPoint) {
 				this.onQuery();
