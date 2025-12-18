@@ -80,6 +80,9 @@ Page({
 					const ei = rooms.findIndex(p => p && Number(p.pointId) === endId);
 					this.setData({ selectedEndPointId: endId, selectedEndIndex: ei >= 0 ? ei : -1, showOrderPicker: false ,locatedEndPoint:true});
 					wx.showToast({ title: '已更新终点', icon: 'none' });
+					if(this.data.locatedStartPoint){
+						this.onQuery();
+					}
 				} else {
 					wx.showToast({ title: (res && res.data ? res.data.msg : '获取医生信息失败'), icon: 'none' });
 				}
@@ -655,10 +658,16 @@ Page({
 						this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false ,locatedStartPoint:true});
 						this.updateImageFromMap();
 						wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
+						if (this.data.locatedEndPoint) {
+							this.onQuery();
+						}
 						return;
 					}
 				}
 				this.setData({ showStartPoint: true, showLine: false ,locatedStartPoint:true});
+				if (this.data.locatedEndPoint) {
+					this.onQuery();
+				}
 				wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
 				this.drawImage();
 
@@ -692,11 +701,17 @@ Page({
 					this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false ,locatedStartPoint:true});
 					this.updateImageFromMap();
 					wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
+					if (this.data.locatedEndPoint) {
+						this.onQuery();
+					}
 					return;
 				}
 			}
 			this.setData({ showStartPoint: true, showLine: false ,locatedStartPoint:true});
 			wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
+			if (this.data.locatedEndPoint) {
+				this.onQuery();
+			}
 			this.drawImage();
 		};
 		wx.showLoading({ title: '正在搜索附近蓝牙信标...', mask: true });
