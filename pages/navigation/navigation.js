@@ -1,5 +1,6 @@
 // pages/navigation/navigation.js
 const app = getApp()
+const BEACON_UUID = '38cb4c33-0587-49de-8c0e-a0370261f321'
 Page({
 
 	/**
@@ -94,7 +95,7 @@ Page({
 		const y = Math.round(oy * s);
 		const r = Math.max(6, Math.round(2 * s));
 		ctx.beginPath();
-		ctx.setFillStyle('#0066ff');
+		ctx.setFillStyle('#66ccff');
 		ctx.arc(x, y, r, 0, Math.PI * 2);
 		ctx.fill();
 		const L = Math.max(30, Math.round(16 * s));
@@ -660,6 +661,87 @@ Page({
 
 			},
 			fail: () => { }
+		});
+	},
+	onBluetoothLocation() {
+		if (!this.data.gotmaps || this.data.showLine) return;
+		const that = this;
+		let completed = false;
+		let timer = null;
+		const finish = (sid) => {
+			if (completed) return;
+			completed = true;
+			try { if (wx.offBeaconUpdate) wx.offBeaconUpdate(); } catch (e) {}
+			try { wx.stopBeaconDiscovery({}); } catch (e) {}
+			try { if (timer) clearTimeout(timer); } catch (e) {}
+			wx.hideLoading();
+			if (!isFinite(sid)) { if (this.show) this.show('蓝牙信标数据错误'); return; }
+			const rooms = this.data.roomPoints || [];
+			const si = rooms.findIndex(p => p && Number(p.pointId) === sid);
+			this.setData({ selectedStartPointId: sid, selectedStartIndex: si >= 0 ? si : -1 });
+			const points = this.data.points || [];
+			const maps = this.data.maps || [];
+			const pmap = new Map(points.map(p => [p.pointId, p]));
+			const sp = pmap.get(sid);
+			if (sp) {
+				const mi = maps.findIndex(m => m && m.mapId === sp.mapId);
+				if (mi >= 0 && mi !== this.data.selectedMapIndex) {
+					this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false });
+					this.updateImageFromMap();
+					if (this.show) this.show('当前位置已显示在地图上');
+					return;
+				}
+			}
+			this.setData({ showStartPoint: true, showLine: false });
+			if (this.show) this.show('当前位置已显示在地图上');
+			this.drawImage();
+		};
+		wx.showLoading({ title: '正在搜索附近蓝牙信标...', mask: true });
+		wx.startBeaconDiscovery({
+			uuids: [BEACON_UUID],
+			success: () => {
+				timer = setTimeout(() => {
+					if (completed) return;
+					completed = true;
+					try { if (wx.offBeaconUpdate) wx.offBeaconUpdate(); } catch (e) {}
+					try { wx.stopBeaconDiscovery({}); } catch (e) {}
+					wx.hideLoading();
+					if (this.show) this.show('附近未发现蓝牙信标');
+				}, 10000);
+				wx.onBeaconUpdate((res) => {
+					if (completed) return;
+					const list = Array.isArray(res && res.beacons) ? res.beacons : [];
+					if (!list.length) return;
+					let nearest = null;
+					for (let i = 0; i < list.length; i++) {
+						const b = list[i];
+						if (!nearest) { nearest = b; continue; }
+						const a2 = Number(b.accuracy);
+						const a1 = Number(nearest.accuracy);
+						const v2 = isFinite(a2) && a2 >= 0;
+						const v1 = isFinite(a1) && a1 >= 0;
+						if (v2 && v1) {
+							if (a2 < a1) nearest = b;
+						} else if (v2 && !v1) {
+							nearest = b;
+						} else if (!v2 && !v1) {
+							const r2 = Number(b.rssi);
+							const r1 = Number(nearest.rssi);
+							if (isFinite(r2) && isFinite(r1)) {
+								if (r2 > r1) nearest = b;
+							}
+						}
+					}
+					const sid = Number(nearest && nearest.major);
+					if (!isFinite(sid)) return;
+					if (timer) { try { clearTimeout(timer); } catch (e) {} timer = null; }
+					finish(sid);
+				});
+			},
+			fail: () => {
+				wx.hideLoading();
+				if (this.show) this.show('蓝牙导航不可用，请检查蓝牙和定位权限');
+			}
 		});
 	},
 	uigo(id) {//可能已废弃

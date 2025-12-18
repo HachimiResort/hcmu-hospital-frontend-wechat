@@ -29,9 +29,14 @@
       <canvas wx:if="{{!showOrderPicker}}" canvas-id="navCanvas" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;" width="{{canvasWidth}}" height="{{canvasHeight}}" bindtap="onCanvasTap"></canvas>
     </block>
   </view>
-  <view style="padding:12rpx;border-top:3px solid #eee;display:flex;justify-content:center;gap:16rpx;">
-    <button size="mini" disabled="{{!gotmaps || showLine}}" bindtap="onScanLocation">扫码获取当前位置</button>
-    <button size="mini" disabled="{{!gotmaps || showLine}}" bindtap="openOrderPicker">从预约记录获取终点</button>
+  <view style="padding:12rpx;border-top:3px solid #eee;display:flex;flex-direction:column;gap:12rpx;">
+    <view style="display:flex;justify-content:center;gap:16rpx;">
+      <button size="mini" disabled="{{!gotmaps || showLine}}" bindtap="onScanLocation">扫码获取当前位置</button>
+      <button size="mini" disabled="{{!gotmaps || showLine}}" bindtap="onBluetoothLocation">蓝牙获取当前位置</button>
+    </view>
+    <view style="display:flex;justify-content:center;gap:16rpx;">
+      <button size="mini" disabled="{{!gotmaps || showLine}}" bindtap="openOrderPicker">从预约记录获取终点</button>
+    </view>
   </view>
   <view wx:if="{{showOrderPicker}}" style="position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:9999;">
     <view style="width:84%;max-height:80vh;background:#fff;border-radius:16rpx;overflow:hidden;display:flex;flex-direction:column;">
