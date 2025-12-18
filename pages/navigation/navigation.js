@@ -70,21 +70,21 @@ Page({
 					this.setData({ doctor });
 					const endId = Number(doctor.locationId);
 					if (!isFinite(endId)) {
-						this.show && this.show('未获取到医生位置');
+						wx.showToast({ title: '未获取到医生位置', icon: 'none' });
 						this.setData({ showOrderPicker: false });
 						return;
 					}
 					const rooms = this.data.roomPoints || [];
 					const ei = rooms.findIndex(p => p && Number(p.pointId) === endId);
 					this.setData({ selectedEndPointId: endId, selectedEndIndex: ei >= 0 ? ei : -1, showOrderPicker: false });
-					this.show && this.show('已更新终点');
+					wx.showToast({ title: '已更新终点', icon: 'none' });
 				} else {
-					this.show && this.show(res && res.data ? res.data.msg : '获取医生信息失败');
+					wx.showToast({ title: (res && res.data ? res.data.msg : '获取医生信息失败'), icon: 'none' });
 				}
 			},
 			fail: () => {
 				wx.hideLoading();
-				this.show && this.show('请检查网络连接');
+				wx.showToast({ title: '请检查网络连接', icon: 'none' });
 			}
 		});
 		this.drawImage();
@@ -146,7 +146,7 @@ Page({
 						orderList:  res.data.data.list,
 					});
 				} else {
-					this.show(res.data.msg)
+					wx.showToast({ title: res.data.msg, icon: 'none' })
 				}
 			}
 		})
@@ -629,7 +629,7 @@ Page({
 			scanType: ['qrCode', 'barCode'],
 			success: (res) => {
 				const raw = (res.result || '').trim();
-				if (!raw) { if (this.show) this.show('扫码结果为空'); return; }
+				if (!raw) { wx.showToast({ title: '扫码结果为空', icon: 'none' }); return; }
 				let key = '';
 				try {
 					const obj = JSON.parse(raw);
@@ -638,7 +638,7 @@ Page({
 					else if (v != null) key = String(v);
 				} catch (e) { key = ''; }
 				const sid = Number(key);
-				if (!isFinite(sid)) { if (this.show) this.show('二维码错误'); return; }
+				if (!isFinite(sid)) { wx.showToast({ title: '二维码错误', icon: 'none' }); return; }
 				const rooms = this.data.roomPoints || [];
 				const si = rooms.findIndex(p => p && Number(p.pointId) === sid);
 				this.setData({ selectedStartPointId: sid, selectedStartIndex: si >= 0 ? si : -1 });
@@ -651,12 +651,12 @@ Page({
 					if (mi >= 0 && mi !== this.data.selectedMapIndex) {
 						this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false });
 						this.updateImageFromMap();
-						if (this.show) this.show('当前位置已显示在地图上');
+						wx.showToast({ title: '当前位置已显示在地图上', icon: 'none' });
 						return;
 					}
 				}
 				this.setData({ showStartPoint: true, showLine: false });
-				this.show('当前位置已显示在地图上');
+				wx.showToast({ title: '当前位置已显示在地图上', icon: 'none' });
 				this.drawImage();
 
 			},
@@ -675,7 +675,7 @@ Page({
 			try { wx.stopBeaconDiscovery({}); } catch (e) {}
 			try { if (timer) clearTimeout(timer); } catch (e) {}
 			wx.hideLoading();
-			if (!isFinite(sid)) { if (this.show) this.show('蓝牙信标数据错误'); return; }
+			if (!isFinite(sid)) { wx.showToast({ title: '蓝牙信标数据错误', icon: 'none' }); return; }
 			const rooms = this.data.roomPoints || [];
 			const si = rooms.findIndex(p => p && Number(p.pointId) === sid);
 			this.setData({ selectedStartPointId: sid, selectedStartIndex: si >= 0 ? si : -1 });
@@ -688,12 +688,12 @@ Page({
 				if (mi >= 0 && mi !== this.data.selectedMapIndex) {
 					this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false });
 					this.updateImageFromMap();
-					if (this.show) this.show('当前位置已显示在地图上');
+					wx.showToast({ title: '当前位置已显示在地图上', icon: 'none' });
 					return;
 				}
 			}
 			this.setData({ showStartPoint: true, showLine: false });
-			if (this.show) this.show('当前位置已显示在地图上');
+			wx.showToast({ title: '当前位置已显示在地图上', icon: 'none' });
 			this.drawImage();
 		};
 		wx.showLoading({ title: '正在搜索附近蓝牙信标...', mask: true });
@@ -706,7 +706,7 @@ Page({
 					try { if (wx.offBeaconUpdate) wx.offBeaconUpdate(); } catch (e) {}
 					try { wx.stopBeaconDiscovery({}); } catch (e) {}
 					wx.hideLoading();
-					if (this.show) this.show('附近未发现蓝牙信标');
+					wx.showToast({ title: '附近未发现蓝牙信标', icon: 'none' });
 				}, 10000);
 				wx.onBeaconUpdate((res) => {
 					if (completed) return;
@@ -740,7 +740,7 @@ Page({
 			},
 			fail: () => {
 				wx.hideLoading();
-				if (this.show) this.show('蓝牙导航不可用，请检查蓝牙和定位权限');
+				wx.showToast({ title: '蓝牙导航不可用，请检查蓝牙和定位权限', icon: 'none' });
 			}
 		});
 	},
