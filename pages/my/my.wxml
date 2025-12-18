@@ -1,7 +1,7 @@
 <import src="../../component/appToast/appToast.wxml"/>
 <template is="toast" data="{{ ..._toast_ }}"/>
 <view class="head">
-	<image  bindtap="sign" src="{{isLogin ? '../../image/avatar.png' : '../../image/boy.jpeg'}}" mode="scaleToFill"></image>
+	<image  bindtap="sign" src="{{isLogin ? '../../image/avatar.png' : '../../image/boy.png'}}" mode="scaleToFill"></image>
 	<view class="headRight" bindtap="sign">
 		<text class="name">{{isLogin ? info.nickname : '登录/注册'}}</text>
 		<!-- <text  bindtap="sign" class="userName" wx:if="isLogin">账号：{{info.userName}}</text> -->
