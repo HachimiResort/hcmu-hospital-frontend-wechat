@@ -21,45 +21,27 @@ Page({
 					that.show('扫码结果为空')
 					return
 				}
-				let key = ''
+				let loc = ''
 				try {
 					const obj = JSON.parse(raw)
-					const v = obj && obj['nav-token']//TODO:名字可能会改.
-					key = typeof v === 'string' ? v.trim() : ''
+					const v = obj && (obj['location-id'] != null ? obj['location-id'] : obj['locationId'])
+					if (typeof v === 'string') loc = v.trim()
+					else if (v != null) loc = String(v)
 				} catch (e) {
-					key = ''
+					loc = ''
 				}
-				if (!key) {
+				const sid = Number(loc)
+				if (!isFinite(sid)) {
 					that.show('二维码错误')
 					return
 				}
-				wx.showLoading({ title: '请等待...' })
-				wx.request({
-					url: `${that.data.url}/nav`,//TODO:名字可能会改.
-					method: 'POST',//TODO:名字可能会改.
-					data: { token: key },
-					header: { 'Authorization': wx.getStorageSync('token') },
-					success: (res1) => {
-						wx.hideLoading()
-						if (res1 && res1.data && res1.data.code == 200) {
-							const data = res1.data.data || {}
-							const sid = Number(data.startId)//TODO:名字可能会改.
-							const eid = Number(data.endId)//TODO:名字可能会改.
-							if (isFinite(sid) && isFinite(eid)) {
-								wx.navigateTo({
-									url: `/pages/navigation/navigation?selectedStartPointId=${sid}&selectedEndPointId=${eid}`
-								})
-							} else {
-								that.show('未获取到起点或终点')
-							}
-						} else {
-							that.show(res1 && res1.data && res1.data.msg ? res1.data.msg : '导航失败')
-						}
-					},
-					fail: () => {
-						wx.hideLoading()
-						that.show('请检查网络连接')
-					}
+				const eid = Number(that.data.doctor && that.data.doctor.locationId)
+				if (!isFinite(eid)) {
+					that.show('未获取到医生位置')
+					return
+				}
+				wx.navigateTo({
+					url: `/pages/navigation/navigation?selectedStartPointId=${sid}&selectedEndPointId=${eid}`
 				})
 			},
 			fail: () => { }
@@ -73,6 +55,33 @@ Page({
 		new app.ToastPannel();
 		this.setData({
 			item: JSON.parse(options.item)
+		})
+		console.log(this.data.item);
+		wx.showLoading({
+			title: '加载中...',
+		})
+		let token = wx.getStorageSync('token')
+		wx.request({
+			url: this.data.url + `/doctor-profiles/` + this.data.item.doctorUserId,
+			header: {
+				'Authorization': token
+			},
+			type: 'GET',
+			success: (res) => {
+				wx.hideLoading()
+				if (res.data.code == 200) {
+					this.setData({
+						doctor: res.data.data
+					})
+					console.log(this.data.doctor);
+				} else {
+					this.show(res.data.msg)
+				}
+			},
+			fail: (err) => {
+				wx.hideLoading()
+				this.show("请检查网络连接")
+			}
 		})
 	},
 	pay() {
@@ -167,17 +176,23 @@ Page({
 					return
 				}
 				let key = ''
+				let loc = ''
 				try {
 					const obj = JSON.parse(raw)
 					const v = obj && obj['check-in-token']
 					key = typeof v === 'string' ? v.trim() : ''
+					const lv = obj && (obj['location-id'] != null ? obj['location-id'] : obj['locationId'])
+					if (typeof lv === 'string') loc = lv.trim()
+					else if (lv != null) loc = String(lv)
 				} catch (e) {
 					key = ''
+					loc = ''
 				}
 				if (!key) {
 					this.show('二维码错误')
 					return
 				}
+				const sid = Number(loc)
 				const that = this
 				wx.showLoading({
 					title: '请等待...',
@@ -194,6 +209,16 @@ Page({
 						if (res1.data.code == 200) {
 							that.setData({ item: res1.data.data })
 							wx.showToast({ title: '成功签到' })
+							if (isFinite(sid)) {
+								const eid = Number(that.data.doctor && that.data.doctor.locationId)
+								if (isFinite(eid)) {
+									setTimeout(() => {
+										wx.navigateTo({
+											url: `/pages/navigation/navigation?selectedStartPointId=${sid}&selectedEndPointId=${eid}`
+										})
+									}, 1500)
+								}
+							}
 						} else {
 							that.show(res1.data.msg)
 						}

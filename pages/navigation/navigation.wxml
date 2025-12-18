@@ -26,10 +26,35 @@
       </view>
     </block>
     <block wx:else>
-      <canvas canvas-id="navCanvas" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;" width="{{canvasWidth}}" height="{{canvasHeight}}" bindtap="onCanvasTap"></canvas>
+      <canvas wx:if="{{!showOrderPicker}}" canvas-id="navCanvas" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;" width="{{canvasWidth}}" height="{{canvasHeight}}" bindtap="onCanvasTap"></canvas>
     </block>
   </view>
-  <view style="padding:12rpx;border-top:3px solid #eee;display:flex;justify-content:center;">
+  <view style="padding:12rpx;border-top:3px solid #eee;display:flex;justify-content:center;gap:16rpx;">
     <button size="mini" disabled="{{!gotmaps || showLine}}" bindtap="onScanLocation">扫码获取当前位置</button>
+    <button size="mini" disabled="{{!gotmaps || showLine}}" bindtap="openOrderPicker">从预约记录获取终点</button>
+  </view>
+  <view wx:if="{{showOrderPicker}}" style="position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:9999;">
+    <view style="width:84%;max-height:80vh;background:#fff;border-radius:16rpx;overflow:hidden;display:flex;flex-direction:column;">
+      <view style="padding:20rpx 24rpx;border-bottom:1px solid #eee;font-weight:600;display:flex;align-items:center;justify-content:space-between;">
+        <text>选择预约记录</text>
+      </view>
+      <scroll-view scroll-y="true" style="padding:16rpx 24rpx;max-height:60vh;height:60vh;">
+        <block wx:if="{{orderList && orderList.length}}">
+          <block wx:for="{{orderList}}" wx:key="appointmentId">
+            <view data-index="{{index}}" bindtap="onChooseOrder" style="padding:16rpx 0;border-bottom:1px solid #f0f0f0;">
+              <view>预约号：{{item.appointmentNo}}</view>
+              <view>医生：{{item.doctorName}}</view>
+              <view>科室：{{item.departmentName}}</view>
+            </view>
+          </block>
+        </block>
+        <block wx:else>
+          <view style="padding:40rpx 0;text-align:center;color:#999;">暂无预约记录</view>
+        </block>
+      </scroll-view>
+      <view style="padding:12rpx 24rpx;border-top:1px solid #eee;display:flex;justify-content:flex-end;">
+        <button size="mini" type="default" bindtap="closeOrderPicker">关闭</button>
+      </view>
+    </view>
   </view>
 </view>

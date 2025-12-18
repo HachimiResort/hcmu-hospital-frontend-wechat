@@ -39,6 +39,54 @@ Page({
 		showStartPoint: false,
 		paths: [],
 		selectedPathIndex: 0,
+		orderList: [],
+		doctor: {},
+		showOrderPicker: false
+	},
+	openOrderPicker() {
+		if (!this.data.gotmaps || this.data.showLine) return;
+		this.setData({ showOrderPicker: true });
+	},
+	closeOrderPicker() {
+		this.setData({ showOrderPicker: false });
+		this.drawImage();
+	},
+	onChooseOrder(e) {
+		const idx = Number(e.currentTarget.dataset.index || 0);
+		const list = this.data.orderList || [];
+		const item = list[idx];
+		if (!item) { this.setData({ showOrderPicker: false }); return; }
+		const token = wx.getStorageSync('token');
+		wx.showLoading({ title: '请等待...', mask: true });
+		wx.request({
+			url: this.data.url + `/doctor-profiles/` + item.doctorUserId,
+			header: { 'Authorization': token },
+			method: 'GET',
+			success: (res) => {
+				wx.hideLoading();
+				if (res.data && res.data.code == 200) {
+					const doctor = res.data.data || {};
+					this.setData({ doctor });
+					const endId = Number(doctor.locationId);
+					if (!isFinite(endId)) {
+						this.show && this.show('未获取到医生位置');
+						this.setData({ showOrderPicker: false });
+						return;
+					}
+					const rooms = this.data.roomPoints || [];
+					const ei = rooms.findIndex(p => p && Number(p.pointId) === endId);
+					this.setData({ selectedEndPointId: endId, selectedEndIndex: ei >= 0 ? ei : -1, showOrderPicker: false });
+					this.show && this.show('已更新终点');
+				} else {
+					this.show && this.show(res && res.data ? res.data.msg : '获取医生信息失败');
+				}
+			},
+			fail: () => {
+				wx.hideLoading();
+				this.show && this.show('请检查网络连接');
+			}
+		});
+		this.drawImage();
 	},
 	drawDot(ctx, ox, oy) {
 		const s = this.data.displayScale || ((this.data.canvasWidth && this.data.imageNaturalWidth) ? this.data.canvasWidth / this.data.imageNaturalWidth : 1);
@@ -49,6 +97,25 @@ Page({
 		ctx.setFillStyle('#0066ff');
 		ctx.arc(x, y, r, 0, Math.PI * 2);
 		ctx.fill();
+		const L = Math.max(30, Math.round(16 * s));
+		const tipX = x - r - 1;
+		const tipY = y;
+		ctx.beginPath();
+		ctx.setStrokeStyle('#ff0000');
+		ctx.setLineWidth(2);
+		ctx.moveTo(x - L, y);
+		ctx.lineTo(tipX, tipY);
+		ctx.stroke();
+		const back = Math.PI;
+		const a1 = back + Math.PI / 6;
+		const a2 = back - Math.PI / 6;
+		const len = Math.max(6, Math.round(10 * s));
+		ctx.beginPath();
+		ctx.moveTo(tipX, tipY);
+		ctx.lineTo(tipX + len * Math.cos(a1), tipY + len * Math.sin(a1));
+		ctx.moveTo(tipX, tipY);
+		ctx.lineTo(tipX + len * Math.cos(a2), tipY + len * Math.sin(a2));
+		ctx.stroke();
 	},
 
 	/**
@@ -67,6 +134,21 @@ Page({
 		wx.showLoading({ title: '加载中', mask: true });
 		const baseUrl = this.data.url;
 		const token = wx.getStorageSync('token');
+		wx.request({
+			url: baseUrl + `/patient-profiles/${wx.getStorageSync('userId')}/appointments`,
+			header: {
+				'Authorization': token
+			},
+			success: (res) => {
+				if (res.data.code == 200) {
+					this.setData({
+						orderList:  res.data.data.list,
+					});
+				} else {
+					this.show(res.data.msg)
+				}
+			}
+		})
 		const httpGet = (path) => new Promise((resolve, reject) => {
 			wx.request({
 				url: baseUrl + path,
@@ -105,7 +187,7 @@ Page({
 						this.setData({ selectedEndPointId: tidNum, selectedEndIndex: ei >= 0 ? ei : -1 });
 					}
 					if (selectedStartPointId && selectedEndPointId) {
-						console.log(selectedStartPointId, selectedEndPointId);
+						console.log(this.data.points);
 						this.onQuery();
 					}
 				}
@@ -287,7 +369,15 @@ Page({
 		const mapsArr = this.data.maps || [];
 		const mi = Number(this.data.selectedMapIndex || 0);
 		const curMapId = mapsArr[mi] ? mapsArr[mi].mapId : this.data.selectedMapId;
-		
+		if (this.data.showStartPoint) {
+			const pts = this.data.points || [];
+			const pmap = new Map(pts.map(p => [p.pointId, p]));
+			const sid = Number(this.data.selectedStartPointId || 0);
+			const startPoint = pmap.get(sid);
+			if (startPoint && startPoint.mapId === curMapId) {
+				this.drawDot(ctx, startPoint.x, startPoint.y);
+			}
+		}
 		const rooms = (this.data.roomPoints || []).filter(p => p.mapId === curMapId);
 		const s = this.data.displayScale || (w && this.data.imageNaturalWidth ? w / this.data.imageNaturalWidth : 1);
 		ctx.setFillStyle('#000000');
@@ -312,15 +402,7 @@ Page({
 				ctx.fillText(lines[j], x, ly);
 			}
 		}
-		if (this.data.showStartPoint) {
-			const pts = this.data.points || [];
-			const pmap = new Map(pts.map(p => [p.pointId, p]));
-			const sid = Number(this.data.selectedStartPointId || 0);
-			const startPoint = pmap.get(sid);
-			if (startPoint && startPoint.mapId === curMapId) {
-				this.drawDot(ctx, startPoint.x, startPoint.y);
-			}
-		}
+
 		ctx.draw();
 	},
 	onCanvasTap() {//预览当前地图
@@ -470,7 +552,8 @@ Page({
 		const idx = Number(e.detail.value || 0);
 		const rooms = this.data.roomPoints || [];
 		const pid = rooms[idx] ? rooms[idx].pointId : 0;
-		this.setData({ selectedStartIndex: idx, selectedStartPointId: pid });
+		this.setData({ showStartPoint: false, selectedStartIndex: idx, selectedStartPointId: pid });
+		this.drawImage();
 	},
 	bindEndChange(e) {//界面修改终点下拉框绑定函数
 		const idx = Number(e.detail.value || 0);
@@ -496,7 +579,7 @@ Page({
 			this.drawImage();
 			return;
 		}
-		console.log(sid, tid);
+
 		const segments = this.computeShortestPath(sid, tid) || [];
 		const has = Array.isArray(segments) && segments.length > 0;
 		this.setData({ showLine: has, selectedPathIndex: 0 });
@@ -541,11 +624,6 @@ Page({
 		}
 	},
 	onScanLocation() {
-		if (this.data.showStartPoint) {
-			this.setData({ showStartPoint: false });
-			this.drawImage();
-			return;
-		}
 		wx.scanCode({
 			scanType: ['qrCode', 'barCode'],
 			success: (res) => {
@@ -554,51 +632,34 @@ Page({
 				let key = '';
 				try {
 					const obj = JSON.parse(raw);
-					const v = obj && obj['nav-token'];//TODO:名字可能会改.
-					key = typeof v === 'string' ? v.trim() : '';
+					const v = obj && (obj['location-id'] != null ? obj['location-id'] : obj['locationId']);
+					if (typeof v === 'string') key = v.trim();
+					else if (v != null) key = String(v);
 				} catch (e) { key = ''; }
-				if (!key) { if (this.show) this.show('二维码错误'); return; }
-				wx.showLoading({ title: '请等待...' });
-				wx.request({
-					url: `${this.data.url}/nav`,//TODO:名字可能会改.
-					method: 'POST',//TODO:名字可能会改.
-					data: { token: key },
-					header: { 'Authorization': wx.getStorageSync('token') },
-					success: (res1) => {
-						wx.hideLoading();
-						if (res1 && res1.data && res1.data.code == 200) {
-							const data = res1.data.data || {};
-							const sid = Number(data.startId);//TODO:名字可能会改.
-							if (isFinite(sid)) {
-								this.setData({ selectedStartPointId: sid });
-								const points = this.data.points || [];
-								const maps = this.data.maps || [];
-								const pmap = new Map(points.map(p => [p.pointId, p]));
-								const sp = pmap.get(sid);
-								if (sp) {
-									const mi = maps.findIndex(m => m && m.mapId === sp.mapId);
-									if (mi >= 0 && mi !== this.data.selectedMapIndex) {
-										this.setData({ selectedMapIndex: mi, showStartPoint: true });
-										this.updateImageFromMap();
-										return;
-									}
-								}
-								this.setData({ showStartPoint: true });
-								this.drawImage();
-							} else {
-								if (this.show) this.show('未获取到起点');
-							}
-						} else {
-							if (this.show) this.show(res1 && res1.data && res1.data.msg ? res1.data.msg : '导航失败');
-						}
-					},
-					fail: () => {
-						wx.hideLoading();
-						if (this.show) this.show('请检查网络连接');
+				const sid = Number(key);
+				if (!isFinite(sid)) { if (this.show) this.show('二维码错误'); return; }
+				const rooms = this.data.roomPoints || [];
+				const si = rooms.findIndex(p => p && Number(p.pointId) === sid);
+				this.setData({ selectedStartPointId: sid, selectedStartIndex: si >= 0 ? si : -1 });
+				const points = this.data.points || [];
+				const maps = this.data.maps || [];
+				const pmap = new Map(points.map(p => [p.pointId, p]));
+				const sp = pmap.get(sid);
+				if (sp) {
+					const mi = maps.findIndex(m => m && m.mapId === sp.mapId);
+					if (mi >= 0 && mi !== this.data.selectedMapIndex) {
+						this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false });
+						this.updateImageFromMap();
+						if (this.show) this.show('当前位置已显示在地图上');
+						return;
 					}
-				});
+				}
+				this.setData({ showStartPoint: true, showLine: false });
+				this.show('当前位置已显示在地图上');
+				this.drawImage();
+
 			},
-			fail: () => {}
+			fail: () => { }
 		});
 	},
 	uigo(id) {//可能已废弃
