@@ -27,11 +27,11 @@
 <view class="mor">
 	<view class="morBlock" bindtap="indexMake">
 		<image src="../../image/mz.png"></image>
-		<text>当前预约</text>
+		<text>我的预约</text>
 	</view>
 	<view class="morBlock" bindtap="waitlist">
 		<image src="../../image/tk.png"></image>
-		<text>当前候补</text>
+		<text>我的候补</text>
 	</view>
 	<view class="morBlock" bindtap="navUigo">
 		<image src="../../image/dh.png"></image>
@@ -39,6 +39,6 @@
 	</view>
 	<view class="morBlock" bindtap="info">
 		<image src="../../image/gg2.png"></image>
-		<text>我的信息</text>
+		<text>个人信息</text>
 	</view>
 </view>
