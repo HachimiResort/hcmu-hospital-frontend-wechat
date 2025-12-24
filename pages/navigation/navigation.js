@@ -688,12 +688,30 @@ Page({
 		const that = this;
 		let completed = false;
 		let timer = null;
+		let sampling = false;
+		let sampleTimer = null;
+		let bestBeacon = null;
+		const isValidAcc = (v) => { const n = Number(v); return isFinite(n) && n >= 0; };
+		const isBetter = (cur, cand) => {
+			if (!cur) return !!cand;
+			if (!cand) return false;
+			const a1 = Number(cur.accuracy), a2 = Number(cand.accuracy);
+			const v1 = isValidAcc(a1), v2 = isValidAcc(a2);
+			if (v1 && v2) return a2 < a1;
+			if (!v1 && v2) return true;
+			if (v1 && !v2) return false;
+			const r1 = Number(cur.rssi), r2 = Number(cand.rssi);
+			if (isFinite(r1) && isFinite(r2)) return r2 > r1;
+			return false;
+		};
 		const finish = (sid) => {
 			if (completed) return;
 			completed = true;
 			try { if (wx.offBeaconUpdate) wx.offBeaconUpdate(); } catch (e) { }
 			try { wx.stopBeaconDiscovery({}); } catch (e) { }
 			try { if (timer) clearTimeout(timer); } catch (e) { }
+			try { if (sampleTimer) clearTimeout(sampleTimer); } catch (e) { }
+			sampling = false;
 			wx.hideLoading();
 			if (!isFinite(sid)) { wx.showToast({ title: '蓝牙信标数据错误', icon: 'none' }); return; }
 			const rooms = this.data.roomPoints || [];
@@ -756,12 +774,20 @@ Page({
 							if (isFinite(r2) && isFinite(r1)) {
 								if (r2 > r1) nearest = b;
 							}
-						}
 					}
-					const sid = Number(nearest && nearest.major);
-					if (!isFinite(sid)) return;
-					if (timer) { try { clearTimeout(timer); } catch (e) { } timer = null; }
-					finish(sid);
+				}
+					if (!sampling) {
+						bestBeacon = nearest;
+						sampling = true;
+						sampleTimer = setTimeout(() => {
+							const sid = Number(bestBeacon && bestBeacon.major);
+							if (!isFinite(sid)) { wx.showToast({ title: '蓝牙信标数据错误', icon: 'none' }); return; }
+							if (timer) { try { clearTimeout(timer); } catch (e) { } timer = null; }
+							finish(sid);
+						}, 5000);
+					} else {
+						if (isBetter(bestBeacon, nearest)) bestBeacon = nearest;
+					}
 				});
 			},
 			fail: () => {
