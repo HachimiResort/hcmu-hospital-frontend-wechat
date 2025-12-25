@@ -42,7 +42,9 @@ Page({
 		selectedPathIndex: 0,
 		orderList: [],
 		doctor: {},
-		showOrderPicker: false
+		showOrderPicker: false,
+		locatedStartPoint: false,
+		locatedEndPoint: false,
 	},
 	openOrderPicker() {
 		if (!this.data.gotmaps || this.data.showLine) return;
@@ -76,8 +78,11 @@ Page({
 					}
 					const rooms = this.data.roomPoints || [];
 					const ei = rooms.findIndex(p => p && Number(p.pointId) === endId);
-					this.setData({ selectedEndPointId: endId, selectedEndIndex: ei >= 0 ? ei : -1, showOrderPicker: false });
+					this.setData({ selectedEndPointId: endId, selectedEndIndex: ei >= 0 ? ei : -1, showOrderPicker: false, locatedEndPoint: true });
 					wx.showToast({ title: '已更新终点', icon: 'none' });
+					if (this.data.locatedStartPoint) {
+						this.onQuery();
+					}
 				} else {
 					wx.showToast({ title: (res && res.data ? res.data.msg : '获取医生信息失败'), icon: 'none' });
 				}
@@ -102,7 +107,7 @@ Page({
 		const tipX = x - r - 1;
 		const tipY = y;
 		ctx.beginPath();
-		ctx.setStrokeStyle('#ff0000');
+		ctx.setStrokeStyle('#ee0000');
 		ctx.setLineWidth(2);
 		ctx.moveTo(x - L, y);
 		ctx.lineTo(tipX, tipY);
@@ -130,7 +135,9 @@ Page({
 			selectedStartIndex: 0,
 			selectedEndIndex: 0,
 			showLine: false,
-			showStartPoint: false
+			showStartPoint: false,
+			locatedStartPoint: false,
+			locatedEndPoint: false,
 		});
 		wx.showLoading({ title: '加载中', mask: true });
 		const baseUrl = this.data.url;
@@ -143,7 +150,7 @@ Page({
 			success: (res) => {
 				if (res.data.code == 200) {
 					this.setData({
-						orderList:  res.data.data.list,
+						orderList: res.data.data.list,
 					});
 				} else {
 					wx.showToast({ title: res.data.msg, icon: 'none' })
@@ -175,17 +182,17 @@ Page({
 					const { selectedMapId, selectedStartPointId, selectedEndPointId } = options;
 					if (selectedMapId) {
 						const mi = maps.findIndex(m => m && m.mapId === Number(selectedMapId));
-						this.setData({ selectedMapId: Number(selectedMapId), selectedMapIndex: mi >= 0 ? mi : this.data.selectedMapIndex });
+						this.setData({ selectedMapId: Number(selectedMapId), selectedMapIndex: mi >= 0 ? mi : this.data.selectedMapIndex});
 					}
 					if (selectedStartPointId) {
 						const sidNum = Number(selectedStartPointId);
 						const si = roomPoints.findIndex(p => p && p.pointId === sidNum);
-						this.setData({ selectedStartPointId: sidNum, selectedStartIndex: si >= 0 ? si : -1 });
+						this.setData({ selectedStartPointId: sidNum, selectedStartIndex: si >= 0 ? si : -1 ,locatedStartPoint:true});
 					}
 					if (selectedEndPointId) {
 						const tidNum = Number(selectedEndPointId);
 						const ei = roomPoints.findIndex(p => p && p.pointId === tidNum);
-						this.setData({ selectedEndPointId: tidNum, selectedEndIndex: ei >= 0 ? ei : -1 });
+						this.setData({ selectedEndPointId: tidNum, selectedEndIndex: ei >= 0 ? ei : -1 ,locatedEndPoint:true});
 					}
 					if (selectedStartPointId && selectedEndPointId) {
 						console.log(this.data.points);
@@ -290,14 +297,14 @@ Page({
 		const y2 = Math.round(oy2 * s);
 		const lw = 2;
 		ctx.beginPath();
-		ctx.setStrokeStyle('#ff0000');
+		ctx.setStrokeStyle('#ee0000');
 		ctx.setLineWidth(lw);
 		ctx.moveTo(x1, y1);
 		ctx.lineTo(x2, y2);
 		ctx.stroke();
 		const r = lw / 2;
 		ctx.beginPath();
-		ctx.setFillStyle('#ff0000');
+		ctx.setFillStyle('#ee0000');
 		ctx.arc(x1, y1, r, 0, Math.PI * 2);
 		ctx.fill();
 		ctx.beginPath();
@@ -553,16 +560,23 @@ Page({
 		const idx = Number(e.detail.value || 0);
 		const rooms = this.data.roomPoints || [];
 		const pid = rooms[idx] ? rooms[idx].pointId : 0;
-		this.setData({ showStartPoint: false, selectedStartIndex: idx, selectedStartPointId: pid });
+		this.setData({ showStartPoint: false, selectedStartIndex: idx, selectedStartPointId: pid, locatedStartPoint: true });
+		if (this.data.locatedEndPoint) {
+			this.onQuery();
+		}
 		this.drawImage();
 	},
 	bindEndChange(e) {//界面修改终点下拉框绑定函数
 		const idx = Number(e.detail.value || 0);
 		const rooms = this.data.roomPoints || [];
 		const pid = rooms[idx] ? rooms[idx].pointId : 0;
-		this.setData({ selectedEndIndex: idx, selectedEndPointId: pid });
+		this.setData({ selectedEndIndex: idx, selectedEndPointId: pid, locatedEndPoint: true });
+		if (this.data.locatedStartPoint) {
+			this.onQuery();
+		}
 	},
 	onQuery() {//查询按钮绑定函数
+		this.setData({ locatedStartPoint: false, locatedEndPoint: false });
 		if (this.data.showLine) {
 			this.setData({ showLine: false });
 			this.drawImage();
@@ -649,14 +663,20 @@ Page({
 				if (sp) {
 					const mi = maps.findIndex(m => m && m.mapId === sp.mapId);
 					if (mi >= 0 && mi !== this.data.selectedMapIndex) {
-						this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false });
+						this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false, locatedStartPoint: true });
 						this.updateImageFromMap();
-						wx.showToast({ title: '当前位置已显示在地图上', icon: 'none' });
+						wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
+						if (this.data.locatedEndPoint) {
+							this.onQuery();
+						}
 						return;
 					}
 				}
-				this.setData({ showStartPoint: true, showLine: false });
-				wx.showToast({ title: '当前位置已显示在地图上', icon: 'none' });
+				this.setData({ showStartPoint: true, showLine: false, locatedStartPoint: true });
+				if (this.data.locatedEndPoint) {
+					this.onQuery();
+				}
+				wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
 				this.drawImage();
 
 			},
@@ -668,12 +688,30 @@ Page({
 		const that = this;
 		let completed = false;
 		let timer = null;
+		let sampling = false;
+		let sampleTimer = null;
+		let bestBeacon = null;
+		const isValidAcc = (v) => { const n = Number(v); return isFinite(n) && n >= 0; };
+		const isBetter = (cur, cand) => {
+			if (!cur) return !!cand;
+			if (!cand) return false;
+			const a1 = Number(cur.accuracy), a2 = Number(cand.accuracy);
+			const v1 = isValidAcc(a1), v2 = isValidAcc(a2);
+			if (v1 && v2) return a2 < a1;
+			if (!v1 && v2) return true;
+			if (v1 && !v2) return false;
+			const r1 = Number(cur.rssi), r2 = Number(cand.rssi);
+			if (isFinite(r1) && isFinite(r2)) return r2 > r1;
+			return false;
+		};
 		const finish = (sid) => {
 			if (completed) return;
 			completed = true;
-			try { if (wx.offBeaconUpdate) wx.offBeaconUpdate(); } catch (e) {}
-			try { wx.stopBeaconDiscovery({}); } catch (e) {}
-			try { if (timer) clearTimeout(timer); } catch (e) {}
+			try { if (wx.offBeaconUpdate) wx.offBeaconUpdate(); } catch (e) { }
+			try { wx.stopBeaconDiscovery({}); } catch (e) { }
+			try { if (timer) clearTimeout(timer); } catch (e) { }
+			try { if (sampleTimer) clearTimeout(sampleTimer); } catch (e) { }
+			sampling = false;
 			wx.hideLoading();
 			if (!isFinite(sid)) { wx.showToast({ title: '蓝牙信标数据错误', icon: 'none' }); return; }
 			const rooms = this.data.roomPoints || [];
@@ -686,14 +724,20 @@ Page({
 			if (sp) {
 				const mi = maps.findIndex(m => m && m.mapId === sp.mapId);
 				if (mi >= 0 && mi !== this.data.selectedMapIndex) {
-					this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false });
+					this.setData({ selectedMapIndex: mi, showStartPoint: true, showLine: false, locatedStartPoint: true });
 					this.updateImageFromMap();
-					wx.showToast({ title: '当前位置已显示在地图上', icon: 'none' });
+					wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
+					if (this.data.locatedEndPoint) {
+						this.onQuery();
+					}
 					return;
 				}
 			}
-			this.setData({ showStartPoint: true, showLine: false });
-			wx.showToast({ title: '当前位置已显示在地图上', icon: 'none' });
+			this.setData({ showStartPoint: true, showLine: false, locatedStartPoint: true });
+			wx.showToast({ title: '已将当前位置显示在地图上', icon: 'none' });
+			if (this.data.locatedEndPoint) {
+				this.onQuery();
+			}
 			this.drawImage();
 		};
 		wx.showLoading({ title: '正在搜索附近蓝牙信标...', mask: true });
@@ -703,8 +747,8 @@ Page({
 				timer = setTimeout(() => {
 					if (completed) return;
 					completed = true;
-					try { if (wx.offBeaconUpdate) wx.offBeaconUpdate(); } catch (e) {}
-					try { wx.stopBeaconDiscovery({}); } catch (e) {}
+					try { if (wx.offBeaconUpdate) wx.offBeaconUpdate(); } catch (e) { }
+					try { wx.stopBeaconDiscovery({}); } catch (e) { }
 					wx.hideLoading();
 					wx.showToast({ title: '附近未发现蓝牙信标', icon: 'none' });
 				}, 10000);
@@ -730,12 +774,20 @@ Page({
 							if (isFinite(r2) && isFinite(r1)) {
 								if (r2 > r1) nearest = b;
 							}
-						}
 					}
-					const sid = Number(nearest && nearest.major);
-					if (!isFinite(sid)) return;
-					if (timer) { try { clearTimeout(timer); } catch (e) {} timer = null; }
-					finish(sid);
+				}
+					if (!sampling) {
+						bestBeacon = nearest;
+						sampling = true;
+						sampleTimer = setTimeout(() => {
+							const sid = Number(bestBeacon && bestBeacon.major);
+							if (!isFinite(sid)) { wx.showToast({ title: '蓝牙信标数据错误', icon: 'none' }); return; }
+							if (timer) { try { clearTimeout(timer); } catch (e) { } timer = null; }
+							finish(sid);
+						}, 5000);
+					} else {
+						if (isBetter(bestBeacon, nearest)) bestBeacon = nearest;
+					}
 				});
 			},
 			fail: () => {

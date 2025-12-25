@@ -12,7 +12,7 @@ Page({
 		docList: [],
 		chiose: [],
 		userInfo: {},
-		parentId: 0,
+		departmentId: 0,
 	},
 
 	/**
@@ -22,20 +22,15 @@ Page({
 		new app.ToastPannel();
 		this.setData({
 			userInfo: wx.getStorageSync('userInfo'),
-			parentId: options.parentId || 0,
+			departmentId: options.departmentId || 0,
 		})
-		if (this.data.parentId == 0) {
-			wx.navigateBack({
-				delta: 1,
-			})
-		}
 		let token = wx.getStorageSync('token')
 		wx.showLoading({
 			title: '加载中...',
 		})
 		new Promise((resolve, reject) => {
 			wx.request({
-				url: this.data.url + '/departments?pageSize=10000&parentId=' + this.data.parentId,
+				url: this.data.url + '/departments?pageSize=10000&parentId=0',
 				header: {
 					'Authorization': token
 				},
@@ -71,10 +66,11 @@ Page({
 			this.setData({
 				depList: res,
 				depChoice: arr,
+				departmentId: res[defaultIndex].departmentId,
 			})
 			return new Promise((resolve, reject) => {
 				wx.request({
-					url: this.data.url + `/departments/${res[defaultIndex].departmentId}/doctors`,
+					url: this.data.url + `/departments?pageSize=10000&parentId=${res[defaultIndex].departmentId}`,
 					header: {
 						'Authorization': token
 					},
@@ -98,6 +94,9 @@ Page({
 	},
 	depChange(e) {
 		if (e.currentTarget.dataset.index == this.data.depChoice.indexOf(true)) return
+		this.setData({
+			departmentId: this.data.depList[e.currentTarget.dataset.index].departmentId,
+		})
 		let arr = new Array(this.data.depChoice.length).fill(false);
 		arr[e.currentTarget.dataset.index] = true;
 		this.setData({
@@ -109,7 +108,7 @@ Page({
 		})
 		console.log(this.data.depList[e.currentTarget.dataset.index].departmentId)
 		wx.request({
-			url: this.data.url + `/departments/${this.data.depList[e.currentTarget.dataset.index].departmentId}/doctors`,
+			url: this.data.url + `/departments?pageSize=10000&parentId=${this.data.depList[e.currentTarget.dataset.index].departmentId}`,
 			header: {
 				'Authorization': token
 			},
@@ -131,8 +130,9 @@ Page({
 	go(e) {
 		console.log(this.data.docList);
 		console.log(e);
+		//console.log(this.data.docList[e.currentTarget.dataset.id]);
 		wx.navigateTo({
-			url: `../doctorInfo/doctorInfo?docId=${e.currentTarget.dataset.name}`,
+			url: `./dep/dep?parentId=${this.data.departmentId}&departmentId=${e.currentTarget.dataset.name}`,
 		})
 	},
 

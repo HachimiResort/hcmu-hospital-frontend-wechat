@@ -203,7 +203,7 @@ Page({
 				wx.hideLoading()
 				if (res.data.code == 200) {
 					wx.navigateTo({
-						url: '../appointment/dep/dep',
+						url: '../appointment/appointment',
 					})
 				} else {
 					wx.navigateTo({

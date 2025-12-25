@@ -34,7 +34,7 @@ Page({
     this.setData({ sending: true })
     wx.showLoading({ title: '基米思考中...' })
     const data = { 
-      model: 'deepseek-chat', 
+      model: 'hcmdoc', 
       stream: false, 
       messages: history.concat([{ role: 'user', content: prompt }]) }
     let token = wx.getStorageSync('token')
