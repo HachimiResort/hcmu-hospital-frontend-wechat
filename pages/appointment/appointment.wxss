@@ -1,5 +1,4 @@
 page {
-	height: 100vh;
 	overflow: hidden;
 }
 
@@ -63,7 +62,7 @@ page {
 	padding: 12px;
 	box-sizing: border-box;
 	width: 100%;
-	min-height: 90px;
+	min-height: 55px;
 	display: flex;
 	align-items: center;
 	background-color: #fff;

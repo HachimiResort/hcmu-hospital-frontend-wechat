@@ -12,6 +12,7 @@
 		"pages/my/modEmail/modEmail",
 		"pages/make/details/details",
 		"pages/make/make", 
+		"pages/appointment/appointment",
 		"pages/appointment/dep/dep",
 		"pages/appointment/doctorInfo/doctorInfo",
 		"pages/course/process/process",
