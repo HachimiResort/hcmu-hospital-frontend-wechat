@@ -1,13 +1,49 @@
 /* pages/index.wxss */
+.header{
+	display: flex;
+	align-items: center;
+	padding: 10px 15px;
+}
+.logo{
+	width: 60px;
+	height: 60px;
+}
+.hospital-name{
+	font-size: 20px;
+	color: #333;
+	margin-left: 10px;
+	letter-spacing: 1px;
+	font-family: "Times New Roman", Times, serif;
+	font-weight: 700;
+}
 swiper{
 	width: 95%;
 	height: 150px;
 	border-radius: 5px;
 	overflow: hidden;
-	margin: 10px auto ;
 	border: 1px solid #eee;
 }
 swiper-item,swiper image{
+	width: 100%;
+	height: 100%;
+}
+.ad-container{
+	width: 95%;
+	margin: 10px auto;
+	position: relative;
+	border-radius: 5px;
+	overflow: hidden;
+	border: 1px solid #eee;
+}
+.ad-container::after{
+	content: "";
+	display: block;
+	padding-top: 56.25%;
+}
+.ad-swiper{
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
 	height: 100%;
 }
