@@ -1,8 +1,21 @@
 <import src="../../component/appToast/appToast.wxml"/>
 <template is="toast" data="{{ ..._toast_ }}"/>
-<view class='imagesize'>
-  <image src='../../image/logo.png' mode="aspectFit" binderror="imageError">
-  </image>
+<view class="header">
+  <image class="logo" src='../../image/logo.png' mode="aspectFit" binderror="imageError"></image>
+  <text class="hospital-name">HMCU Hospital</text>
+</view>
+<view class="ad-container">
+  <swiper autoplay="true" interval="5000" duration="500" circular="true" class="ad-swiper">
+    <swiper-item>
+      <image src='https://hcmu-hospital.oss-cn-beijing.aliyuncs.com/4e7535abd09006b9b133cbaafa44f8da.png' mode="aspectFit"></image>
+    </swiper-item>
+    <swiper-item>
+      <image src='https://hcmu-hospital.oss-cn-beijing.aliyuncs.com/d85c83428fade1f05953cec2afc3c437.png' mode="aspectFit"></image>
+    </swiper-item>
+	<swiper-item>
+      <image src='https://hcmu-hospital.oss-cn-beijing.aliyuncs.com/300db80ef6672516374d72e831261e51.png' mode="aspectFit"></image>
+    </swiper-item>
+  </swiper>
 </view>
 <view class="tap">
 	<view class="tapLeft"></view>

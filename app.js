@@ -7,7 +7,7 @@ App({
 		try { this.towxml = require('/towxml/index') } catch (e) {}
 	},
 	globalData: {
-		$url: 'http://hcmu.jiasheng.wang:8080'
+		$url: 'https://hcmu.jiasheng.wang/api/'
 	},
 	notPermission: () => {
 		wx.showModal({
